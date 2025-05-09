@@ -1,0 +1,97 @@
+<189>: Sep 27 2023 10:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-1
+<184>: Sep 27 2023 10:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+<190>: Sep 27 2023 10:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.1 -> 192.168.1.1
+<187>: Sep 27 2023 10:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.2 Down due to BGP Notification received
+<188>: Sep 27 2023 10:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-1, process: HOG_PROCESS
+<189>: Sep 27 2023 11:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-2
+<184>: Sep 27 2023 11:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/2, changed state to down
+<190>: Sep 27 2023 11:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.2 -> 192.168.1.2
+<187>: Sep 27 2023 11:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.3 Down due to BGP Notification received
+<188>: Sep 27 2023 11:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-2, process: HOG_PROCESS
+<189>: Sep 27 2023 12:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-3
+<184>: Sep 27 2023 12:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/3, changed state to up
+<190>: Sep 27 2023 12:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.3 -> 192.168.1.3
+<187>: Sep 27 2023 12:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.4 Down due to BGP Notification received
+<188>: Sep 27 2023 12:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-3, process: HOG_PROCESS
+<189>: Sep 27 2023 13:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-4
+<184>: Sep 27 2023 13:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/4, changed state to down
+<190>: Sep 27 2023 13:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.4 -> 192.168.1.4
+<187>: Sep 27 2023 13:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.5 Down due to BGP Notification received
+<188>: Sep 27 2023 13:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-4, process: HOG_PROCESS
+<189>: Sep 27 2023 14:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-5
+<184>: Sep 27 2023 14:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/5, changed state to up
+<190>: Sep 27 2023 14:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.5 -> 192.168.1.5
+<187>: Sep 27 2023 14:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.6 Down due to BGP Notification received
+<188>: Sep 27 2023 14:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-5, process: HOG_PROCESS
+<189>: Sep 27 2023 15:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-6
+<184>: Sep 27 2023 15:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/6, changed state to up
+<190>: Sep 27 2023 15:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.6 -> 192.168.1.6
+<187>: Sep 27 2023 15:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.7 Down due to BGP Notification received
+<188>: Sep 27 2023 15:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-6, process: HOG_PROCESS
+<189>: Sep 27 2023 16:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-7
+<184>: Sep 27 2023 16:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/7, changed state to down
+<190>: Sep 27 2023 16:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.7 -> 192.168.1.7
+<187>: Sep 27 2023 16:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.8 Down due to BGP Notification received
+<188>: Sep 27 2023 16:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-7, process: HOG_PROCESS
+<189>: Sep 27 2023 17:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-8
+<184>: Sep 27 2023 17:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/8, changed state to up
+<190>: Sep 27 2023 17:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.8 -> 192.168.1.8
+<187>: Sep 27 2023 17:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.9 Down due to BGP Notification received
+<188>: Sep 27 2023 17:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-8, process: HOG_PROCESS
+<189>: Sep 27 2023 18:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-9
+<184>: Sep 27 2023 18:16:45.6789 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/9, changed state to down
+<190>: Sep 27 2023 18:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.9 -> 192.168.1.9
+<187>: Sep 27 2023 18:18:00.9876 UTC: %BGP-5-ADJCHANGE: Neighbor 192.168.2.10 Down due to BGP Notification received
+<188>: Sep 27 2023 18:19:18.4321 UTC: %SYS-4-CPUHOG: CPU hog detected on Router-9, process: HOG_PROCESS
+<189>: Sep 27 2023 19:15:30.1234 UTC: %SYS-5-USER_LOGOUT: User admin logged out from Router-10
+<184>: Sep 27 2023 19:16:45.6789 UTC: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up
+<190>: Sep 27 2023 19:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.10 -> 192.168.1.10
+<187>: Sep 27 2023 19:18:00.9876 UTC: %VPN-4-IKMP_NO_SA: IKE message from 203.0.113.1 has no SA, deleting
+<188>: Sep 27 2023 19:19:18.4321 UTC: %INTERFACE-6-ERROR_DISABLED: Interface GigabitEthernet0/0/1 disabled due to excessive errors
+<189>: Sep 27 2023 20:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-11
+<184>: Sep 27 2023 20:16:45.6789 UTC: %LINK-3-UPDOWN: Interface Serial0/0/0, changed state to down
+<190>: Sep 27 2023 20:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.11 -> 192.168.1.11
+<187>: Sep 27 2023 20:18:00.9876 UTC: %OSPF-5-ADJCHG: OSPF neighbor 192.168.3.1 went down
+<188>: Sep 27 2023 20:19:18.4321 UTC: %SYS-4-LOGGING: Logging to host 192.168.4.1 failed - Host unreachable
+<189>: Sep 27 2023 21:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-12
+<184>: Sep 27 2023 21:16:45.6789 UTC: %LINK-3-UPDOWN: Interface Serial0/0/1, changed state to up
+<190>: Sep 27 2023 21:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.12 -> 192.168.1.12
+<187>: Sep 27 2023 21:18:00.9876 UTC: %EIGRP-5-ADJCHANGE: Neighbor 192.168.5.1 went up
+<188>: Sep 27 2023 21:19:18.4321 UTC: %SYS-4-RESTART: System restarted
+<189>: Sep 27 2023 22:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-13
+<184>: Sep 27 2023 22:16:45.6789 UTC: %LINK-3-UPDOWN: Interface Serial0/0/2, changed state to down
+<190>: Sep 27 2023 22:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.13 -> 192.168.1.13
+<187>: Sep 27 2023 22:18:00.9876 UTC: %VRRP-6-STATECHANGE: VRRP Group 1 state changed to Backup
+<188>: Sep 27 2023 22:19:18.4321 UTC: %SYS-4-SW2BASIC: Switching from advanced to basic mode
+<189>: Sep 27 2023 23:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-14
+<184>: Sep 27 2023 23:16:45.6789 UTC: %LINK-3-UPDOWN: Interface Serial0/0/3, changed state to up
+<190>: Sep 27 2023 23:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.14 -> 192.168.1.14
+<187>: Sep 27 2023 23:18:00.9876 UTC: %HSRP-4-STATECHANGE: FastEthernet0/1 Grp 1 state Standby -> Active
+<188>: Sep 27 2023 23:19:18.4321 UTC: %SYS-4-STACKT: Stack unit 2 switched to new master
+<189>: Sep 27 2023 00:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-15
+<184>: Sep 27 2023 00:16:45.6789 UTC: %LINK-3-UPDOWN: Interface FastEthernet0/2, changed state to down
+<190>: Sep 27 2023 00:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.15 -> 192.168.1.15
+<187>: Sep 27 2023 00:18:00.9876 UTC: %VLAN-6-PORT_UP: VLAN 20, port FastEthernet0/2 is up
+<188>: Sep 27 2023 00:19:18.4321 UTC: %SYS-4-TIMER: Timer 1 has expired on Router-15
+<189>: Sep 27 2023 01:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-16
+<184>: Sep 27 2023 01:16:45.6789 UTC: %LINK-3-UPDOWN: Interface FastEthernet0/3, changed state to up
+<190>: Sep 27 2023 01:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.16 -> 192.168.1.16
+<187>: Sep 27 2023 01:18:00.9876 UTC: %SNMP-6-AUTHFAIL: SNMP authentication failure from host 192.168.10.1
+<188>: Sep 27 2023 01:19:18.4321 UTC: %SYS-4-ROUTERBOOT: Router-16 is booting up
+<189>: Sep 27 2023 02:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-17
+<184>: Sep 27 2023 02:16:45.6789 UTC: %LINK-3-UPDOWN: Interface FastEthernet0/4, changed state to down
+<190>: Sep 27 2023 02:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.17 -> 192.168.1.17
+<187>: Sep 27 2023 02:18:00.9876 UTC: %PORTSEC-6-VIOLATION: Security violation on interface FastEthernet0/4
+<188>: Sep 27 2023 02:19:18.4321 UTC: %SYS-4-STACKM: Stack unit 3 has been added to the stack
+<189>: Sep 27 2023 03:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-18
+<184>: Sep 27 2023 03:16:45.6789 UTC: %LINK-3-UPDOWN: Interface FastEthernet0/5, changed state to up
+<190>: Sep 27 2023 03:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.18 -> 192.168.1.18
+<187>: Sep 27 2023 03:18:00.9876 UTC: %ACL-6-IPDENY: IP deny from host 10.0.0.19 to 192.168.1.19
+<188>: Sep 27 2023 03:19:18.4321 UTC: %SYS-4-PORTFLAP: Port FastEthernet0/5 flapping between up and down states
+<189>: Sep 27 2023 04:15:30.1234 UTC: %SYS-5-CONFIG_I: Configured from console by admin on Router-19
+<184>: Sep 27 2023 04:16:45.6789 UTC: %LINK-3-UPDOWN: Interface FastEthernet0/6, changed state to down
+<190>: Sep 27 2023 04:17:12.3456 UTC: %SEC-6-IPACCESSLOGP: IP access violation detected: 10.0.0.20 -> 192.168.1.20
+<187>: Sep 27 2023 04:18:00.9876 UTC: %DHCP-6-ADDRESS_ASSIGN: IP address 192.168.20.1 assigned to client 00:0A:BC:DE:F0:01
+<188>: Sep 27 2023 04:19:18.4321 UTC: %SYS-4-INTERFACECHANGE: Interface GigabitEthernet0/0/2 changed state to administratively down
+
+
