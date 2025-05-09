@@ -1,4 +1,4 @@
-# Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit
+# Cisco SysLog Router Dateien Auswertung Belegarbeit
 
 Belegarbeit im Rahmen des Studiums IT-Forensik/ Cybercrime für das Modul Programmierung I
 
