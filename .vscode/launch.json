@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/mf/Documents/dev/testtest/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit",
+      "program": "/Users/mf/Documents/dev/testtest/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/build/Debug/outDebug"
+    }
+  ]
+}
