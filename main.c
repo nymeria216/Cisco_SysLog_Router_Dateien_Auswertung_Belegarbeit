@@ -3,10 +3,10 @@
 #define _CRT_SECURE_NO_WARNINGS  // Unterdrückt Warnungen für "unsichere" Funktionen wie fopen() in Visual Studio
 #include <stdio.h>
 #include <string.h>
-#include <windows.h>
+// #include <windows.h>    // Für SetConsoleOutputCP() und CP_UTF8 und Windows ONLY
 
 int main() {
-    SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen
+   // SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
     char dateiname[256];      // Variable zum Speichern des Dateipfads
     char suchbegriff[256];    // Variable zum Speichern des Suchbegriffs
     char zeile[1024];         // Puffer zum Einlesen einer Zeile aus der Datei
@@ -21,6 +21,27 @@ int main() {
     fgets(dateiname, sizeof(dateiname), stdin);
     dateiname[strcspn(dateiname, "\n")] = '\0';
 
+    // Fragestellung, ob die Datei existiert
+    char janein;
+    int versuch = 0;  // Zähler für JaNein-Versuche
+    do {
+        printf("Ist der Pfad und Name der Datei korrekt (y/n)? ");
+        scanf(" %c", &janein);
+        while (getchar() != '\n')
+
+        if (janein == 'y' || janein == 'Y') {
+        break;                     
+    }
+
+        versuch++;
+    
+        if (versuch == 2 && (janein != 'y' || janein != 'Y')) {
+            printf("Zu viele Versuche. Das Programm wird beendet.\n");
+            return 0;
+        }
+
+    } while (janein != 'y' || janein != 'y');  // Solange die Datei nicht existiert, wird nachgefragt
+
 
     //Hier eine Auswahl programmieren mit Eingabe von Ziffern, was der Benutzer mit der Datei machen will
 
@@ -30,14 +51,14 @@ int main() {
     fgets(suchbegriff, sizeof(suchbegriff), stdin);
 
     // Ausgabe zur Kontrolle
-    printf("\n Dateiname :: % s\n", dateiname);
-    printf("\n Suchbegriff :: %s\n", suchbegriff);
+    printf("\n Dateiname: %s\n", dateiname);
+    printf("\n Suchbegriff: %s\n", suchbegriff);
     suchbegriff[strcspn(suchbegriff, "\n")] = '\0';
 
     // Datei im Lesemodus öffnen
     FILE* datei = fopen(dateiname, "r");
     if (datei == NULL) {
-        perror("Fehler beim Öffnen der Datei");  // Gibt konkrete Fehlermeldung aus
+        perror("Fehler beim Öffnen der Datei");  
         return -2;
     }
 
