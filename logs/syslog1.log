@@ -1,0 +1,146 @@
+*Sep 14 06:04:55.610: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/8, changed state to down
+*Sep 14 06:04:56.611: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/8, changed state to down
+*Sep 14 06:04:59.782: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/8, changed state to up
+*Sep 14 06:05:00.782: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/8, changed state to up
+*Sep 14 06:05:05.923: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/8, changed state to down
+*Sep 14 06:05:06.926: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/8, changed state to down
+*Sep 14 06:05:10.855: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/8, changed state to up
+*Sep 14 06:05:11.855: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/8, changed state to up
+*Sep 14 06:05:25.666: %LINEPROTO-5-UPDOWN: Line protocol on Interface TenGigabitEthernet1/0/48, changed state to down
+*Sep 14 06:05:26.669: %LINK-3-UPDOWN: Interface TenGigabitEthernet1/0/48, changed state to down
+*Sep 14 06:05:30.762: %LINK-3-UPDOWN: Interface TenGigabitEthernet1/0/48, changed state to up
+*Sep 14 06:05:31.762: %LINEPROTO-5-UPDOWN: Line protocol on Interface TenGigabitEthernet1/0/48, changed state to up
+*Sep 14 06:06:00.178: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/8, changed state to down
+*Sep 14 06:06:01.178: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/8, changed state to down
+*Sep 14 06:06:04.842: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/8, changed state to up
+*Sep 14 06:06:05.843: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/8, changed state to up
+*Sep 14 06:06:48.087: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/8, changed state to down
+*Sep 14 06:06:49.086: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/8, changed state to down
+*Sep 14 06:06:49.618: %LINEPROTO-5-UPDOWN: Line protocol on Interface TenGigabitEthernet1/0/48, changed state to down
+*Sep 14 06:06:50.619: %LINK-3-UPDOWN: Interface TenGigabitEthernet1/0/48, changed state to down
+*Sep 14 06:06:52.283: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/8, changed state to up
+*Sep 14 06:06:53.282: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/8, changed state to up
+*Sep 14 06:06:53.747: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 06:06:54.659: %LINK-3-UPDOWN: Interface TenGigabitEthernet1/0/48, changed state to up
+*Sep 14 06:06:54.745: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 06:06:55.658: %LINEPROTO-5-UPDOWN: Line protocol on Interface TenGigabitEthernet1/0/48, changed state to up
+*Sep 14 06:11:38.066: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:11:39.067: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:11:41.749: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:11:42.750: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:12:07.247: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:12:08.246: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:12:11.395: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:12:12.394: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:12:39.799: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:12:40.798: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:12:44.166: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:12:45.166: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:15:19.051: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:15:20.051: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:15:22.819: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:15:23.819: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:15:47.766: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:15:48.769: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:15:52.126: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:15:53.127: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:16:32.707: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:16:33.707: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:16:36.741: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:16:37.742: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:18:10.538: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:18:11.543: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:18:14.277: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:18:15.279: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:18:39.319: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:18:40.322: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:18:43.415: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:18:44.415: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:19:10.158: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:19:11.157: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:19:14.259: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:19:15.259: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:19:29.955: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:19:30.954: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to down
+*Sep 14 06:19:34.219: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:19:35.219: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/6, changed state to up
+*Sep 14 06:19:52.386: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 06:19:53.386: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 06:19:56.874: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 06:19:57.875: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 06:25:05.502: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 06:25:06.503: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 06:25:10.674: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 06:25:11.675: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 06:25:36.191: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 06:25:37.190: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 06:25:40.377: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 06:25:41.379: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 06:25:54.563: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 06:25:55.563: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 06:25:58.686: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 06:25:59.685: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 06:26:01.310: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 06:26:02.314: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 06:26:05.433: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 06:26:06.435: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 06:26:44.350: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 06:26:45.350: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 08:54:29.614: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 08:54:30.614: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 08:54:38.035: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 08:54:39.034: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 08:54:42.318: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 08:54:43.318: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 08:56:24.678: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 08:56:25.679: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 08:56:29.125: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 08:56:30.126: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 08:56:45.822: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 08:56:46.826: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 08:56:49.551: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 08:56:50.550: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 08:57:14.242: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 08:57:15.243: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 08:57:18.322: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 08:57:19.322: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 08:57:32.751: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 08:57:33.754: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 08:57:36.827: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 08:57:37.827: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 08:57:39.631: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 08:57:40.631: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to down
+*Sep 14 08:57:43.789: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 08:57:44.791: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to up
+*Sep 14 08:57:59.385: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 08:58:00.391: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 09:34:05.903: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: datacadmin] [Source: 172.16.100.188] [localport: 22] at 09:34:05 UTC Thu Sep 14 2023
+*Sep 14 09:36:44.722: %SYS-6-LOGOUT: User datacadmin has exited tty session 2(172.16.100.188)
+*Sep 14 12:14:45.876: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 14 13:11:51.274: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 13:11:52.275: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to up
+*Sep 14 13:13:21.503: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: datacadmin] [Source: 172.16.100.187] [localport: 22] at 13:13:21 UTC Thu Sep 14 2023
+*Sep 14 13:13:55.033: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/25, changed state to down
+*Sep 14 13:13:55.352: %SYS-5-CONFIG_I: Configured from console by datacadmin on vty0 (172.16.100.187)
+*Sep 14 13:14:08.649: %SYS-6-LOGOUT: User datacadmin has exited tty session 2(172.16.100.187)
+*Sep 14 13:14:22.418: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 13:14:23.422: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/1, changed state to down
+*Sep 14 13:14:32.154: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/25, changed state to up
+*Sep 14 13:14:33.155: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/25, changed state to up
+*Sep 14 13:26:43.830: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/25, changed state to down
+*Sep 14 13:26:44.831: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/25, changed state to down
+*Sep 15 12:14:54.887: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 16 12:15:03.906: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 17 12:15:12.919: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 18 12:15:21.935: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 19 12:00:43.984: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Communications failure 
+*Sep 19 12:15:30.947: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 20 12:15:39.960: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 21 12:15:48.975: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 22 12:15:57.987: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 23 12:16:07.004: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 24 12:16:16.016: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 25 12:16:25.026: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 26 12:00:44.411: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Communications failure 
+*Sep 26 12:16:34.038: %SMART_LIC-3-COMM_FAILED: Communications failure with the Cisco Smart License Utility (CSLU) : Unable to resolve server hostname/domain name 
+*Sep 27 04:44:54.133: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: datacadmin] [Source: 172.16.100.188] [localport: 22] at 04:44:54 UTC Wed Sep 27 2023
