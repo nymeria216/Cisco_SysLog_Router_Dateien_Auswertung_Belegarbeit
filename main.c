@@ -17,37 +17,51 @@ int main() {
     printf("Dies ist ein Programm zur Auswertung eines CISCO-Logfiles.\n\n");
 
     // Benutzer gibt den Dateipfad ein
-    printf("Bitte geben Sie den Dateipfad ohne Anführungszeichen ein und drücken Sie die Enter-Taste: \n\n");
+    printf("Bitte geben Sie den Dateipfad ein: \n\n");
     fgets(dateiname, sizeof(dateiname), stdin);
     dateiname[strcspn(dateiname, "\n")] = '\0';
 
-    // Fragestellung, ob die Datei existiert
+
+    /// Fragestellung zur Bestätigung des Dateipfads
     char janein;
-    int versuch = 0;  // Zähler für JaNein-Versuche
+    int versuch = 0; // Zähler für JaNein-Versuche
+
     do {
-        printf("Ist der Pfad und Name der Datei korrekt (y/n)? ");
+        printf("\nIst der Pfad und Name der Datei korrekt (y/n)? ");
         scanf(" %c", &janein);
-        while (getchar() != '\n')
+        while (getchar() != '\n');
 
+        // Überprüfen der Eingabe und Ausgeben entsprechender Ja/Nein-Antworten
         if (janein == 'y' || janein == 'Y') {
-        break;                     
-    }
-
-        versuch++;
-    
-        if (versuch == 2 && (janein != 'y' || janein != 'Y')) {
-            printf("Zu viele Versuche. Das Programm wird beendet.\n");
+            break;
+        } else if (janein == 'n' || janein == 'N') {
+            printf("Programm wird beendet.\n");
             return 0;
+        } else {
+            // Ungültige Eingabe
+            printf("Ungültige Eingabe. Bitte geben Sie 'y' für Ja oder 'n' für Nein ein.\n");
+            versuch++;
         }
 
-    } while (janein != 'y' || janein != 'y');  // Solange die Datei nicht existiert, wird nachgefragt
+        // Zählt die verbleibenden Versuche
+        if (versuch > 0 && versuch < 3) { 
+            printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
+        }
+
+        // Programm beenden nach zu vielen Fehlversuchen
+        if (versuch >= 3) {
+            printf("Zu viele ungültige Versuche. Das Programm wird beendet.\n");
+            return 0; 
+        }
+
+    } while (1);
 
 
-    //Hier eine Auswahl programmieren mit Eingabe von Ziffern, was der Benutzer mit der Datei machen will
+    // Filterliste
+    // printf("\n Wonach soll gefiltert werden? Wähle eine Zahl aus. \n");
+    // printf("1: \n");
 
-
-    // Benutzer gibt den Suchbegriff ein
-    printf("\n Bitte geben Sie den Suchbegriff ein und drücken Sie die Enter-Taste: ");
+    printf("\n\nBitte geben Sie den Suchbegriff ein: ");
     fgets(suchbegriff, sizeof(suchbegriff), stdin);
 
     // Ausgabe zur Kontrolle
