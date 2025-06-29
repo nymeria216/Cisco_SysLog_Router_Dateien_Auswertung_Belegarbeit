@@ -1,11 +1,19 @@
 // Programm Beleg Programmierung I
 
-#define _CRT_SECURE_NO_WARNINGS  // Unterdrückt Warnungen für "unsichere" Funktionen wie fopen() in Visual Studio
-#include <stdio.h>
-#include <string.h>
-// #include <windows.h>    // Für SetConsoleOutkputCP() und CP_UTF8 und Windows ONLY
 
-// Funktion zur Eingabe des Dateipfads
+// Präprozessoranweisungen
+
+#define _CRT_SECURE_NO_WARNINGS     // Unterdrückt Warnungen für "unsichere" Funktionen wie fopen() in Visual Studio
+#include <stdio.h>                  // Einbindung der Standard-Ein-/Ausgabe-Bibliothek
+#include <string.h>                 // Einbindung der String-Bibliothek für Funktionen zur Zeichenkettenverarbeitung
+// #include <windows.h>             // Für SetConsoleOutkputCP() und CP_UTF8 und Windows ONLY
+
+
+
+// zunächst werden die Funktionen definiert, die für das Programm benötigt werden
+
+// 1. Funktion zur Eingabe des Dateipfads durch den Benutzer
+
 void Dateipfad_Eingabe(char* dateiname, size_t groesse) {
     printf("\nBitte geben Sie den korrekten Dateipfad ein: \n\n");
     if (fgets(dateiname, groesse, stdin) != NULL) {
@@ -13,24 +21,15 @@ void Dateipfad_Eingabe(char* dateiname, size_t groesse) {
     }
 }
 
-int main() {
-   // SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
-    char dateiname[256];      // Variable zum Speichern des Dateipfads
-    char suchbegriff[256];    // Variable zum Speichern des Suchbegriffs
-    char zeile[1024];         // Puffer zum Einlesen einer Zeile aus der Datei
-    int zeilennummer = 0;     // Zähler für die aktuelle Zeilennummer
-    int treffer = 0;          // Zählt die Anzahl gefundener Treffer
 
-    //Erklärung des Programms
-    printf("Dies ist ein Programm zur Auswertung eines CISCO-Logfiles.\n\n");
+// 2. Funktion zur Bestätigung der Eingabe des Dateipfads
 
-    Dateipfad_Eingabe(dateiname, sizeof(dateiname));
-
-    /// Fragestellung zur Bestätigung des Dateipfads
+void Bestaetigung_des_Dateipfads(char* dateiname) {
     char janein;
-    int versuch = 0; // Zähler für JaNein-Versuche
+    int versuch = 0;
 
     do {
+        // Fragt den Benutzer, ob Pfad und Dateiname korrekt sind
         printf("\nIst der Pfad und Name der Datei korrekt (y/n)?\n\n");
         scanf("%c", &janein);
         while (getchar() != '\n');
@@ -38,32 +37,51 @@ int main() {
         // Überprüfen der Eingabe und Ausgeben entsprechender Ja/Nein-Antworten
         if (janein == 'y' || janein == 'Y') {
             break;
-        } else if (janein == 'n' || janein == 'N') {
-            Dateipfad_Eingabe(dateiname, sizeof(dateiname));       //nochmaliges Aufrufen der Funktion zur Eingabe des korrekten Dateipfades statt Programm zu beenden.
-        } else {
+        }
+        else if (janein == 'n' || janein == 'N') {
+            Dateipfad_Eingabe(dateiname, sizeof(dateiname));       // bei "Nein" wird die Funktion zur Eingabe des Dateipfads erneut aufgerufen
+        }
+        else {
             // Ungültige Eingabe
             printf("Ungültige Eingabe. Bitte geben Sie 'y' für Ja oder 'n' für Nein ein.\n");
             versuch++;
         }
 
         // Zählt die verbleibenden Versuche
-        if (versuch > 0 && versuch < 3) { 
+        if (versuch > 0 && versuch < 3) {
             printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
         }
 
         // Programm beenden nach zu vielen Fehlversuchen
         if (versuch >= 3) {
             printf("Zu viele ungültige Versuche. Das Programm wird beendet.\n");
-            return 0; 
         }
 
     } while (1);
+}
 
+
+// Hier folgt das Hauptprogramm
+
+int main() {
+    // SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
+    char dateiname[256];      // Variable zum Speichern des Dateipfads
+    char suchbegriff[256];    // Variable zum Speichern des Suchbegriffs
+    char zeile[1024];         // Puffer zum Einlesen einer Zeile aus der Datei
+    int zeilennummer = 0;     // Zähler für die aktuelle Zeilennummer
+    int treffer = 0;          // Zählt die Anzahl gefundener Treffer
+
+    printf("Dies ist ein Programm zur Auswertung eines CISCO-Logfiles.\n\n");       // Kurze Erklärung was die Aufgabe des Programms ist
+
+    Dateipfad_Eingabe(dateiname, sizeof(dateiname));        // Aufrufen der zuvor definierten Funktion "Dateipfad_Eingabe"
+
+    Bestaetigung_des_Dateipfads(dateiname);                  // Aufrufen der zuvor definierten Funktion "Bestätigung_des_Dateipfads"
 
     // Filterliste
     // printf("\n Wonach soll gefiltert werden? Wähle eine Zahl aus. \n");
     // printf("1: \n");
 
+    //Eingabe des Suchbegriffs durch Benutzer
     printf("\n\nBitte geben Sie den Suchbegriff ein: ");
     fgets(suchbegriff, sizeof(suchbegriff), stdin);
 
@@ -75,7 +93,7 @@ int main() {
     // Datei im Lesemodus öffnen
     FILE* datei = fopen(dateiname, "r");
     if (datei == NULL) {
-        perror("Fehler beim Öffnen der Datei");  
+        perror("Fehler beim Öffnen der Datei");
         return -2;
     }
 
@@ -103,6 +121,10 @@ int main() {
     fclose(datei);  // Datei schließen
     return 0;
 }
+    
+
+
+
 
 
 
