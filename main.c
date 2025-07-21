@@ -12,14 +12,10 @@ int main() {
     char zeile[1024];         // Puffer zum Einlesen einer Zeile aus der Datei
     int zeilennummer = 0;     // Zähler für die aktuelle Zeilennummer
     int treffer = 0;          // Zählt die Anzahl gefundener Treffer
+    char date[] = "DATE";     // Suchbegriff für Datum
 
     //Erklärung des Programms
     printf("Dies ist ein Programm zur Auswertung eines CISCO-Logfiles.\n\n");
-
-    // Benutzer gibt den Dateipfad ein
-    printf("Bitte geben Sie den Dateipfad ein: \n\n");
-    fgets(dateiname, sizeof(dateiname), stdin);
-    dateiname[strcspn(dateiname, "\n")] = '\0';
 
 
     /// Fragestellung zur Bestätigung des Dateipfads
@@ -27,6 +23,11 @@ int main() {
     int versuch = 0; // Zähler für JaNein-Versuche
 
     do {
+        // Benutzer gibt den Dateipfad ein
+        printf("\n\nBitte geben Sie den Dateipfad ein: \n");
+        fgets(dateiname, sizeof(dateiname), stdin);
+        dateiname[strcspn(dateiname, "\n")] = '\0';
+
         printf("\nIst der Pfad und Name der Datei korrekt (y/n)? ");
         scanf(" %c", &janein);
         while (getchar() != '\n');
@@ -34,18 +35,19 @@ int main() {
         // Überprüfen der Eingabe und Ausgeben entsprechender Ja/Nein-Antworten
         if (janein == 'y' || janein == 'Y') {
             break;
+            // Gültige Nein-Eingabe
         } else if (janein == 'n' || janein == 'N') {
-            printf("Programm wird beendet.\n");
-            return 0;
-        } else {
+            printf("\nSchau nochmal darüber und gib den Pfad erneut ein.");
+            versuch++;
             // Ungültige Eingabe
-            printf("Ungültige Eingabe. Bitte geben Sie 'y' für Ja oder 'n' für Nein ein.\n");
+        } else {
+            printf("\nUgültige Eingabe. Bitte geben Sie 'y' für Ja oder 'n' für Nein ein.");
             versuch++;
         }
 
         // Zählt die verbleibenden Versuche
         if (versuch > 0 && versuch < 3) { 
-            printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
+            printf("\nNoch %d Versuch(e) übrig\n", 3 - versuch);
         }
 
         // Programm beenden nach zu vielen Fehlversuchen
@@ -57,12 +59,19 @@ int main() {
     } while (1);
 
 
-    // Filterliste
-    // printf("\n Wonach soll gefiltert werden? Wähle eine Zahl aus. \n");
-    // printf("1: \n");
+    /// Filterliste
+    printf("\nWonach soll gefiltert werden? Wähle eine Zahl aus. \n");
+    printf("USER\n");
+    printf("INTERFACE\n");
+    printf("DATE\n");
 
     printf("\n\nBitte geben Sie den Suchbegriff ein: ");
     fgets(suchbegriff, sizeof(suchbegriff), stdin);
+
+    // Wenn "DATE" ausgewählt wurde
+    if (strcmp(suchbegriff, date) == 0) { 
+        printf("Bitte geben Sie das Datum im Format 'DD/MM/YYYY' ein: ");
+    }
 
     // Ausgabe zur Kontrolle
     printf("\n Dateiname: %s\n", dateiname);
@@ -94,7 +103,7 @@ int main() {
         printf("Keine Treffer für '%s' gefunden.\n", suchbegriff);
     }
     else {
-        printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
+        printf("\nInsgesamt wurde(n) %d Treffer gefunden.\n", treffer);
     }
 
     fclose(datei);  // Datei schließen
