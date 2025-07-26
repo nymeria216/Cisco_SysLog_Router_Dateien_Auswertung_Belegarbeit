@@ -3,35 +3,49 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <stdlib.h>             // Löschen des Terminals
+#include <ctype.h>              // Buchstaben-Bibliothek
+// #include <windows.h>         // Für SetConsoleOutputCP() und CP_UTF8 und Windows ONLY
 
-char suchbegriff[256];
-char zeile[1024];
+/* ##############################
+     VARIABLENDEKLARATION
+###############################*/
+
+// globale Variablendefinition
+// SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
+FILE* datei;
+int stunde;
+int minute;
+int sekunde;
 int zeilennummer = 0;
 int treffer = 0;
 int begriff = 1;
 int zeitauswahl = 1;
 int tag, versuch = 0;
-char monat[4];
-char uhrzeit[9];
 int jahr = 0;
 int minJahr = 9999, maxJahr = 0;
-char dateiname[256] = "/Volumes/HSMW_MacOS/Programmierung/2._Semester/Programmierung_I/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/logs/syslog1.log";
-int stunde;
-int minute;
-int sekunde;
-FILE* datei;
+char suchbegriff[256];
+char zeile[1024];
+char monat[4];
+char uhrzeit[9];
+char dateiname[256] = "/Volumes/HSMW_MacOS/Programmierung/2._Semester/Programmierung_I/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/logs/syslog_generic.log";
 
 int monatZuZahl(const char *monat);
 int zeitZuSekunden(int tag, const char *monat, int jahr, int stunde, int minute, int sekunde);
 int zeitZuSekundenOhneJahr(int tag, const char *monat, int stunde, int minute, int sekunde);
 
+
+/* ##############################
+      METHODENDEKLARATION
+###############################*/
+
+//  Funktion: Prüfung auf Dateinnamenende (".log")
 int log_dateiendung(const char *log_dateiname) {
     size_t laenge = strlen(log_dateiname);
     return (laenge >= 4 && strcmp(log_dateiname + laenge - 4, ".log") == 0);
 }
 
+// Funktion: Öffnet die Datei
 int dateiOeffnen() {
     datei = fopen(dateiname, "r");
     if (!datei) {
@@ -40,6 +54,48 @@ int dateiOeffnen() {
     return 0;
 }
 
+// Funktion: eigene Suchbegriffeingabe
+int eigenerSuchbegriff() {
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF); // Eingabepuffer leeren
+
+    printf("\n Gib einen beliebigen Suchbegriff und drücke die Enter-Taste: ");
+    fgets(suchbegriff, sizeof(suchbegriff), stdin);
+    suchbegriff[strcspn(suchbegriff, "\n")] = '\0'; // Zeilenumbruch entfernen
+
+    // Prüfen, ob der Suchbegriff leer ist
+    if (strlen(suchbegriff) == 0) {
+        printf("Du hast keinen Suchbegriff eingegeben. Abbruch.\n");
+        return 1;
+    }
+
+    printf("\n Dateiname: %s\n", dateiname);
+    printf("\n Suchbegriff: %s\n", suchbegriff);
+
+    dateiOeffnen();
+
+    treffer = 0;
+    zeilennummer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, suchbegriff)) {
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            treffer++;
+        }
+    }
+
+    if (treffer == 0) {
+        printf("Keine Treffer für '%s' gefunden.\n", suchbegriff);
+    } else {
+        printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
+    }
+
+    fclose(datei);
+    return 0;
+}
+
+// Funktion: Definition aller gültigen Monate
 int alleMonate(const char *monat) {
     const char* gueltigeMonate[] = {
         "Jan", "Feb", "Mar", "Apr", "Mai", "Jun",
@@ -53,6 +109,7 @@ int alleMonate(const char *monat) {
     return 0;
 }
 
+// Funktion: Definition der und aller Tage
 int tagDefinition() {
     do {
         versuch = 0;
@@ -75,6 +132,7 @@ int tagDefinition() {
     return 0;
 }
 
+// Funktion: Definition der Monate
 int monatDefinition() {
     do {
         versuch = 0;
@@ -101,6 +159,7 @@ int monatDefinition() {
     return 0;
 }
 
+// Funktion: Definition der Jahre
 int jahrDefinition() {
     int jahrVorhanden = 0;
     minJahr = 9999; maxJahr = 0;
@@ -122,7 +181,7 @@ int jahrDefinition() {
     if (jahrVorhanden) {
         do {
             versuch = 0;
-            printf("\n! Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).\n", minJahr, maxJahr);
+            printf("\n! Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).", minJahr, maxJahr);
             printf(" Jahreszahl (YYYY): ");
             int falscheEingabe = scanf("%d", &jahr);
             if (falscheEingabe != 1) {
@@ -149,6 +208,7 @@ int jahrDefinition() {
     return 0;
 }
 
+// Funktion: Definition der Uhrzeit
 int uhrzeitDefinition() {
     do {
         printf("\n Uhrzeit (HH:MM:SS): ");
@@ -173,6 +233,7 @@ int uhrzeitDefinition() {
     return 0;
 }
 
+// Funktion: Zeitpunktberechnung für Zeitraum mit Jahr
 int zeitZuSekunden(int tag, const char *monat, int jahr, int stunde, int minute, int sekunde) {
     int mon = monatZuZahl(monat);
     if (mon == 0) return -1;
@@ -180,6 +241,7 @@ int zeitZuSekunden(int tag, const char *monat, int jahr, int stunde, int minute,
     return sekunden;
 }
 
+// Funktion: Zeitpunktberechnung für Zeitraum ohne Jahr
 int zeitZuSekundenOhneJahr(int tag, const char *monat, int stunde, int minute, int sekunde) {
     int mon = monatZuZahl(monat);
     if (mon == 0) return -1;
@@ -187,6 +249,7 @@ int zeitZuSekundenOhneJahr(int tag, const char *monat, int stunde, int minute, i
     return sekunden;
 }
 
+// Funktion: Zur Zeitstempelberechnung
 int monatZuZahl(const char *monat) {
     if (strcmp(monat, "Jan") == 0) return 1;
     if (strcmp(monat, "Feb") == 0) return 2;
@@ -203,14 +266,18 @@ int monatZuZahl(const char *monat) {
     return 0;
 }
 
+// Funktion: 1. Auswahl, Zeitraumberechnung der Logs
 int zeitraum() {
     int startzeit;
+
     printf("\nWähle die erste Zeit aus:");
+
     tagDefinition();
     monatDefinition();
     jahrDefinition();
     uhrzeitDefinition();
 
+    // Prüfung, ob ein Jahr vorhanden oder nicht, dann Ausgabe der Startzeit
     if (jahr == -1) {
         startzeit = zeitZuSekundenOhneJahr(tag, monat, stunde, minute, sekunde);
         printf("\nErste Zeit: %d. %s um %02d:%02d:%02d Uhr\n\n\n", tag, monat, stunde, minute, sekunde);
@@ -230,6 +297,7 @@ int zeitraum() {
     while (getchar() != '\n');
 
     switch (zeitauswahl) {
+    // Ausgabe aller Logs vor dem ersten Zeitpunkt
     case 1: {
         dateiOeffnen();
         while (fgets(zeile, sizeof(zeile), datei)) {
@@ -251,6 +319,7 @@ int zeitraum() {
         fclose(datei);
         break;
     }
+    // Ausgabe aller Logs nach dem ersten Zeitpunkt
     case 2: {
         dateiOeffnen();
         while (fgets(zeile, sizeof(zeile), datei)) {
@@ -271,12 +340,13 @@ int zeitraum() {
         fclose(datei);
         break;
     }
+    // Ausgabe aller Logs zwischen zwei Zeitpunkten
     case 3: {
         int endTag, endJahr, endStunde, endMinute, endSekunde;
         char endMonat[4];
         int endzeit;
         printf("\nGib die zweite Zeit ein (Tag, Monat, Jahr, Uhrzeit):\n");
-        // Tag
+        // Zweiter Tag
         do {
             versuch = 0;
             printf("\n Tag (DD): ");
@@ -289,7 +359,7 @@ int zeitraum() {
             if (versuch < 3) printf("\nNoch %d Versuch(e) übrig\n", 3 - versuch);
             else { printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n"); return 1; }
         } while (1);
-        // Monat
+        // Zweiter Monat
         do {
             versuch = 0;
             printf("\n Monat (MMM): ");
@@ -306,7 +376,7 @@ int zeitraum() {
             if (versuch < 3) printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
             else { printf("Zu viele ungültige Versuche. Das Programm wird beendet.\n"); return 1; }
         } while (1);
-        // Jahr
+        // Zweites Jahr
         int endJahrVorhanden = 0;
         minJahr = 9999; maxJahr = 0;
         dateiOeffnen();
@@ -345,7 +415,7 @@ int zeitraum() {
             endJahr = -1;
             printf("\nEs ist keine Abfrage für das Jahr nötig.\n");
         }
-        // Uhrzeit
+        // Zweite Uhrzeit
         do {
             printf("\n Uhrzeit (HH:MM:SS): ");
             if (scanf("%d:%d:%d", &endStunde, &endMinute, &endSekunde) != 3) {
@@ -417,6 +487,7 @@ int main() {
         return 0;
     }
     printf("\nWähle ein Suchbegriff aus:");
+    printf("\n0: Eigene Eingabe");
     printf("\n1: Zeitraum");
     printf("\n2: IP Adresse");
     printf("\n3: Interfaces");
@@ -427,9 +498,14 @@ int main() {
     printf("\n8: Severity Level");
     printf("\n9: Neue Datei auswählen");
     printf("\n10: Programm beenden");
+
     printf("\n\nAusgewählter Suchbegriff: ");
     scanf("%d", &begriff);
+
     switch (begriff) {
+    case 0:
+        eigenerSuchbegriff();
+        break;
     case 1:
         zeitraum();
         break;
