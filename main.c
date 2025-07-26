@@ -7,6 +7,10 @@
 #include <ctype.h>              // Buchstaben-Bibliothek
 // #include <windows.h>         // Für SetConsoleOutputCP() und CP_UTF8 und Windows ONLY
 
+// #ifdef _WIN32                // Windows ONLY
+// #define strcasecmp _stricmp  // Windows ONLY
+// #endif                       // Windows ONLY
+
 /* ##############################
      VARIABLENDEKLARATION
 ###############################*/
@@ -93,6 +97,111 @@ int eigenerSuchbegriff() {
     }
 
     fclose(datei);
+    return 0;
+}
+
+// Funktion: Prüft, ob eine IPv4-Adresse gültig ist (vier Zahlen zwischen 0–255)
+int istGueltigeIPv4(const char* ip) {
+    int a, b, c, d;
+
+    if (sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d) == 4) {
+        if (a >= 0 && a <= 255 &&
+            b >= 0 && b <= 255 &&
+            c >= 0 && c <= 255 &&
+            d >= 0 && d <= 255) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// Funktion: Prüft, ob eine IP-Adresse im privaten Bereich liegt
+int istPrivateIP(const char* ip) {
+    int a, b, c, d;
+    if (sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d) != 4) return 0;
+
+    // Private IP-Bereiche:
+    // 10.0.0.0 – 10.255.255.255
+    if (a == 10) return 1;
+
+    // 172.16.0.0 – 172.31.255.255
+    if (a == 172 && b >= 16 && b <= 31) return 1;
+
+    // 192.168.0.0 – 192.168.255.255
+    if (a == 192 && b == 168) return 1;
+
+
+    return 0;
+}
+
+// Funktion: Suche nach einer IP-Adresse im Logfile
+int ipSuche() {
+    int ch;
+    // Leere den Eingabepuffer, falls noch alte Zeichen vorhanden sind
+    while ((ch = getchar()) != '\n' && ch != EOF);
+
+    int maxVersuche = 3;  // Maximal erlaubte Fehlversuche bei der IP-Eingabe
+    int versuche = 0;
+
+    // Eingabeschleife für die IP-Adresse
+    while (versuche < maxVersuche) {
+        printf("\n Gib eine IP-Adresse ein (Format: XXX.XXX.XXX.XXX): ");
+        fgets(suchbegriff, sizeof(suchbegriff), stdin);
+        suchbegriff[strcspn(suchbegriff, "\n")] = '\0'; // Entferne das '\n' am Ende
+
+        // Prüfe, ob die Eingabe leer ist
+        if (strlen(suchbegriff) == 0) {
+            versuche++;
+            printf("Keine IP-Adresse eingegeben.");
+        }
+        // Prüfe das Format der IP-Adresse
+        else if (!istGueltigeIPv4(suchbegriff)) {
+            versuche++;
+            printf("Ungültiges IP-Adressformat.");
+        }
+        else {
+            break; // Eingabe ist gültig → Schleife verlassen
+        }
+
+        // Gib verbleibende Versuche aus oder beende bei zu vielen Fehlern
+        if (versuche < maxVersuche) {
+            printf("\nNoch %d Versuch(e) übrig\n", maxVersuche - versuche);
+        }
+        else {
+            printf("\nZu viele ungültige Versuche. Das Programm wird beendet.\n");
+            exit(1);
+        }
+    }
+
+    // Gültige IP-Adresse liegt vor – Suche starten
+    printf("\n Suche nach IP-Adresse: %s\n", suchbegriff);
+
+    dateiOeffnen(); // Öffne die Logdatei
+
+    treffer = 0;
+    zeilennummer = 0;
+
+    // Durchsuche jede Zeile der Datei nach der eingegebenen IP-Adresse
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, suchbegriff)) {
+            // IP-Adresse gefunden – Zeile ausgeben
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            treffer++;
+        }
+    }
+
+    fclose(datei); // Datei schließen
+
+    // Zusammenfassung ausgeben
+    if (treffer == 0) {
+        printf("\nKeine Einträge mit IP-Adresse '%s' gefunden.\n", suchbegriff);
+    }
+    else {
+        printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
+    }
+
+
     return 0;
 }
 
@@ -467,7 +576,7 @@ int zeitraum() {
         break;
     }
     case 4:
-        printf("Programm wird beendet.\n");
+        printf("Programm wird beendet\n");
         exit(0);
         break;
     default:
@@ -475,6 +584,55 @@ int zeitraum() {
         break;
     }
     return 0;
+}
+
+void ipFilterSucheEinfach(int privat) {
+    dateiOeffnen();
+
+    zeilennummer = 0;
+    treffer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+
+        char* ptr = zeile;
+        while ((ptr = strstr(ptr, ".")) != NULL) {
+            // Rückwärtslauf zum Anfang der IP
+            char* start = ptr;
+            while (start > zeile && (isdigit(*(start - 1)) || *(start - 1) == '.')) start--;
+
+            char ip[32] = { 0 };
+            sscanf(start, "%31s", ip);
+
+            // Kürzen bei nachfolgendem Text
+            for (int i = 0; ip[i]; i++) {
+                if (!isdigit(ip[i]) && ip[i] != '.') {
+                    ip[i] = '\0';
+                    break;
+                }
+            }
+
+            if (istGueltigeIPv4(ip)) {
+                int isPriv = istPrivateIP(ip);
+                if ((privat && isPriv) || (!privat && !isPriv)) {
+                    printf("Zeile %d: %s", zeilennummer, zeile);
+                    treffer++;
+                    break;
+                }
+            }
+
+            ptr++;
+        }
+    }
+
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf("\nKeine %s IP-Adressen gefunden.\n", privat ? "privaten" : "öffentlichen");
+    }
+    else {
+        printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
+    }
 }
 
 int severityLevel() {
@@ -559,6 +717,7 @@ int main() {
         printf("\nDie Datei muss die Endung .log haben. Programm wird beendet.\n");
         return 0;
     }
+
     printf("\nWähle ein Suchbegriff aus:");
     printf("\n0: Eigene Eingabe");
     printf("\n1: Zeitraum");
@@ -581,17 +740,43 @@ int main() {
     case 1:
         zeitraum();
         break;
-    case 2:
-        printf("Test");
+    case 2: {
+        int wahl;
+        printf("\nWähle die Art der IP-Suche:\n");
+        printf("1: Manuelle Eingabe einer IP-Adresse\n");
+        printf("2: Nur private IP-Adressen anzeigen\n");
+        printf("3: Nur öffentliche IP-Adressen anzeigen\n");
+        printf("4: Programm beenden");
+        printf("\n\nAuswahl: ");
+        scanf("%d", &wahl);
+
+        switch (wahl) {
+        case 1:
+            ipSuche(); // vorhandene Funktion
+            break;
+        case 2:
+            ipFilterSucheEinfach(1); // nur private IPs
+            break;
+        case 3:
+            ipFilterSucheEinfach(0); // nur öffentliche IPs
+            break;
+        case 4:
+            printf("Programm wird beendet.\n");
+            exit(0);
+        default:
+            printf("Ungültige Auswahl.\n");
+            break;
+        }
         break;
+    }
     case 3: case 4: case 5: case 6: 
     case 7: 
         severityLevel();
         break;
-    case 8: case 9:
+    case 8:
         /* code */
         break;
-    case 10:
+    case 9:
         printf("Programm wird beendet.\n");
         exit(0);
         break;
