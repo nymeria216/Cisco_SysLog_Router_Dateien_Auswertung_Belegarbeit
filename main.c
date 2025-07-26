@@ -28,6 +28,7 @@ char suchbegriff[256];
 char zeile[1024];
 char monat[4];
 char uhrzeit[9];
+char sevLevel[8];
 char dateiname[256] = "/Volumes/HSMW_MacOS/Programmierung/2._Semester/Programmierung_I/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/logs/syslog_generic.log";
 
 int monatZuZahl(const char *monat);
@@ -111,8 +112,8 @@ int alleMonate(const char *monat) {
 
 // Funktion: Definition der und aller Tage
 int tagDefinition() {
+     versuch = 0;
     do {
-        versuch = 0;
         printf("\n Tag (DD): ");
         int falscheEingabe = scanf("%d", &tag);
         while (getchar() != '\n');
@@ -476,6 +477,78 @@ int zeitraum() {
     return 0;
 }
 
+int severityLevel() {
+    const char *sevLevellNamen[] = {
+        "EMERGENCIES", "ALERTS", "CRITICALS", "ERRORS", "WARNINGS",
+        "NOTIFICATIONS", "INFORMATIONAL", "DEBUGGING"
+    };
+    const char *sevLevelBeschreibung[] = {
+        "Ein System ist unbenutzbar",
+        "Sofortiges Handeln erforderlich",
+        "Kritische Zustände",
+        "Errorwarnungen",
+        "Warnhinweise",
+        "Normale, aber signifikante Zustände",
+        "Informierende Nachrichten/Logs",
+        "Debugging Nachrichten/Logs"
+    };
+
+    printf("\n Wähle ein Severity Level aus.");
+    for (int i = 0; i < 8; ++i)
+        printf("\n %d: %s", i, sevLevellNamen[i]);
+    printf("\n 8: Alle");
+    printf("\n 9: Programm beenden\n");
+
+    int sevLevelAuswahl;
+    printf("\n Ausgewähltes Severity Level: ");
+    scanf("%d", &sevLevelAuswahl);
+    while (getchar() != '\n'); // Eingabepuffer leeren
+
+    if (sevLevelAuswahl == 9) {
+        printf("\nProgramm wird beendet.\n");
+        exit(0);
+    }
+
+    dateiOeffnen();
+    int treffer = 0, zeilennummer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        char *prozentZeichen = strchr(zeile, '%');
+        if (prozentZeichen) {
+            char *minusZeichen = strchr(prozentZeichen, '-');
+            if (minusZeichen && isdigit(*(minusZeichen + 1)) && !isdigit(*(minusZeichen + 2))) {
+                int sev = *(minusZeichen + 1) - '0';
+                if ((sevLevelAuswahl == 8) || (sev == sevLevelAuswahl)) {
+                    if (treffer == 0 && sevLevelAuswahl != 8) {
+                        printf("\nAlle %s Logs werden angezeigt (%s)\n\n", sevLevellNamen[sevLevelAuswahl], sevLevelBeschreibung[sevLevelAuswahl]);
+                    }
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+        }
+    }
+    fclose(datei);
+
+    if (treffer == 0) {
+        if (sevLevelAuswahl == 8)
+            printf("Keine Logs gefunden.\n");
+        else
+            printf("Keine Logs mit Severity Level %d gefunden.\n", sevLevelAuswahl);
+    } else {
+        if (sevLevelAuswahl == 8)
+            printf("\nInsgesamt wurden %d Logs gefunden.\n", treffer);
+        else
+            printf("\nInsgesamt wurden %d Logs mit Severity Level %d gefunden.\n", treffer, sevLevelAuswahl);
+    }
+    return 0;
+}
+
+/* ##############################
+      MAIN-/ HAUPTMETHODE
+###############################*/
+
 int main() {
     system("clear");
     printf("\n#####################################################");
@@ -494,10 +567,9 @@ int main() {
     printf("\n4: User");
     printf("\n5: Ereignis");
     printf("\n6: Fehlermeldung");
-    printf("\n7: MAC-Adresse");
-    printf("\n8: Severity Level");
-    printf("\n9: Neue Datei auswählen");
-    printf("\n10: Programm beenden");
+    printf("\n7: Severity Level");
+    printf("\n8: Neue Datei auswählen");
+    printf("\n9: Programm beenden");
 
     printf("\n\nAusgewählter Suchbegriff: ");
     scanf("%d", &begriff);
@@ -512,7 +584,11 @@ int main() {
     case 2:
         printf("Test");
         break;
-    case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+    case 3: case 4: case 5: case 6: 
+    case 7: 
+        severityLevel();
+        break;
+    case 8: case 9:
         /* code */
         break;
     case 10:
