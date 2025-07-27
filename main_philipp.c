@@ -7,16 +7,15 @@
 #include <ctype.h>              // Buchstaben-Bibliothek
 // #include <windows.h>         // Für SetConsoleOutputCP() und CP_UTF8 und Windows ONLY
 
-#ifdef _WIN32
-#define strcasecmp _stricmp
-#endif
+// #ifdef _WIN32                // Windows ONLY
+// #define strcasecmp _stricmp  // Windows ONLY
+// #endif                       // Windows ONLY
 
 /* ##############################
      VARIABLENDEKLARATION
 ###############################*/
 
 // globale Variablendefinition
-// SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
 FILE* datei;
 int stunde;
 int minute;
@@ -32,6 +31,7 @@ char suchbegriff[256];
 char zeile[1024];
 char monat[4];
 char uhrzeit[9];
+char sevLevel[8];
 char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
 
 int monatZuZahl(const char* monat);
@@ -60,8 +60,6 @@ int dateiOeffnen() {
 
 // Funktion: eigene Suchbegriffeingabe
 int eigenerSuchbegriff() {
-    int ch;
-    while ((ch = getchar()) != '\n' && ch != EOF); // Eingabepuffer leeren
 
     printf("\nGib einen beliebigen Suchbegriff und drücke die Enter-Taste: ");
     fgets(suchbegriff, sizeof(suchbegriff), stdin);
@@ -129,6 +127,7 @@ int istPrivateIP(const char* ip) {
 
     // 192.168.0.0 – 192.168.255.255
     if (a == 192 && b == 168) return 1;
+
 
     return 0;
 }
@@ -200,6 +199,7 @@ int ipSuche() {
         printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
     }
 
+
     return 0;
 }
 
@@ -219,8 +219,8 @@ int alleMonate(const char* monat) {
 
 // Funktion: Definition der und aller Tage
 int tagDefinition() {
+    versuch = 0;
     do {
-        versuch = 0;
         printf("\n Tag (DD): ");
         int falscheEingabe = scanf("%d", &tag);
         while (getchar() != '\n');
@@ -600,7 +600,7 @@ int zeitraum() {
         break;
     }
     case 4:
-        printf("Programm wird beendet.\n");
+        printf("Programm wird beendet\n");
         exit(0);
         break;
     default:
@@ -659,72 +659,330 @@ void ipFilterSucheEinfach(int privat) {
     }
 }
 
+void eigeneFacilitySuche() {
+    char eingabe[64];
+    printf("\nGib einen Facility-Begriff ein (z. B. STP, LINK, DHCP): ");
+    fgets(eingabe, sizeof(eingabe), stdin);
+    eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
+
+    if (strlen(eingabe) == 0) {
+        printf("Kein Begriff eingegeben. Zurück...\n");
+        return;
+    }
+
+    // Muster erstellen, z. B. "%STP-"
+    char muster[70];
+    snprintf(muster, sizeof(muster), "%%%s-", eingabe);
+
+    dateiOeffnen();
+    zeilennummer = 0;
+    treffer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, muster)) {
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            treffer++;
+        }
+    }
+
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf("\nKeine Logzeilen zur Facility '%s' gefunden.\n", eingabe);
+    }
+    else {
+        printf("\nInsgesamt %d Treffer für Facility '%s'.\n", treffer, eingabe);
+    }
+}
+
+#define MAX_FACILITIES 1000
+
+int compareStrings(const void* a, const void* b) {
+    const char* sa = *(const char**)a;
+    const char* sb = *(const char**)b;
+    return strcmp(sa, sb);
+}
+
+void facilitySuche() {
+    char* facilities[MAX_FACILITIES];
+    int anzahlFacilities = 0;
+
+    dateiOeffnen();
+    zeilennummer = 0;
+
+    for (int i = 0; i < MAX_FACILITIES; i++) {
+        facilities[i] = NULL;
+    }
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+
+        char* start = strchr(zeile, '%');
+        if (start) {
+            start++; // nach dem '%'
+
+            char facility[64];
+            int i = 0;
+            while (*start && *start != '-' && i < 63) {
+                facility[i++] = *start++;
+            }
+            facility[i] = '\0';
+
+            if (strlen(facility) == 0) continue;
+
+            int vorhanden = 0;
+            for (int j = 0; j < anzahlFacilities; j++) {
+                if (strcmp(facilities[j], facility) == 0) {
+                    vorhanden = 1;
+                    break;
+                }
+            }
+
+            if (!vorhanden && anzahlFacilities < MAX_FACILITIES) {
+                facilities[anzahlFacilities] = malloc(strlen(facility) + 1);
+                strcpy(facilities[anzahlFacilities], facility);
+                anzahlFacilities++;
+            }
+        }
+    }
+
+    fclose(datei);
+
+    if (anzahlFacilities == 0) {
+        printf("\nKeine Facilities gefunden.\n");
+        return;
+    }
+
+    // Sortieren alphabetisch
+    qsort(facilities, anzahlFacilities, sizeof(char*), compareStrings);
+
+    printf("\nGefundene Facilities:\n");
+    for (int i = 0; i < anzahlFacilities; i++) {
+        printf("%2d: %s\n", i + 1, facilities[i]);
+    }
+    printf(" 0: Zurück\n");
+
+    int auswahl;
+    printf("\nWähle eine Facility aus: ");
+    scanf("%d", &auswahl);
+    while (getchar() != '\n');
+
+    if (auswahl == 0 || auswahl > anzahlFacilities) {
+        printf("Zurück...\n");
+        return;
+    }
+
+    const char* muster = facilities[auswahl - 1];
+    char suchmuster[70];
+    snprintf(suchmuster, sizeof(suchmuster), "%%%s-", muster); // z. B. %LINK-
+
+    dateiOeffnen();
+    treffer = 0;
+    zeilennummer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, suchmuster)) {
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            treffer++;
+        }
+    }
+
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf("\nKeine Treffer für Facility '%s' gefunden.\n", muster);
+    }
+    else {
+        printf("\nInsgesamt %d Treffer für Facility '%s'.\n", treffer, muster);
+    }
+
+    // Speicher freigeben
+    for (int i = 0; i < anzahlFacilities; i++) {
+        free(facilities[i]);
+    }
+}
+
+
+int severityLevel() {
+    const char* sevLevellNamen[] = {
+        "EMERGENCIES", "ALERTS", "CRITICALS", "ERRORS", "WARNINGS",
+        "NOTIFICATIONS", "INFORMATIONAL", "DEBUGGING"
+    };
+    const char* sevLevelBeschreibung[] = {
+        "Ein System ist unbenutzbar",
+        "Sofortiges Handeln erforderlich",
+        "Kritische Zustände",
+        "Errorwarnungen",
+        "Warnhinweise",
+        "Normale, aber signifikante Zustände",
+        "Informierende Nachrichten/Logs",
+        "Debugging Nachrichten/Logs"
+    };
+
+    printf("\n Wähle ein Severity Level aus.");
+    for (int i = 0; i < 8; ++i)
+        printf("\n %d: %s", i, sevLevellNamen[i]);
+    printf("\n 8: Alle");
+    printf("\n 9: Programm beenden\n");
+
+    int sevLevelAuswahl;
+    printf("\n Ausgewähltes Severity Level: ");
+    scanf("%d", &sevLevelAuswahl);
+    while (getchar() != '\n'); // Eingabepuffer leeren
+
+    if (sevLevelAuswahl == 9) {
+        printf("\nProgramm wird beendet.\n");
+        exit(0);
+    }
+
+    dateiOeffnen();
+    int treffer = 0, zeilennummer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        char* prozentZeichen = strchr(zeile, '%');
+        if (prozentZeichen) {
+            char* minusZeichen = strchr(prozentZeichen, '-');
+            if (minusZeichen && isdigit(*(minusZeichen + 1)) && !isdigit(*(minusZeichen + 2))) {
+                int sev = *(minusZeichen + 1) - '0';
+                if ((sevLevelAuswahl == 8) || (sev == sevLevelAuswahl)) {
+                    if (treffer == 0 && sevLevelAuswahl != 8) {
+                        printf("\nAlle %s Logs werden angezeigt (%s)\n\n", sevLevellNamen[sevLevelAuswahl], sevLevelBeschreibung[sevLevelAuswahl]);
+                    }
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+        }
+    }
+    fclose(datei);
+
+    if (treffer == 0) {
+        if (sevLevelAuswahl == 8)
+            printf("Keine Logs gefunden.\n");
+        else
+            printf("Keine Logs mit Severity Level %d gefunden.\n", sevLevelAuswahl);
+    }
+    else {
+        if (sevLevelAuswahl == 8)
+            printf("\nInsgesamt wurden %d Logs gefunden.\n", treffer);
+        else
+            printf("\nInsgesamt wurden %d Logs mit Severity Level %d gefunden.\n", treffer, sevLevelAuswahl);
+    }
+    return 0;
+}
+/* ##############################
+      MAIN-/ HAUPTMETHODE
+###############################*/
+
 int main() {
+//SetConsoleOutputCP(CP_UTF8);  // Windows: Konsole auf UTF-8
+
+#ifdef _WIN32
+    system("cls");
+#else
     system("clear");
+#endif
+
     printf("\n#####################################################");
     printf("\n      Auswertungsprogramm für CISCO-Logdateien");
     printf("\n#####################################################");
-    printf("\n\nBitte geben Sie den Dateipfad ein: %s\n", dateiname);
+
+    // Dateiendung prüfen
+    printf("\n\nBitte geben Sie den Dateipfad ein: %s", dateiname);
     if (!log_dateiendung(dateiname)) {
         printf("\nDie Datei muss die Endung .log haben. Programm wird beendet.\n");
         return 0;
     }
-    printf("\nWähle ein Suchbegriff aus:\n");
-    printf("\n0: Benutzerdefinierte freie Suche");
-    printf("\n1: Zeitraum");
-    printf("\n2: IP Adresse");
-    printf("\n3: Interfaces");
-    printf("\n4: User");
-    printf("\n5: Ereignis");
-    printf("\n6: Fehlermeldung");
-    printf("\n7: MAC-Adresse");
-    printf("\n8: Severity Level");
-    printf("\n9: Neue Datei auswählen");
-    printf("\n10: Programm beenden");
 
-    printf("\n\nAusgewählter Suchbegriff: ");
-    scanf("%d", &begriff);
+    // Hauptmenü-Schleife
+    while (1) {
+        printf("\n\nWähle ein Suchbegriff aus:");
+        printf("\n0: Eigene Eingabe");
+        printf("\n1: Zeitraum");
+        printf("\n2: IP Adresse");
+        printf("\n3: Facilities");
+        printf("\n4: User");
+        printf("\n5: Ereignis");
+        printf("\n6: Fehlermeldung");
+        printf("\n7: Severity Level");
+        printf("\n8: Neue Datei auswählen");
+        printf("\n9: Programm beenden");
 
-    switch (begriff) {
-    case 0:
-        eigenerSuchbegriff();
-        break;
-    case 1:
-        zeitraum();
-        break;
-    case 2: {
-        int wahl;
-        printf("\nWähle die Art der IP-Suche:\n");
-        printf("1: Manuelle Eingabe einer IP-Adresse\n");
-        printf("2: Nur private IP-Adressen anzeigen\n");
-        printf("3: Nur öffentliche IP-Adressen anzeigen\n");
-        printf("Auswahl: ");
-        scanf("%d", &wahl);
+        printf("\n\nAusgewählter Suchbegriff: ");
+        if (scanf("%d", &begriff) != 1) {
+            while (getchar() != '\n');
+            printf("Ungültige Eingabe. Bitte Zahl eingeben.\n");
+            continue;
+        }
+        while (getchar() != '\n');
 
-        switch (wahl) {
+        switch (begriff) {
+        case 0:
+            eigenerSuchbegriff();
+            break;
         case 1:
-            ipSuche(); // vorhandene Funktion
+            zeitraum();
             break;
-        case 2:
-            ipFilterSucheEinfach(1); // nur private IPs
-            break;
-        case 3:
-            ipFilterSucheEinfach(0); // nur öffentliche IPs
-            break;
-        default:
-            printf("Ungültige Auswahl.\n");
+        case 2: {
+            int wahl;
+            printf("\nWähle die Art der IP-Suche:\n");
+            printf("1: Manuelle Eingabe einer IP-Adresse\n");
+            printf("2: Nur private IP-Adressen anzeigen\n");
+            printf("3: Nur öffentliche IP-Adressen anzeigen\n");
+            printf("4: Zurück ins Hauptmenü\n");
+            printf("5: Programm beenden\n");
+            printf("\nAuswahl: ");
+            scanf("%d", &wahl);
+            while (getchar() != '\n');
+
+            switch (wahl) {
+            case 1: ipSuche(); break;
+            case 2: ipFilterSucheEinfach(1); break;
+            case 3: ipFilterSucheEinfach(0); break;
+            case 4: printf("Zurück ins Hauptmenü...\n"); break;
+            case 5: printf("Programm wird beendet.\n"); exit(0);
+            default: printf("Ungültige Auswahl.\n"); break;
+            }
             break;
         }
-        break;
+        case 3: {
+            int wahl;
+            printf("\nWähle die Art der Facility-Suche:\n");
+            printf("1: Eigene Suche nach Facility-Begriff\n");
+            printf("2: Alle vorhandenen Facilities anzeigen und auswählen\n");
+            printf("3: Zurück ins Hauptmenü\n");
+            printf("4: Programm beenden\n");
+            printf("\nAuswahl: ");
+            scanf("%d", &wahl);
+            while (getchar() != '\n');
+
+            switch (wahl) {
+            case 1: eigeneFacilitySuche(); break;
+            case 2: facilitySuche(); break;
+            case 3: printf("Zurück ins Hauptmenü...\n"); break;
+            case 4: printf("Programm wird beendet.\n"); exit(0);
+            default: printf("Ungültige Auswahl.\n"); break;
+            }
+            break;
+        }
+        case 4: case 5: case 6:
+        case 7:
+            severityLevel();
+            break;
+        case 8:
+            printf("\nFunktion zum Dateiwechsel ist noch nicht implementiert.\n");
+            break;
+        case 9:
+            printf("Programm wird beendet.\n");
+            return 0;
+        default:
+            printf("Ungültige Auswahl. Bitte erneut versuchen.\n");
+            break;
+        }
     }
-    case 3: case 4: case 5: case 6: case 7: case 8: case 9:
-        /* code */
-        break;
-    case 10:
-        printf("Programm wird beendet.\n");
-        exit(0);
-        break;
-    default:
-        break;
-    }
+
+    return 0;
 }
