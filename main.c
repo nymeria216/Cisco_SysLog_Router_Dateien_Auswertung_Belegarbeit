@@ -790,6 +790,39 @@ int severityLevel() {
     return 0;
 }
 
+int neueDateiAuswaehlen() {
+    char neuerDateiname[256];
+    FILE *neueDatei;
+
+    // Eingabepuffer leeren!
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF);
+    
+    while (1) {
+        printf("\nBitte geben Sie den Pfad zur neuen Logdatei ein (mit .log-Endung):\n> ");
+        fgets(neuerDateiname, sizeof(neuerDateiname), stdin);
+        neuerDateiname[strcspn(neuerDateiname, "\n")] = '\0'; // Zeilenumbruch entfernen
+
+        if (!log_dateiendung(neuerDateiname)) {
+            printf("Die Datei muss die Endung .log haben.\n");
+            continue;
+        }
+
+        neueDatei = fopen(neuerDateiname, "r");
+        if (!neueDatei) {
+            printf("Datei konnte nicht geöffnet werden. Bitte erneut versuchen.\n");
+            continue;
+        }
+        fclose(neueDatei);
+
+        // Dateiname übernehmen
+        strcpy(dateiname, neuerDateiname);
+        printf("\nNeue Datei: %s\n", dateiname);
+        break;
+    }
+    return 0;
+}
+
 void ipFilterSucheEinfach(int privat) {
     dateiOeffnen();
 
@@ -1111,7 +1144,7 @@ int main() {
             severityLevel();
             break;
         case 8:
-            printf("\nFunktion zum Dateiwechsel ist noch nicht implementiert.\n");
+            neueDateiAuswaehlen();
             break;
         case 9:
             printf("Programm wird beendet.\n");
