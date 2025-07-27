@@ -16,7 +16,6 @@
 ###############################*/
 
 // globale Variablendefinition
-// SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
 FILE* datei;
 int stunde;
 int minute;
@@ -61,10 +60,8 @@ int dateiOeffnen() {
 
 // Funktion: eigene Suchbegriffeingabe
 int eigenerSuchbegriff() {
-    int ch;
-    while ((ch = getchar()) != '\n' && ch != EOF); // Eingabepuffer leeren
 
-    printf("\n Gib einen beliebigen Suchbegriff und drücke die Enter-Taste: ");
+    printf("\nGib einen beliebigen Suchbegriff und drücke die Enter-Taste: ");
     fgets(suchbegriff, sizeof(suchbegriff), stdin);
     suchbegriff[strcspn(suchbegriff, "\n")] = '\0'; // Zeilenumbruch entfernen
 
@@ -92,7 +89,8 @@ int eigenerSuchbegriff() {
 
     if (treffer == 0) {
         printf("Keine Treffer für '%s' gefunden.\n", suchbegriff);
-    } else {
+    }
+    else {
         printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
     }
 
@@ -208,8 +206,8 @@ int ipSuche() {
 // Funktion: Definition aller gültigen Monate
 int alleMonate(const char *monat) {
     const char* gueltigeMonate[] = {
-        "Jan", "Feb", "Mar", "Apr", "Mai", "Jun",
-        "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
     for (int i = 0; i < 12; i++) {
         if (strcasecmp(monat, gueltigeMonate[i]) == 0) {
@@ -221,7 +219,7 @@ int alleMonate(const char *monat) {
 
 // Funktion: Definition der und aller Tage
 int tagDefinition() {
-     versuch = 0;
+    versuch = 0;
     do {
         printf("\n Tag (DD): ");
         int falscheEingabe = scanf("%d", &tag);
@@ -229,12 +227,14 @@ int tagDefinition() {
         if (falscheEingabe != 1 || tag < 1 || tag > 31) {
             printf("\nUngültige Eingabe – gib einen Tag zwischen 1 und 31 ein.");
             versuch++;
-        } else {
+        } 
+        else {
             break;
         }
         if (versuch < 3) {
             printf("\nNoch %d Versuch(e) übrig\n", 3 - versuch);
-        } else {
+        } 
+        else {
             printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n");
             return 1;
         }
@@ -246,22 +246,25 @@ int tagDefinition() {
 int monatDefinition() {
     do {
         versuch = 0;
-        printf("\n Monat (MMM): ");
+        printf(" Monat (MMM): ");
         if (scanf("%3s", monat) != 1) {
             printf("Fehler bei der Eingabe.\n");
             while (getchar() != '\n');
-        } else {
+        } 
+        else {
             while (getchar() != '\n');
             if (!alleMonate(monat)) {
                 printf("\nUngültige Eingabe (z. B. Jan, Feb, Mar...).\n");
                 versuch++;
-            } else {
+            } 
+            else {
                 break;
             }
         }
         if (versuch < 3) {
             printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
-        } else {
+        } 
+        else {
             printf("Zu viele ungültige Versuche. Das Programm wird beendet.\n");
             return 1;
         }
@@ -281,7 +284,8 @@ int jahrDefinition() {
             jahrVorhanden = 1;
             if (logJahr < minJahr) minJahr = logJahr;
             if (logJahr > maxJahr) maxJahr = logJahr;
-        } else if (sscanf(zeile, "<%d>: %3s %d %d", &dummy, logMonat, &logTag, &logJahr) == 4 && logJahr >= 1970 && logJahr <= 2100) {
+        } 
+        else if (sscanf(zeile, "<%d>: %3s %d %d", &dummy, logMonat, &logTag, &logJahr) == 4 && logJahr >= 1970 && logJahr <= 2100) {
             jahrVorhanden = 1;
             if (logJahr < minJahr) minJahr = logJahr;
             if (logJahr > maxJahr) maxJahr = logJahr;
@@ -291,27 +295,31 @@ int jahrDefinition() {
     if (jahrVorhanden) {
         do {
             versuch = 0;
-            printf("\n! Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).", minJahr, maxJahr);
-            printf(" Jahreszahl (YYYY): ");
+            printf("! Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).", minJahr, maxJahr);
+            printf("\n Jahreszahl (YYYY): ");
             int falscheEingabe = scanf("%d", &jahr);
             if (falscheEingabe != 1) {
                 printf("\nKeine gültige Jahreszahl.");
                 versuch++;
                 while (getchar() != '\n');
-            } else if (jahr < minJahr || jahr > maxJahr) {
+            } 
+            else if (jahr < minJahr || jahr > maxJahr) {
                 printf(" Jahreszahl außerhalb des gültigen Bereichs.");
                 versuch++;
-            } else {
+            } 
+            else {
                 break;
             }
             if (versuch < 3) {
                 printf("\nNoch %d Versuch(e) übrig\n", 3 - versuch);
-            } else {
+            } 
+            else {
                 printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n");
                 return 1;
             }
         } while (1);
-    } else {
+    } 
+    else {
         jahr = -1;
         printf("\nEs ist keine Abfrage für das Jahr nötig.\n");
     }
@@ -321,21 +329,24 @@ int jahrDefinition() {
 // Funktion: Definition der Uhrzeit
 int uhrzeitDefinition() {
     do {
-        printf("\n Uhrzeit (HH:MM:SS): ");
+        printf(" Uhrzeit (HH:MM:SS): ");
         if (scanf("%d:%d:%d", &stunde, &minute, &sekunde) != 3) {
             printf("Ungültiges Format. Bitte HH:MM:SS eingeben.\n");
             versuch++;
             int ch;
             while ((ch = getchar()) != '\n' && ch != EOF);
-        } else if (stunde < 0 || stunde > 23 || minute < 0 || minute > 59 || sekunde < 0 || sekunde > 59) {
+        } 
+        else if (stunde < 0 || stunde > 23 || minute < 0 || minute > 59 || sekunde < 0 || sekunde > 59) {
             printf("Ungültige Uhrzeitformat: %02d:%02d:%02d\n", stunde, minute, sekunde);
             versuch++;
-        } else {
+        } 
+        else {
             break;
         }
         if (versuch < 3) {
             printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
-        } else {
+        } 
+        else {
             printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n");
             return 1;
         }
@@ -409,57 +420,117 @@ int zeitraum() {
     switch (zeitauswahl) {
     // Ausgabe aller Logs vor dem ersten Zeitpunkt
     case 1: {
+        treffer = 0;
         dateiOeffnen();
         while (fgets(zeile, sizeof(zeile), datei)) {
             char stern;
-            int lTag, lJahr, lStunde, lMinute, lSekunde, millisek;
+            int lTag = 0, lJahr = -1, lStunde = 0, lMinute = 0, lSekunde = 0;
             char lMonat[4];
-            if (jahr == -1) {
-                if (sscanf(zeile, "%c%3s %d %d:%d:%d.%d", &stern, lMonat, &lTag, &lStunde, &lMinute, &lSekunde, &millisek) == 7) {
-                    int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
-                    if (logZeit >= startzeit) printf("%s", zeile);
+
+            // Altes Cisco-Format: *Sep 14 06:04:55.610: ...
+            if (sscanf(zeile, "*%3s %d %d:%d:%d.%*d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
+                int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
+                if (logZeit >= startzeit) {
+                    printf("%s", zeile);
+                    treffer++;
                 }
-            } else {
-                if (sscanf(zeile, "%c%3s %d %d %d:%d:%d.%d", &stern, lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde, &millisek) == 8) {
-                    int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
-                    if (logZeit >= startzeit) printf("%s", zeile);
+            }
+            // Neues Cisco-Format: <189>: Sep 27 2023 10:19:18.4321 UTC: ...
+            else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d.%*d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
+                int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                if (logZeit >= startzeit) {
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+            // Falls Zeile ohne Millisekunden (selten, aber möglich)
+            else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
+                int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                if (logZeit >= startzeit) {
+                    printf("%s", zeile);
+                    treffer++;
                 }
             }
         }
         fclose(datei);
+
+        if (treffer == 0) {
+            printf("\nKeine Logs gefunden.\n");
+        } else {
+            printf("\nEs wurden %d Logs gefunden.\n", treffer);
+        }
+
         break;
     }
     // Ausgabe aller Logs nach dem ersten Zeitpunkt
     case 2: {
+        treffer = 0;
         dateiOeffnen();
         while (fgets(zeile, sizeof(zeile), datei)) {
-            int lTag, lJahr, lStunde, lMinute, lSekunde;
+            int lTag = 0, lJahr = -1, lStunde = 0, lMinute = 0, lSekunde = 0;
             char lMonat[4];
-            if (jahr == -1) {
-                if (sscanf(zeile, "*%3s %d %d:%d:%d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
-                    int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
-                    if (logZeit <= startzeit) printf("%s", zeile);
+
+            // Altes Format ohne Jahr, mit Millisekunden
+            if (jahr == -1 && sscanf(zeile, "*%3s %d %d:%d:%d.%*d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
+                int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
+                if (logZeit <= startzeit) {
+                    printf("%s", zeile);
+                    treffer++;
                 }
-            } else {
-                if (sscanf(zeile, "*%3s %d %d %d:%d:%d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
-                    int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
-                    if (logZeit <= startzeit) printf("%s", zeile);
+            }
+            // Altes Format mit Jahr, mit Millisekunden
+            else if (jahr != -1 && sscanf(zeile, "*%3s %d %d %d:%d:%d.%*d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
+                int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                if (logZeit <= startzeit) {
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+            // Neues Format mit Jahr, mit Millisekunden
+            else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d.%*d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
+                int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                if (logZeit <= startzeit) {
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+            // Optional: ohne Millisekunden
+            else if (jahr == -1 && sscanf(zeile, "*%3s %d %d:%d:%d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
+                int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
+                if (logZeit <= startzeit) {
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+            else if (jahr != -1 && sscanf(zeile, "*%3s %d %d %d:%d:%d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
+                int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                if (logZeit <= startzeit) {
+                    printf("%s", zeile);
+                    treffer++;
                 }
             }
         }
         fclose(datei);
+
+        if (treffer == 0) {
+            printf("\nKeine Logs gefunden.\n");
+        } else {
+            printf("\nEs wurden %d Logs gefunden.\n", treffer);
+        }
         break;
     }
     // Ausgabe aller Logs zwischen zwei Zeitpunkten
     case 3: {
+        treffer = 0;
         int endTag, endJahr, endStunde, endMinute, endSekunde;
+        double sekundenBruch = 0.0;
         char endMonat[4];
         int endzeit;
-        printf("\nGib die zweite Zeit ein (Tag, Monat, Jahr, Uhrzeit):\n");
-        // Zweiter Tag
+
+        // --- Eingabe und Validierung: Tag ---
         do {
             versuch = 0;
-            printf("\n Tag (DD): ");
+            printf(" Tag (DD): ");
             int falscheEingabe = scanf("%d", &endTag);
             while (getchar() != '\n');
             if (falscheEingabe != 1 || endTag < 1 || endTag > 31) {
@@ -469,45 +540,52 @@ int zeitraum() {
             if (versuch < 3) printf("\nNoch %d Versuch(e) übrig\n", 3 - versuch);
             else { printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n"); return 1; }
         } while (1);
-        // Zweiter Monat
+
+        // --- Eingabe und Validierung: Monat ---
         do {
             versuch = 0;
-            printf("\n Monat (MMM): ");
+            printf(" Monat (MMM): ");
             if (scanf("%3s", endMonat) != 1) {
                 printf("Fehler bei der Eingabe.\n");
                 while (getchar() != '\n');
             } else {
                 while (getchar() != '\n');
                 if (!alleMonate(endMonat)) {
-                    printf("\nUngültige Eingabe (z. B. Jan, Feb, Mar...).\n");
+                    printf("\nUngültige Eingabe (z. B. Jan, Feb, Mar...).\n");
                     versuch++;
                 } else break;
             }
             if (versuch < 3) printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
             else { printf("Zu viele ungültige Versuche. Das Programm wird beendet.\n"); return 1; }
         } while (1);
-        // Zweites Jahr
+
+        // --- Jahrenerkennung im Log ---
         int endJahrVorhanden = 0;
         minJahr = 9999; maxJahr = 0;
         dateiOeffnen();
         while (fgets(zeile, sizeof(zeile), datei)) {
             char logMonat[4];
-            int logTag, logJahr, dummy;
-            if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 && logJahr >= 1970 && logJahr <= 2100) {
+            int logTag, logJahr, logStunde, logMinute, logSekunde, dummy;
+            // Cisco-Format mit Jahr
+            if (sscanf(zeile, "*%3s %d %d %d:%d:%d", logMonat, &logTag, &logJahr, &logStunde, &logMinute, &logSekunde) == 6 && logJahr >= 1970 && logJahr <= 2100) {
                 endJahrVorhanden = 1;
                 if (logJahr < minJahr) minJahr = logJahr;
                 if (logJahr > maxJahr) maxJahr = logJahr;
-            } else if (sscanf(zeile, "<%d>: %3s %d %d", &dummy, logMonat, &logTag, &logJahr) == 4 && logJahr >= 1970 && logJahr <= 2100) {
+            }
+            // Syslog-Priority-Format mit Jahr
+            else if (sscanf(zeile, "<%d>: %3s %d %d %d:%d:%d", &dummy, logMonat, &logTag, &logJahr, &logStunde, &logMinute, &logSekunde) == 7 && logJahr >= 1970 && logJahr <= 2100) {
                 endJahrVorhanden = 1;
                 if (logJahr < minJahr) minJahr = logJahr;
                 if (logJahr > maxJahr) maxJahr = logJahr;
             }
         }
         fclose(datei);
+
+        // --- Eingabe und Validierung: Jahr ---
         if (endJahrVorhanden) {
             do {
                 versuch = 0;
-                printf("\n! Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).\n", minJahr, maxJahr);
+                printf("! Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).\n", minJahr, maxJahr);
                 printf(" Jahreszahl (YYYY): ");
                 int falscheEingabe = scanf("%d", &endJahr);
                 if (falscheEingabe != 1) {
@@ -525,9 +603,11 @@ int zeitraum() {
             endJahr = -1;
             printf("\nEs ist keine Abfrage für das Jahr nötig.\n");
         }
-        // Zweite Uhrzeit
+
+        // --- Eingabe und Validierung: Uhrzeit ---
         do {
-            printf("\n Uhrzeit (HH:MM:SS): ");
+            versuch = 0;
+            printf(" Uhrzeit (HH:MM:SS): ");
             if (scanf("%d:%d:%d", &endStunde, &endMinute, &endSekunde) != 3) {
                 printf("Ungültiges Format. Bitte HH:MM:SS eingeben.\n");
                 versuch++;
@@ -541,40 +621,79 @@ int zeitraum() {
             else { printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n"); return 1; }
         } while (1);
         while (getchar() != '\n');
+
+        // --- Zeitumrechnung und Bereichsprüfung ---
         if (jahr == -1 || endJahr == -1) {
             endzeit = zeitZuSekundenOhneJahr(endTag, endMonat, endStunde, endMinute, endSekunde);
             if (endzeit < startzeit) { printf("\nDie zweite Zeit muss nach der ersten Zeit liegen.\n"); break; }
+
             dateiOeffnen();
             printf("\nLogs zwischen %d. %s um %02d:%02d:%02d Uhr und %d. %s um %02d:%02d:%02d Uhr\n\n",
                 tag, monat, stunde, minute, sekunde,
                 endTag, endMonat, endStunde, endMinute, endSekunde);
+
             while (fgets(zeile, sizeof(zeile), datei)) {
                 int lTag, lStunde, lMinute, lSekunde;
                 char lMonat[4];
                 if (sscanf(zeile, "*%3s %d %d:%d:%d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
                     int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
-                    if (logZeit >= startzeit && logZeit <= endzeit) printf("%s", zeile);
+                    if (logZeit >= startzeit && logZeit <= endzeit) {
+                        printf("%s", zeile);
+                        treffer++;
+                    }
                 }
             }
         } else {
             endzeit = zeitZuSekunden(endTag, endMonat, endJahr, endStunde, endMinute, endSekunde);
             if (endzeit < startzeit) { printf("\nDie zweite Zeit muss nach der ersten Zeit liegen.\n"); break; }
+
             dateiOeffnen();
             printf("\nLogs zwischen %d. %s %d um %02d:%02d:%02d Uhr und %d. %s %d um %02d:%02d:%02d Uhr\n\n",
                 tag, monat, jahr, stunde, minute, sekunde,
                 endTag, endMonat, endJahr, endStunde, endMinute, endSekunde);
+
             while (fgets(zeile, sizeof(zeile), datei)) {
                 int lTag, lJahr, lStunde, lMinute, lSekunde;
                 char lMonat[4];
+                double sekundenBruch = 0.0;
+
+                // Cisco-Standardformat mit Jahr
                 if (sscanf(zeile, "*%3s %d %d %d:%d:%d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
                     int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
-                    if (logZeit >= startzeit && logZeit <= endzeit) printf("%s", zeile);
+                    if (logZeit >= startzeit && logZeit <= endzeit) {
+                        printf("%s", zeile);
+                        treffer++;
+                    }
+                }
+                // Syslog-Priority-Format mit Jahr und ggf. Zeitzone
+                else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d.%lf %*s", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde, &sekundenBruch) >= 6) {
+                    int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                    if (logZeit >= startzeit && logZeit <= endzeit) {
+                        printf("%s", zeile);
+                        treffer++;
+                    }
+                }
+                // Alternative: Priority-Format ohne Zeitzone
+                else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d.%lf", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde, &sekundenBruch) >= 6) {
+                    int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                    if (logZeit >= startzeit && logZeit <= endzeit) {
+                        printf("%s", zeile);
+                        treffer++;
+                    }
                 }
             }
         }
         fclose(datei);
+
+        // --- Ergebnis-Ausgabe ---
+        if (treffer == 0) {
+            printf("\nKeine Logs gefunden.\n");
+        } else {
+            printf("\nEs wurden %d Logs gefunden.\n", treffer);
+        }
         break;
     }
+
     case 4:
         printf("Programm wird beendet\n");
         exit(0);
@@ -584,55 +703,6 @@ int zeitraum() {
         break;
     }
     return 0;
-}
-
-void ipFilterSucheEinfach(int privat) {
-    dateiOeffnen();
-
-    zeilennummer = 0;
-    treffer = 0;
-
-    while (fgets(zeile, sizeof(zeile), datei)) {
-        zeilennummer++;
-
-        char* ptr = zeile;
-        while ((ptr = strstr(ptr, ".")) != NULL) {
-            // Rückwärtslauf zum Anfang der IP
-            char* start = ptr;
-            while (start > zeile && (isdigit(*(start - 1)) || *(start - 1) == '.')) start--;
-
-            char ip[32] = { 0 };
-            sscanf(start, "%31s", ip);
-
-            // Kürzen bei nachfolgendem Text
-            for (int i = 0; ip[i]; i++) {
-                if (!isdigit(ip[i]) && ip[i] != '.') {
-                    ip[i] = '\0';
-                    break;
-                }
-            }
-
-            if (istGueltigeIPv4(ip)) {
-                int isPriv = istPrivateIP(ip);
-                if ((privat && isPriv) || (!privat && !isPriv)) {
-                    printf("Zeile %d: %s", zeilennummer, zeile);
-                    treffer++;
-                    break;
-                }
-            }
-
-            ptr++;
-        }
-    }
-
-    fclose(datei);
-
-    if (treffer == 0) {
-        printf("\nKeine %s IP-Adressen gefunden.\n", privat ? "privaten" : "öffentlichen");
-    }
-    else {
-        printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
-    }
 }
 
 int severityLevel() {
@@ -703,12 +773,214 @@ int severityLevel() {
     return 0;
 }
 
+void ipFilterSucheEinfach(int privat) {
+    dateiOeffnen();
+
+    zeilennummer = 0;
+    treffer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+
+        char* ptr = zeile;
+        while ((ptr = strstr(ptr, ".")) != NULL) {
+            // Rückwärtslauf zum Anfang der IP
+            char* start = ptr;
+            while (start > zeile && (isdigit(*(start - 1)) || *(start - 1) == '.')) start--;
+
+            char ip[32] = { 0 };
+            sscanf(start, "%31s", ip);
+
+            // Kürzen bei nachfolgendem Text
+            for (int i = 0; ip[i]; i++) {
+                if (!isdigit(ip[i]) && ip[i] != '.') {
+                    ip[i] = '\0';
+                    break;
+                }
+            }
+
+            if (istGueltigeIPv4(ip)) {
+                int isPriv = istPrivateIP(ip);
+                if ((privat && isPriv) || (!privat && !isPriv)) {
+                    printf("Zeile %d: %s", zeilennummer, zeile);
+                    treffer++;
+                    break;
+                }
+            }
+
+            ptr++;
+        }
+    }
+
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf("\nKeine %s IP-Adressen gefunden.\n", privat ? "privaten" : "öffentlichen");
+    }
+    else {
+        printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
+    }
+}
+
+void eigeneFacilitySuche() {
+    char eingabe[64];
+    printf("\nGib einen Facility-Begriff ein (z. B. STP, LINK, DHCP): ");
+    fgets(eingabe, sizeof(eingabe), stdin);
+    eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
+
+    if (strlen(eingabe) == 0) {
+        printf("Kein Begriff eingegeben. Zurück...\n");
+        return;
+    }
+
+    // Muster erstellen, z. B. "%STP-"
+    char muster[70];
+    snprintf(muster, sizeof(muster), "%%%s-", eingabe);
+
+    dateiOeffnen();
+    zeilennummer = 0;
+    treffer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, muster)) {
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            treffer++;
+        }
+    }
+
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf("\nKeine Logzeilen zur Facility '%s' gefunden.\n", eingabe);
+    }
+    else {
+        printf("\nInsgesamt %d Treffer für Facility '%s'.\n", treffer, eingabe);
+    }
+}
+
+#define MAX_FACILITIES 1000
+
+int compareStrings(const void* a, const void* b) {
+    const char* sa = *(const char**)a;
+    const char* sb = *(const char**)b;
+    return strcmp(sa, sb);
+}
+
+void facilitySuche() {
+    char* facilities[MAX_FACILITIES];
+    int anzahlFacilities = 0;
+
+    dateiOeffnen();
+    zeilennummer = 0;
+
+    for (int i = 0; i < MAX_FACILITIES; i++) {
+        facilities[i] = NULL;
+    }
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+
+        char* start = strchr(zeile, '%');
+        if (start) {
+            start++; // nach dem '%'
+
+            char facility[64];
+            int i = 0;
+            while (*start && *start != '-' && i < 63) {
+                facility[i++] = *start++;
+            }
+            facility[i] = '\0';
+
+            if (strlen(facility) == 0) continue;
+
+            int vorhanden = 0;
+            for (int j = 0; j < anzahlFacilities; j++) {
+                if (strcmp(facilities[j], facility) == 0) {
+                    vorhanden = 1;
+                    break;
+                }
+            }
+
+            if (!vorhanden && anzahlFacilities < MAX_FACILITIES) {
+                facilities[anzahlFacilities] = malloc(strlen(facility) + 1);
+                strcpy(facilities[anzahlFacilities], facility);
+                anzahlFacilities++;
+            }
+        }
+    }
+
+    fclose(datei);
+
+    if (anzahlFacilities == 0) {
+        printf("\nKeine Facilities gefunden.\n");
+        return;
+    }
+
+    // Sortieren alphabetisch
+    qsort(facilities, anzahlFacilities, sizeof(char*), compareStrings);
+
+    printf("\nGefundene Facilities:\n");
+    for (int i = 0; i < anzahlFacilities; i++) {
+        printf("%2d: %s\n", i + 1, facilities[i]);
+    }
+    printf(" 0: Zurück\n");
+
+    int auswahl;
+    printf("\nWähle eine Facility aus: ");
+    scanf("%d", &auswahl);
+    while (getchar() != '\n');
+
+    if (auswahl == 0 || auswahl > anzahlFacilities) {
+        printf("Zurück...\n");
+        return;
+    }
+
+    const char* muster = facilities[auswahl - 1];
+    char suchmuster[70];
+    snprintf(suchmuster, sizeof(suchmuster), "%%%s-", muster); // z. B. %LINK-
+
+    dateiOeffnen();
+    treffer = 0;
+    zeilennummer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, suchmuster)) {
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            treffer++;
+        }
+    }
+
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf("\nKeine Treffer für Facility '%s' gefunden.\n", muster);
+    }
+    else {
+        printf("\nInsgesamt %d Treffer für Facility '%s'.\n", treffer, muster);
+    }
+
+    // Speicher freigeben
+    for (int i = 0; i < anzahlFacilities; i++) {
+        free(facilities[i]);
+    }
+}
+
 /* ##############################
       MAIN-/ HAUPTMETHODE
 ###############################*/
 
+
 int main() {
-    system("clear");
+    //SetConsoleOutputCP(CP_UTF8);  // Windows: Konsole auf UTF-8
+
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+    
     printf("\n#####################################################");
     printf("\n      Auswertungsprogramm für CISCO-Logdateien");
     printf("\n#####################################################");
@@ -718,69 +990,98 @@ int main() {
         return 0;
     }
 
-    printf("\nWähle ein Suchbegriff aus:");
-    printf("\n0: Eigene Eingabe");
-    printf("\n1: Zeitraum");
-    printf("\n2: IP Adresse");
-    printf("\n3: Interfaces");
-    printf("\n4: User");
-    printf("\n5: Ereignis");
-    printf("\n6: Fehlermeldung");
-    printf("\n7: Severity Level");
-    printf("\n8: Neue Datei auswählen");
-    printf("\n9: Programm beenden");
+    // Hauptmenü-Schleife
+    while (1) {
+        printf("\nWähle ein Suchbegriff aus:");
+        printf("\n0: Eigene Eingabe");
+        printf("\n1: Zeitraum");
+        printf("\n2: IP Adresse");
+        printf("\n3: Interfaces");
+        printf("\n4: User");
+        printf("\n5: Ereignis");
+        printf("\n6: Fehlermeldung");
+        printf("\n7: Severity Level");
+        printf("\n8: Neue Datei auswählen");
+        printf("\n9: Programm beenden");
 
-    printf("\n\nAusgewählter Suchbegriff: ");
-    scanf("%d", &begriff);
+        printf("\n\nAusgewählter Suchbegriff: ");
+        scanf("%d", &begriff);
 
-    switch (begriff) {
-    case 0:
-        eigenerSuchbegriff();
-        break;
-    case 1:
-        zeitraum();
-        break;
-    case 2: {
-        int wahl;
-        printf("\nWähle die Art der IP-Suche:\n");
-        printf("1: Manuelle Eingabe einer IP-Adresse\n");
-        printf("2: Nur private IP-Adressen anzeigen\n");
-        printf("3: Nur öffentliche IP-Adressen anzeigen\n");
-        printf("4: Programm beenden");
-        printf("\n\nAuswahl: ");
-        scanf("%d", &wahl);
-
-        switch (wahl) {
+        switch (begriff) {
+        case 0:
+            eigenerSuchbegriff();
+            break;
         case 1:
-            ipSuche(); // vorhandene Funktion
+            zeitraum();
             break;
-        case 2:
-            ipFilterSucheEinfach(1); // nur private IPs
-            break;
-        case 3:
-            ipFilterSucheEinfach(0); // nur öffentliche IPs
-            break;
-        case 4:
-            printf("Programm wird beendet.\n");
-            exit(0);
-        default:
-            printf("Ungültige Auswahl.\n");
+        case 2: {
+            int wahl;
+            printf("\nWähle die Art der IP-Suche:\n");
+            printf("1: Manuelle Eingabe einer IP-Adresse\n");
+            printf("2: Nur private IP-Adressen anzeigen\n");
+            printf("3: Nur öffentliche IP-Adressen anzeigen\n");
+            printf("4: Zurück ins Hauptmenü\n");
+            printf("5: Programm beenden\n");
+            printf("\n\nAuswahl: ");
+            scanf("%d", &wahl);
+            while (getchar() != '\n');
+
+            switch (wahl) {
+                case 1: 
+                    ipSuche(); 
+                    break;
+                case 2: 
+                    ipFilterSucheEinfach(1); 
+                    break;
+                case 3: 
+                    ipFilterSucheEinfach(0); 
+                    break;
+                case 4: 
+                    printf("Zurück ins Hauptmenü...\n"); 
+                    break;
+                case 5: 
+                    printf("Programm wird beendet.\n"); 
+                    exit(0);
+                default: 
+                    printf("Ungültige Auswahl.\n"); 
+                    break;
+            }
             break;
         }
-        break;
-    }
-    case 3: case 4: case 5: case 6: 
-    case 7: 
-        severityLevel();
-        break;
-    case 8:
-        /* code */
-        break;
-    case 9:
-        printf("Programm wird beendet.\n");
-        exit(0);
-        break;
-    default:
-        break;
+        case 3: {
+            int wahl;
+            printf("\nWähle die Art der Facility-Suche:\n");
+            printf("1: Eigene Suche nach Facility-Begriff\n");
+            printf("2: Alle vorhandenen Facilities anzeigen und auswählen\n");
+            printf("3: Zurück ins Hauptmenü\n");
+            printf("4: Programm beenden\n");
+            printf("\nAuswahl: ");
+            scanf("%d", &wahl);
+            while (getchar() != '\n');
+
+            switch (wahl) {
+            case 1: eigeneFacilitySuche(); break;
+            case 2: facilitySuche(); break;
+            case 3: printf("Zurück ins Hauptmenü...\n"); break;
+            case 4: printf("Programm wird beendet.\n"); exit(0);
+            default: printf("Ungültige Auswahl.\n"); break;
+            }
+            break;
+        }
+        case 4: case 5: case 6: 
+        case 7: 
+            severityLevel();
+            break;
+        case 8:
+            printf("\nFunktion zum Dateiwechsel ist noch nicht implementiert.\n");
+            break;
+        case 9:
+            printf("Programm wird beendet.\n");
+            exit(0);
+            break;
+        default:
+            printf("Ungültige Auswahl. Bitte erneut versuchen.\n");
+            break;
+        }
     }
 }
