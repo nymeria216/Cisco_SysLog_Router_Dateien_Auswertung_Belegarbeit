@@ -411,7 +411,8 @@ int zeitraum() {
     printf("\n1: Ab der ersten Zeit.");
     printf("\n2: Bis zur ersten Zeit.");
     printf("\n3: Zeitraum zwischen der ersten und zweiten Zeit.");
-    printf("\n4: Programm beenden.");
+    printf("\n4: Zurück ins Hauptmenü");
+    printf("\n5: Programm beenden.");
 
     printf("\n\nAuswahl: ");
     scanf("%d", &zeitauswahl);
@@ -693,8 +694,15 @@ int zeitraum() {
         }
         break;
     }
-
     case 4:
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+        printf("Zurück im Hauptmenü.");
+        break;
+    case 5:
         printf("Programm wird beendet\n");
         exit(0);
         break;
@@ -725,7 +733,8 @@ int severityLevel() {
     for (int i = 0; i < 8; ++i)
         printf("\n %d: %s", i, sevLevellNamen[i]);
     printf("\n 8: Alle");
-    printf("\n 9: Programm beenden\n");
+    printf("\n 9: Zurück ins Hauptmenü");
+    printf("\n 10: Programm beenden\n");
 
     int sevLevelAuswahl;
     printf("\n Ausgewähltes Severity Level: ");
@@ -733,6 +742,14 @@ int severityLevel() {
     while (getchar() != '\n'); // Eingabepuffer leeren
 
     if (sevLevelAuswahl == 9) {
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+        printf("\nZurück im Hauptmenü.");
+    }
+    else if (sevLevelAuswahl == 10) {
         printf("\nProgramm wird beendet.\n");
         exit(0);
     }
@@ -1036,8 +1053,14 @@ int main() {
                 case 3: 
                     ipFilterSucheEinfach(0); 
                     break;
-                case 4: 
-                    printf("Zurück ins Hauptmenü...\n"); 
+                case 4:
+                break;
+                    #ifdef _WIN32
+                        system("cls");
+                    #else
+                        system("clear");
+                    #endif
+                    printf("Zurück im Hauptmenü.\n"); 
                     break;
                 case 5: 
                     printf("Programm wird beendet.\n"); 
@@ -1060,11 +1083,26 @@ int main() {
             while (getchar() != '\n');
 
             switch (wahl) {
-            case 1: eigeneFacilitySuche(); break;
-            case 2: facilitySuche(); break;
-            case 3: printf("Zurück ins Hauptmenü...\n"); break;
-            case 4: printf("Programm wird beendet.\n"); exit(0);
-            default: printf("Ungültige Auswahl.\n"); break;
+            case 1: 
+                eigeneFacilitySuche(); 
+                break;
+            case 2: 
+                facilitySuche(); 
+                break;
+            case 3: 
+                    #ifdef _WIN32
+                        system("cls");
+                    #else
+                        system("clear");
+                    #endif
+                    printf("Zurück im Hauptmenü.\n"); 
+                    break;
+            case 4: 
+                printf("Programm wird beendet.\n"); 
+                exit(0);
+            default: 
+                printf("Ungültige Auswahl.\n"); 
+                break;
             }
             break;
         }
