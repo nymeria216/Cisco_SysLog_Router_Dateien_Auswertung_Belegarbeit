@@ -6,6 +6,10 @@
 #include <stdlib.h>             // Löschen des Terminals
 #include <ctype.h>              // Buchstaben-Bibliothek
 
+#ifdef _WIN32                   
+#define strcasecmp _stricmp
+#endif
+
 /* ##############################
      VARIABLENDEKLARATION
 ###############################*/
@@ -29,10 +33,20 @@ char monat[4];
 char uhrzeit[9];
 char sevLevel[8];
 // char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
-char dateiname[256] = "/Volumes/HSMW_MacOS/Programmierung/2._Semester/Programmierung_I/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/logs/syslog_generic.log";
+char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
 
 void hauptmenue(void);
-int zurueckInDasHauptmenueFrage(void);
+void auswahlnachSuche(int funktionID);
+int ipSuche(void);
+int zeitraum(void);
+int eigenerSuchbegriff(void);
+void eigeneFacilitySuche(void);
+void facilitySuche(void);
+void eigeneUserSuche(void);
+void userSuche(void);
+int severityLevel(void);
+int neueDateiAuswaehlen(void);
+void ipFilterSucheEinfach(int privat);
 
 int monatZuZahl(const char* monat);
 int zeitZuSekunden(int tag, const char* monat, int jahr, int stunde, int minute, int sekunde);
@@ -93,10 +107,7 @@ int istPrivateIP(const char* ip) {
 
 // Funktion: Suche nach einer IP-Adresse im Logfile
 int ipSuche() {
-    int ch;
-    // Leere den Eingabepuffer, falls noch alte Zeichen vorhanden sind
-    while ((ch = getchar()) != '\n' && ch != EOF);
-
+    
     int maxVersuche = 3;  // Maximal erlaubte Fehlversuche bei der IP-Eingabe
     int versuche = 0;
 
@@ -115,7 +126,7 @@ int ipSuche() {
         else if (!istGueltigeIPv4(suchbegriff)) {
             versuche++;
             printf("Ungültiges IP-Adressformat.");
-            
+
         }
         else {
             break; // Eingabe ist gültig → Schleife verlassen
@@ -150,7 +161,7 @@ int ipSuche() {
     }
 
     fclose(datei); // Datei schließen
-    zurueckInDasHauptmenueFrage();
+    auswahlnachSuche(1);
 
     // Zusammenfassung ausgeben
     if (treffer == 0) {
@@ -352,25 +363,51 @@ int monatZuZahl(const char* monat) {
     return 0;
 }
 
-// Funktion: Frage zurück in das Hauptmenü
-int zurueckInDasHauptmenueFrage() {
-    char antwort[2];
-    printf("\n\nSoll zurück in das Hauptmenü gekehrt werden? (y/ n) ");
-    fgets(antwort, sizeof(antwort), stdin);
+// Funktion: Auswahl nach Suche
+void auswahlnachSuche(int funktionID) {
+    char wahl;
+    printf("\n\nWas möchten Sie tun?");
+    printf("\n1: Suche wiederholen");
+    printf("\n2: Zurück ins Hauptmenü");
+    printf("\n3: Programm beenden");
+    printf("\nBitte auswählen: ");
+    wahl = getchar();
+    while (getchar() != '\n');
 
-    if (antwort[0] == 'n' || antwort[0] == 'N') {
-        printf("\nProgramm wird beendet.");
+    switch (wahl) {
+    case '1':
+        switch (funktionID) {
+        case 1: ipSuche(); break;
+        case 2: zeitraum(); break;
+        case 3: eigeneUserSuche(); break;
+        case 4: eigenerSuchbegriff(); break;
+        case 5: eigeneFacilitySuche(); break;
+        case 6: facilitySuche(); break;
+        case 7: userSuche(); break;
+        case 8: severityLevel(); break;
+        case 9: ipFilterSucheEinfach(1); break;  // private IPs
+        case 10: ipFilterSucheEinfach(0); break; // öffentliche IPs
+        default:
+            printf("Unbekannte Funktion.\n");
+            hauptmenue();
+        }
+        break;
+    case '2':
+        hauptmenue();
+        break;
+    case '3':
+        printf("\nProgramm wird beendet.\n");
         exit(0);
-    } else if (antwort[0] == 'y' || antwort[0] == 'Y') {
+    default:
+        printf("Ungültige Eingabe. Zurück ins Hauptmenü.\n");
         hauptmenue();
     }
-
-    return 0;
 }
+
 
 // Funktion 0: eigene Suchbegriffeingabe
 int eigenerSuchbegriff() {
-    
+
     printf("\n Gib einen beliebigen Suchbegriff und drücke die Enter-Taste: ");
     fgets(suchbegriff, sizeof(suchbegriff), stdin);
     suchbegriff[strcspn(suchbegriff, "\n")] = '\0'; // Zeilenumbruch entfernen
@@ -405,8 +442,8 @@ int eigenerSuchbegriff() {
     }
 
     fclose(datei);
-    
-    zurueckInDasHauptmenueFrage();
+
+    auswahlnachSuche(4);
 
     return 0;
 }
@@ -438,7 +475,8 @@ int zeitraum() {
         if (jahr == -1) {
             startzeit = zeitZuSekundenOhneJahr(tag, monat, stunde, minute, sekunde);
             printf("\nErste Zeit: %d. %s um %02d:%02d:%02d Uhr\n\n\n", tag, monat, stunde, minute, sekunde);
-        } else {
+        }
+        else {
             startzeit = zeitZuSekunden(tag, monat, jahr, stunde, minute, sekunde);
             printf("\nErste Zeit: %d. %s %d um %02d:%02d:%02d Uhr\n\n\n", tag, monat, jahr, stunde, minute, sekunde);
         }
@@ -475,7 +513,8 @@ int zeitraum() {
 
         if (treffer == 0) {
             printf("\nKeine Logs gefunden.\n");
-        } else {
+        }
+        else {
             printf("\nEs wurden %d Logs gefunden.\n", treffer);
         }
         break;
@@ -491,7 +530,8 @@ int zeitraum() {
         if (jahr == -1) {
             startzeit = zeitZuSekundenOhneJahr(tag, monat, stunde, minute, sekunde);
             printf("\nErste Zeit: %d. %s um %02d:%02d:%02d Uhr\n\n\n", tag, monat, stunde, minute, sekunde);
-        } else {
+        }
+        else {
             startzeit = zeitZuSekunden(tag, monat, jahr, stunde, minute, sekunde);
             printf("\nErste Zeit: %d. %s %d um %02d:%02d:%02d Uhr\n\n\n", tag, monat, jahr, stunde, minute, sekunde);
         }
@@ -541,7 +581,8 @@ int zeitraum() {
 
         if (treffer == 0) {
             printf("\nKeine Logs gefunden.\n");
-        } else {
+        }
+        else {
             printf("\nEs wurden %d Logs gefunden.\n", treffer);
         }
         break;
@@ -561,7 +602,8 @@ int zeitraum() {
         if (jahr == -1) {
             startzeit = zeitZuSekundenOhneJahr(tag, monat, stunde, minute, sekunde);
             printf("\nErste Zeit: %d. %s um %02d:%02d:%02d Uhr\n\n\n", tag, monat, stunde, minute, sekunde);
-        } else {
+        }
+        else {
             startzeit = zeitZuSekunden(tag, monat, jahr, stunde, minute, sekunde);
             printf("\nErste Zeit: %d. %s %d um %02d:%02d:%02d Uhr\n\n\n", tag, monat, jahr, stunde, minute, sekunde);
         }
@@ -572,7 +614,8 @@ int zeitraum() {
         // Nach der Ausgabe:
         if (treffer == 0) {
             printf("\nKeine Logs gefunden.\n");
-        } else {
+        }
+        else {
             printf("\nEs wurden %d Logs gefunden.\n", treffer);
         }
         break;
@@ -589,7 +632,7 @@ int zeitraum() {
         break;
     }
 
-    zurueckInDasHauptmenueFrage();
+    auswahlnachSuche(2);
     return 0;
 }
 
@@ -642,7 +685,7 @@ void ipFilterSucheEinfach(int privat) {
         printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
     }
 
-    zurueckInDasHauptmenueFrage();
+    auswahlnachSuche(privat ? 9 : 10);
 }
 
 // Funktion 3: Facility-Suche/Filterung
@@ -682,7 +725,7 @@ void eigeneFacilitySuche() {
         printf("\nInsgesamt %d Treffer für Facility '%s'.\n", treffer, eingabe);
     }
 
-    zurueckInDasHauptmenueFrage();
+    auswahlnachSuche(5);
 }
 
 #define MAX_FACILITIES 1000
@@ -792,7 +835,7 @@ void facilitySuche() {
         free(facilities[i]);
     }
 
-    zurueckInDasHauptmenueFrage();
+    auswahlnachSuche(6);
 }
 
 // Funktion 3: Facility-Suche/Filterung
@@ -827,7 +870,7 @@ void eigeneUserSuche() {
     else {
         printf("\nInsgesamt %d Treffer für User '%s'.\n", treffer, eingabe);
     }
-    zurueckInDasHauptmenueFrage();
+    auswahlnachSuche(6);
 }
 
 #define MAX_USER 100
@@ -915,7 +958,7 @@ void userSuche() {
             }
         }
         fclose(datei);
-        
+
 
         if (treffer == 0) {
             printf("\nKeine Treffer für Benutzer '%s' gefunden.\n", muster);
@@ -925,7 +968,7 @@ void userSuche() {
         }
     }
 
-    zurueckInDasHauptmenueFrage();
+    auswahlnachSuche(7);
 
     // Speicher freigeben
     for (int i = 0; i < anzahlUser; i++) {
@@ -1006,7 +1049,7 @@ int severityLevel() {
             printf("\nInsgesamt wurden %d Logs mit Severity Level %d gefunden.\n", treffer, sevLevelAuswahl);
     }
 
-    zurueckInDasHauptmenueFrage();
+    auswahlnachSuche(8);
     return 0;
 }
 
@@ -1041,11 +1084,11 @@ int neueDateiAuswaehlen() {
 }
 
 void hauptmenue() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
     printf("\n#####################################################");
     printf("\n      Auswertungsprogramm für CISCO-Logdateien");
     printf("\n#####################################################");
@@ -1089,7 +1132,7 @@ void hauptmenue() {
         case 1: ipSuche(); break;
         case 2: ipFilterSucheEinfach(1); break;
         case 3: ipFilterSucheEinfach(0); break;
-        case 4: 
+        case 4:
             hauptmenue();
             break;
         case 5:
@@ -1115,7 +1158,7 @@ void hauptmenue() {
         switch (wahl) {
         case 1: eigeneFacilitySuche(); break;
         case 2: facilitySuche(); break;
-        case 3: 
+        case 3:
             hauptmenue();
             break;
         case 4:
@@ -1140,7 +1183,7 @@ void hauptmenue() {
         case 1: eigeneUserSuche(); break;
         case 2: userSuche(); break;
         case 3:
-            hauptmenue(); 
+            hauptmenue();
             break;
         case 4:
             printf("Programm wird beendet.\n");
@@ -1172,11 +1215,11 @@ void hauptmenue() {
 
 int main() {
 
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 
     printf("\n#####################################################");
     printf("\n      Auswertungsprogramm für CISCO-Logdateien");
