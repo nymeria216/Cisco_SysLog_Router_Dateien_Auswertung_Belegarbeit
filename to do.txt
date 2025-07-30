@@ -1,0 +1,24 @@
+Features einbauen:
+
+- Ereignisse implementieren
+
+- Speicherung in txt. Datei verbessern
+
+- Vorlesung prüfen, was noch alles eingebaut werden muss
+
+
+
+Code aufräumen:
+
+- Aufbau Funktionen vereinheitlichen
+
+- Reihenfolge Funktionen prüfen
+
+- Sprache vereinheitlichen
+
+- Ausgabetexte vereinheitlichen
+
+- alles ordentlich kommentieren
+
+
+
