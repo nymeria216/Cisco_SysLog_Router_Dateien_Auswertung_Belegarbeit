@@ -34,6 +34,7 @@ char uhrzeit[9];
 char sevLevel[8];
 // char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
 char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
+FILE* outputDatei = NULL;  
 
 void hauptmenue(void);
 void auswahlnachSuche(int funktionID);
@@ -115,7 +116,7 @@ int ipSuche() {
     while (versuche < maxVersuche) {
         printf("\n Gib eine IP-Adresse ein (Format: XXX.XXX.XXX.XXX): ");
         fgets(suchbegriff, sizeof(suchbegriff), stdin);
-        suchbegriff[strcspn(suchbegriff, "\n")] = '\0'; // Entferne das '\n' am Ende
+        suchbegriff[strcspn(suchbegriff, "\n")] = '\0';
 
         // Prüfe, ob die Eingabe leer ist
         if (strlen(suchbegriff) == 0) {
@@ -154,8 +155,10 @@ int ipSuche() {
     while (fgets(zeile, sizeof(zeile), datei)) {
         zeilennummer++;
         if (strstr(zeile, suchbegriff)) {
-            // IP-Adresse gefunden – Zeile ausgeben
             printf("Zeile %d: %s", zeilennummer, zeile);
+            if (outputDatei) {
+                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+            }
             treffer++;
         }
     }
@@ -268,6 +271,7 @@ int jahrDefinition() {
         }
     }
     fclose(datei);
+
     if (jahrVorhanden) {
         do {
             versuch = 0;
@@ -366,6 +370,25 @@ int monatZuZahl(const char* monat) {
 // Funktion: Auswahl nach Suche
 void auswahlnachSuche(int funktionID) {
     char wahl;
+
+    // Nur wenn mindestens ein Treffer gefunden wurde → Frage stellen
+    if (treffer > 0) {
+        char speichern;
+        printf("\n\nMöchten Sie die Ergebnisse in eine Datei speichern? (j/n): ");
+        speichern = getchar();
+        while (getchar() != '\n');  // Eingabepuffer leeren
+
+        if (speichern == 'j' || speichern == 'J') {
+            outputDatei = fopen("Suchergebnisse.txt", "w");
+            if (!outputDatei) {
+                perror("Fehler beim Öffnen der Datei");
+            }
+            else {
+                printf("\nErgebnisse werden gespeichert\n");
+            }
+        }
+    }
+
     printf("\n\nWas möchten Sie tun?");
     printf("\n1: Suche wiederholen");
     printf("\n2: Zurück ins Hauptmenü");
@@ -373,6 +396,13 @@ void auswahlnachSuche(int funktionID) {
     printf("\nBitte auswählen: ");
     wahl = getchar();
     while (getchar() != '\n');
+
+    // Datei schließen, wenn offen
+    if (outputDatei) {
+        fclose(outputDatei);
+        outputDatei = NULL;
+        printf("\nErgebnisse wurden in 'Suchergebnisse.txt' gespeichert.\n");
+    }
 
     switch (wahl) {
     case '1':
@@ -385,8 +415,8 @@ void auswahlnachSuche(int funktionID) {
         case 6: facilitySuche(); break;
         case 7: userSuche(); break;
         case 8: severityLevel(); break;
-        case 9: ipFilterSucheEinfach(1); break;  // private IPs
-        case 10: ipFilterSucheEinfach(0); break; // öffentliche IPs
+        case 9: ipFilterSucheEinfach(1); break;
+        case 10: ipFilterSucheEinfach(0); break;
         default:
             printf("Unbekannte Funktion.\n");
             hauptmenue();
@@ -403,6 +433,8 @@ void auswahlnachSuche(int funktionID) {
         hauptmenue();
     }
 }
+
+
 
 
 // Funktion 0: eigene Suchbegriffeingabe
@@ -430,10 +462,12 @@ int eigenerSuchbegriff() {
         zeilennummer++;
         if (strstr(zeile, suchbegriff)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
+            if (outputDatei) {
+                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+            }
             treffer++;
         }
     }
-
     if (treffer == 0) {
         printf("Keine Treffer für '%s' gefunden.\n", suchbegriff);
     }
@@ -491,20 +525,32 @@ int zeitraum() {
                 int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
                 if (logZeit >= startzeit) {
                     printf("%s", zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "%s", zeile);
+                    }
                     treffer++;
                 }
             }
+
             else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d.%*d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
                 int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
                 if (logZeit >= startzeit) {
                     printf("%s", zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "%s", zeile);
+                    }
                     treffer++;
                 }
             }
+
+
             else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
                 int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
                 if (logZeit >= startzeit) {
                     printf("%s", zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "%s", zeile);
+                    }
                     treffer++;
                 }
             }
@@ -545,34 +591,53 @@ int zeitraum() {
                 int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
                 if (logZeit <= startzeit) {
                     printf("%s", zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "%s", zeile);
+                    }
                     treffer++;
                 }
             }
+
             else if (jahr != -1 && sscanf(zeile, "*%3s %d %d %d:%d:%d.%*d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
                 int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
                 if (logZeit <= startzeit) {
                     printf("%s", zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "%s", zeile);
+                    }
                     treffer++;
                 }
             }
+
             else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d.%*d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
                 int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
                 if (logZeit <= startzeit) {
                     printf("%s", zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "%s", zeile);
+                    }
                     treffer++;
                 }
             }
+
             else if (jahr == -1 && sscanf(zeile, "*%3s %d %d:%d:%d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
                 int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
                 if (logZeit <= startzeit) {
                     printf("%s", zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "%s", zeile);
+                    }
                     treffer++;
                 }
             }
+
             else if (jahr != -1 && sscanf(zeile, "*%3s %d %d %d:%d:%d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
                 int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
                 if (logZeit <= startzeit) {
                     printf("%s", zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "%s", zeile);
+                    }
                     treffer++;
                 }
             }
@@ -667,6 +732,9 @@ void ipFilterSucheEinfach(int privat) {
                 int isPriv = istPrivateIP(ip);
                 if ((privat && isPriv) || (!privat && !isPriv)) {
                     printf("Zeile %d: %s", zeilennummer, zeile);
+                    if (outputDatei) {
+                        fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+                    }
                     treffer++;
                     break;
                 }
@@ -712,6 +780,9 @@ void eigeneFacilitySuche() {
         zeilennummer++;
         if (strstr(zeile, muster)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
+            if (outputDatei) {
+                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+            }
             treffer++;
         }
     }
@@ -817,6 +888,9 @@ void facilitySuche() {
         zeilennummer++;
         if (strstr(zeile, suchmuster)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
+            if (outputDatei) {
+                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+            }
             treffer++;
         }
     }
@@ -858,9 +932,13 @@ void eigeneUserSuche() {
         zeilennummer++;
         if (strstr(zeile, eingabe)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
+            if (outputDatei) {
+                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+            }
             treffer++;
         }
     }
+
 
     fclose(datei);
 
@@ -954,9 +1032,13 @@ void userSuche() {
             zeilennummer++;
             if (strstr(zeile, muster)) {
                 printf("Zeile %d: %s", zeilennummer, zeile);
+                if (outputDatei) {
+                    fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+                }
                 treffer++;
             }
         }
+
         fclose(datei);
 
 
@@ -1028,9 +1110,12 @@ int severityLevel() {
                     if (treffer == 0 && sevLevelAuswahl != 8) {
                         printf("\nAlle %s Logs werden angezeigt (%s)\n\n", sevLevellNamen[sevLevelAuswahl], sevLevelBeschreibung[sevLevelAuswahl]);
                     }
-                    printf("%s", zeile);
-                    treffer++;
                 }
+                printf("%s", zeile);
+                if (outputDatei) {
+                    fprintf(outputDatei, "%s", zeile);
+                }
+                treffer++;
             }
         }
     }
