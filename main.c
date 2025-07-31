@@ -5,6 +5,9 @@
 #include <string.h>
 #include <stdlib.h>             // Löschen des Terminals
 #include <ctype.h>              // Buchstaben-Bibliothek
+#define RED     "\033[31;91m"
+#define YELLOW  "\033[33;93m"     
+#define RESET   "\033[0m"
 
 #ifdef _WIN32                   
 #define strcasecmp _stricmp
@@ -14,7 +17,6 @@
      VARIABLENDEKLARATION
 ###############################*/
 
-// globale Variablendefinition
 // SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
 FILE* datei;
 int stunde;
@@ -32,8 +34,8 @@ char zeile[1024];
 char monat[4];
 char uhrzeit[9];
 char sevLevel[8];
+char dateiname[256] = "/Volumes/HSMW_MacOS/Programmierung/2._Semester/Programmierung_I/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/logs/syslog_generic.log";
 // char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
-char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
 FILE* outputDatei = NULL;  
 
 void hauptmenue(void);
@@ -68,7 +70,7 @@ int log_dateiendung(const char* log_dateiname) {
 int dateiOeffnen() {
     datei = fopen(dateiname, "r");
     if (!datei) {
-        perror("Fehler beim Öffnen der Datei");
+        perror(RED "Fehler beim Öffnen der Datei" RESET);
     }
     return 0;
 }
@@ -121,12 +123,12 @@ int ipSuche() {
         // Prüfe, ob die Eingabe leer ist
         if (strlen(suchbegriff) == 0) {
             versuche++;
-            printf("Keine IP-Adresse eingegeben.");
+            printf(YELLOW "Keine IP-Adresse eingegeben." RESET);
         }
         // Prüfe das Format der IP-Adresse
         else if (!istGueltigeIPv4(suchbegriff)) {
             versuche++;
-            printf("Ungültiges IP-Adressformat.");
+            printf(YELLOW "Ungültiges IP-Adressformat." RESET);
 
         }
         else {
@@ -135,10 +137,10 @@ int ipSuche() {
 
         // Gib verbleibende Versuche aus oder beende bei zu vielen Fehlern
         if (versuche < maxVersuche) {
-            printf("\nNoch %d Versuch(e) übrig\n", maxVersuche - versuche);
+            printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, maxVersuche - versuche);
         }
         else {
-            printf("\nZu viele ungültige Versuche. Das Programm wird beendet.\n");
+            printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             exit(1);
         }
     }
@@ -168,7 +170,7 @@ int ipSuche() {
 
     // Zusammenfassung ausgeben
     if (treffer == 0) {
-        printf("\nKeine Einträge mit IP-Adresse '%s' gefunden.\n", suchbegriff);
+        printf(YELLOW "\nKeine Einträge mit IP-Adresse '%s' gefunden.\n" RESET, suchbegriff);
     }
     else {
         printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
@@ -200,17 +202,17 @@ int tagDefinition() {
         int falscheEingabe = scanf("%d", &tag);
         while (getchar() != '\n');
         if (falscheEingabe != 1 || tag < 1 || tag > 31) {
-            printf("\nUngültige Eingabe – gib einen Tag zwischen 1 und 31 ein.");
+            printf(YELLOW "\nUngültige Eingabe – gib einen Tag zwischen 1 und 31 ein." RESET);
             versuch++;
         }
         else {
             break;
         }
         if (versuch < 3) {
-            printf("\nNoch %d Versuch(e) übrig\n", 3 - versuch);
+            printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
         }
         else {
-            printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n");
+            printf(RED "Zu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             return 1;
         }
     } while (1);
@@ -223,7 +225,7 @@ int monatDefinition() {
         versuch = 0;
         printf(" Monat (MMM): ");
         if (scanf("%3s", monat) != 1) {
-            printf("Fehler bei der Eingabe.\n");
+            printf(YELLOW "Fehler bei der Eingabe.\n" RESET);
             while (getchar() != '\n');
         }
         else {
@@ -233,7 +235,7 @@ int monatDefinition() {
             monat[2] = tolower(monat[2]);
             monat[3] = '\0';
             if (!alleMonate(monat)) {
-                printf("\nUngültige Eingabe (z. B. Jan, Feb, Mar...).\n");
+                printf(YELLOW "\nUngültige Eingabe (z. B. Jan, Feb, Mar...).\n" RESET);
                 versuch++;
             }
             else {
@@ -241,10 +243,10 @@ int monatDefinition() {
             }
         }
         if (versuch < 3) {
-            printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
+            printf(YELLOW "Noch %d Versuch(e) übrig\n" RESET, 3 - versuch);
         }
         else {
-            printf("Zu viele ungültige Versuche. Das Programm wird beendet.\n");
+            printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             return 1;
         }
     } while (1);
@@ -275,26 +277,26 @@ int jahrDefinition() {
     if (jahrVorhanden) {
         do {
             versuch = 0;
-            printf(" Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).", minJahr, maxJahr);
+            printf("Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).", minJahr, maxJahr);
             printf("\n Jahreszahl (YYYY): ");
             int falscheEingabe = scanf("%d", &jahr);
             if (falscheEingabe != 1) {
-                printf("\nKeine gültige Jahreszahl.");
+                printf(YELLOW "\nKeine gültige Jahreszahl." RESET);
                 versuch++;
                 while (getchar() != '\n');
             }
             else if (jahr < minJahr || jahr > maxJahr) {
-                printf(" Jahreszahl außerhalb des gültigen Bereichs.");
+                printf(YELLOW "Jahreszahl außerhalb des gültigen Bereichs." RESET);
                 versuch++;
             }
             else {
                 break;
             }
             if (versuch < 3) {
-                printf("\nNoch %d Versuch(e) übrig\n", 3 - versuch);
+                printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
             }
             else {
-                printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n");
+                printf(RED "Zu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
                 return 1;
             }
         } while (1);
@@ -311,23 +313,23 @@ int uhrzeitDefinition() {
     do {
         printf(" Uhrzeit (HH:MM:SS): ");
         if (scanf("%d:%d:%d", &stunde, &minute, &sekunde) != 3) {
-            printf("Ungültiges Format. Bitte HH:MM:SS eingeben.\n");
+            printf(YELLOW "Ungültiges Format. Bitte HH:MM:SS eingeben.\n" RESET);
             versuch++;
             int ch;
             while ((ch = getchar()) != '\n' && ch != EOF);
         }
         else if (stunde < 0 || stunde > 23 || minute < 0 || minute > 59 || sekunde < 0 || sekunde > 59) {
-            printf("Ungültige Uhrzeitformat: %02d:%02d:%02d\n", stunde, minute, sekunde);
+            printf(YELLOW "Ungültige Uhrzeitformat: %02d:%02d:%02d\n" RESET, stunde, minute, sekunde);
             versuch++;
         }
         else {
             break;
         }
         if (versuch < 3) {
-            printf("Noch %d Versuch(e) übrig\n", 3 - versuch);
+            printf(YELLOW "Noch %d Versuch(e) übrig\n" RESET, 3 - versuch);
         }
         else {
-            printf(" Zu viele ungültige Versuche. Das Programm wird beendet.\n");
+            printf(RED "Zu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             return 1;
         }
     } while (1);
@@ -381,7 +383,7 @@ void auswahlnachSuche(int funktionID) {
         if (speichern == 'j' || speichern == 'J') {
             outputDatei = fopen("Suchergebnisse.txt", "w");
             if (!outputDatei) {
-                perror("Fehler beim Öffnen der Datei");
+                perror(YELLOW "Fehler beim Öffnen der Datei" RESET);
             }
             else {
                 printf("\nErgebnisse werden gespeichert\n");
@@ -434,9 +436,6 @@ void auswahlnachSuche(int funktionID) {
     }
 }
 
-
-
-
 // Funktion 0: eigene Suchbegriffeingabe
 int eigenerSuchbegriff() {
 
@@ -446,7 +445,7 @@ int eigenerSuchbegriff() {
 
     // Prüfen, ob der Suchbegriff leer ist
     if (strlen(suchbegriff) == 0) {
-        printf("Du hast keinen Suchbegriff eingegeben. Abbruch.\n");
+        printf(RED "\nDu hast keinen Suchbegriff eingegeben. Abbruch.\n" RESET);
         return 1;
     }
 
@@ -469,7 +468,7 @@ int eigenerSuchbegriff() {
         }
     }
     if (treffer == 0) {
-        printf("Keine Treffer für '%s' gefunden.\n", suchbegriff);
+        printf(YELLOW "\nKeine Treffer für '%s' gefunden.\n" RESET, suchbegriff);
     }
     else {
         printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
@@ -558,7 +557,7 @@ int zeitraum() {
         fclose(datei);
 
         if (treffer == 0) {
-            printf("\nKeine Logs gefunden.\n");
+            printf(YELLOW "\nKeine Logs gefunden.\n" RESET);
         }
         else {
             printf("\nEs wurden %d Logs gefunden.\n", treffer);
@@ -645,7 +644,7 @@ int zeitraum() {
         fclose(datei);
 
         if (treffer == 0) {
-            printf("\nKeine Logs gefunden.\n");
+            printf(YELLOW "\nKeine Logs gefunden.\n" RESET);
         }
         else {
             printf("\nEs wurden %d Logs gefunden.\n", treffer);
@@ -673,12 +672,56 @@ int zeitraum() {
             printf("\nErste Zeit: %d. %s %d um %02d:%02d:%02d Uhr\n\n\n", tag, monat, jahr, stunde, minute, sekunde);
         }
 
-        // Eingabe zweite Zeit (analog wie oben)
-        // ... (wie gehabt, siehe vorherige Beispiele)
+         // Eingabe zweite Zeit
+        printf("\nWähle die zweite Zeit aus:");
+        tagDefinition();
+        monatDefinition();
+        jahrDefinition();
+        uhrzeitDefinition();
+
+        if (jahr == -1) {
+            endzeit = zeitZuSekundenOhneJahr(tag, monat, stunde, minute, sekunde);
+        } else {
+            endzeit = zeitZuSekunden(tag, monat, jahr, stunde, minute, sekunde);
+        }
+
+        if (endzeit < startzeit) {
+            printf(YELLOW "\nDie zweite Zeit muss nach der ersten Zeit liegen.\n" RESET);
+            break;
+        }
+
+        dateiOeffnen();
+        while (fgets(zeile, sizeof(zeile), datei)) {
+            int lTag = 0, lJahr = -1, lStunde = 0, lMinute = 0, lSekunde = 0;
+            char lMonat[4];
+
+            if (sscanf(zeile, "*%3s %d %d:%d:%d.%*d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
+                int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
+                if (logZeit >= startzeit && logZeit <= endzeit) {
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+            else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d.%*d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
+                int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                if (logZeit >= startzeit && logZeit <= endzeit) {
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+            else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d", lMonat, &lTag, &lJahr, &lStunde, &lMinute, &lSekunde) == 6) {
+                int logZeit = zeitZuSekunden(lTag, lMonat, lJahr, lStunde, lMinute, lSekunde);
+                if (logZeit >= startzeit && logZeit <= endzeit) {
+                    printf("%s", zeile);
+                    treffer++;
+                }
+            }
+        }
+        fclose(datei);
 
         // Nach der Ausgabe:
         if (treffer == 0) {
-            printf("\nKeine Logs gefunden.\n");
+            printf(YELLOW "\nKeine Logs gefunden.\n" RESET);
         }
         else {
             printf("\nEs wurden %d Logs gefunden.\n", treffer);
@@ -689,11 +732,11 @@ int zeitraum() {
         hauptmenue();
         break;
     case 5:
-        printf("Programm wird beendet\n");
+        printf(RED "\nProgramm wird beendet\n" RESET);
         exit(0);
         break;
     default:
-        printf("Ungültige Auswahl.\n");
+        printf(RED "\nUngültige Auswahl.\n" RESET);
         break;
     }
 
@@ -747,7 +790,7 @@ void ipFilterSucheEinfach(int privat) {
     fclose(datei);
 
     if (treffer == 0) {
-        printf("\nKeine %s IP-Adressen gefunden.\n", privat ? "privaten" : "öffentlichen");
+        printf(YELLOW "\nKeine %s IP-Adressen gefunden.\n" RESET, privat ? "privaten" : "öffentlichen");
     }
     else {
         printf("\nInsgesamt wurden %d Treffer gefunden.\n", treffer);
@@ -764,7 +807,7 @@ void eigeneFacilitySuche() {
     eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
 
     if (strlen(eingabe) == 0) {
-        printf("Kein Begriff eingegeben. Zurück...\n");
+        printf(YELLOW "Kein Begriff eingegeben. Zurück...\n" RESET);
         return;
     }
 
@@ -790,7 +833,7 @@ void eigeneFacilitySuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf("\nKeine Logzeilen zur Facility '%s' gefunden.\n", eingabe);
+        printf(YELLOW "\nKeine Logzeilen zur Facility '%s' gefunden.\n" RESET, eingabe);
     }
     else {
         printf("\nInsgesamt %d Treffer für Facility '%s'.\n", treffer, eingabe);
@@ -853,7 +896,7 @@ void facilitySuche() {
     fclose(datei);
 
     if (anzahlFacilities == 0) {
-        printf("\nKeine Facilities gefunden.\n");
+        printf(YELLOW "\nKeine Facilities gefunden.\n" RESET);
         return;
     }
 
@@ -898,7 +941,7 @@ void facilitySuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf("\nKeine Treffer für Facility '%s' gefunden.\n", muster);
+        printf(YELLOW "\nKeine Treffer für Facility '%s' gefunden.\n" RESET, muster);
     }
     else {
         printf("\nInsgesamt %d Treffer für Facility '%s'.\n", treffer, muster);
@@ -920,7 +963,7 @@ void eigeneUserSuche() {
     eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
 
     if (strlen(eingabe) == 0) {
-        printf("Keinen User eingegeben. Zurück...\n");
+        printf(YELLOW "Keinen User eingegeben. Zurück...\n" RESET);
         return;
     }
 
@@ -943,7 +986,7 @@ void eigeneUserSuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf("\nKeine Logzeilen zum User '%s' gefunden.\n", eingabe);
+        printf(YELLOW "\nKeine Logzeilen zum User '%s' gefunden.\n" RESET, eingabe);
     }
     else {
         printf("\nInsgesamt %d Treffer für User '%s'.\n", treffer, eingabe);
@@ -1000,7 +1043,7 @@ void userSuche() {
     fclose(datei);
 
     if (anzahlUser == 0) {
-        printf("\nKeine User gefunden.\n");
+        printf(YELLOW "\nKeine User gefunden.\n" RESET);
         return;
     }
 
@@ -1019,7 +1062,7 @@ void userSuche() {
     while (getchar() != '\n');
 
     if (auswahl == 0 || auswahl > anzahlUser) {
-        printf("Zurück...\n");
+        printf(YELLOW "Zurück...\n" RESET);
     }
     else {
         const char* muster = userNamen[auswahl - 1];
@@ -1043,7 +1086,7 @@ void userSuche() {
 
 
         if (treffer == 0) {
-            printf("\nKeine Treffer für Benutzer '%s' gefunden.\n", muster);
+            printf(YELLOW "\nKeine Treffer für Benutzer '%s' gefunden.\n" RESET, muster);
         }
         else {
             printf("\nInsgesamt %d Treffer für Benutzer '%s'.\n", treffer, muster);
@@ -1092,7 +1135,7 @@ int severityLevel() {
     }
 
     if (sevLevelAuswahl == 10) {
-        printf("\nProgramm wird beendet.\n");
+        printf(RED "\nProgramm wird beendet.\n" RESET);
         exit(0);
     }
 
@@ -1123,9 +1166,9 @@ int severityLevel() {
 
     if (treffer == 0) {
         if (sevLevelAuswahl == 8)
-            printf("Keine Logs gefunden.\n");
+            printf(YELLOW "Keine Logs gefunden.\n" RESET);
         else
-            printf("Keine Logs mit Severity Level %d gefunden.\n", sevLevelAuswahl);
+            printf(YELLOW "Keine Logs mit Severity Level %d gefunden.\n" RESET, sevLevelAuswahl);
     }
     else {
         if (sevLevelAuswahl == 8)
@@ -1149,13 +1192,13 @@ int neueDateiAuswaehlen() {
         neuerDateiname[strcspn(neuerDateiname, "\n")] = '\0'; // Zeilenumbruch entfernen
 
         if (!log_dateiendung(neuerDateiname)) {
-            printf("Die Datei muss die Endung .log haben.\n");
+            printf(YELLOW "Die Datei muss die Endung .log haben.\n" RESET);
             continue;
         }
 
         neueDatei = fopen(neuerDateiname, "r");
         if (!neueDatei) {
-            printf("Datei konnte nicht geöffnet werden. Bitte erneut versuchen.\n");
+            printf(YELLOW "Datei konnte nicht geöffnet werden. Bitte erneut versuchen.\n" RESET);
             continue;
         }
         fclose(neueDatei);
@@ -1221,10 +1264,10 @@ void hauptmenue() {
             hauptmenue();
             break;
         case 5:
-            printf("Programm wird beendet.\n");
+            printf(RED "Programm wird beendet.\n" RESET);
             exit(0);
         default:
-            printf("Ungültige Auswahl.\n");
+            printf(YELLOW "Ungültige Auswahl.\n" RESET);
             break;
         }
         break;
@@ -1247,9 +1290,9 @@ void hauptmenue() {
             hauptmenue();
             break;
         case 4:
-            printf("Programm wird beendet.\n");
+            printf(RED "Programm wird beendet.\n" RESET);
             exit(0);
-        default: printf("Ungültige Auswahl.\n"); break;
+        default: printf(YELLOW "Ungültige Auswahl.\n" RESET); break;
         }
         break;
     }
@@ -1271,9 +1314,9 @@ void hauptmenue() {
             hauptmenue();
             break;
         case 4:
-            printf("Programm wird beendet.\n");
+            printf(RED "Programm wird beendet.\n" RESET);
             exit(0);
-        default: printf("Ungültige Auswahl.\n"); break;
+        default: printf(YELLOW "Ungültige Auswahl.\n" RESET); break;
         }
         break;
     }
@@ -1286,10 +1329,10 @@ void hauptmenue() {
         hauptmenue();
         break;
     case 9:
-        printf("Programm wird beendet.\n");
+        printf(RED "Programm wird beendet.\n" RESET);
         exit(0);
     default:
-        printf("Ungültige Auswahl.\n");
+        printf(YELLOW "Ungültige Auswahl.\n" RESET);
         break;
     }
 }
@@ -1312,7 +1355,7 @@ int main() {
     printf("\n\nBitte geben Sie den Dateipfad ein: %s\n", dateiname);
 
     if (!log_dateiendung(dateiname)) {
-        printf("\nDie Datei muss die Endung .log haben. Programm wird beendet.\n");
+        printf(RED "\nDie Datei muss die Endung .log haben. Programm wird beendet.\n" RESET);
         return 0;
     }
 
