@@ -34,9 +34,9 @@ char zeile[1024];
 char monat[4];
 char uhrzeit[9];
 char sevLevel[8];
-char dateiname[256] = "/Volumes/HSMW_MacOS/Programmierung/2._Semester/Programmierung_I/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/logs/syslog_generic.log";
-// char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
-FILE* outputDatei = NULL;  
+// char dateiname[256] = "/Volumes/HSMW_MacOS/Programmierung/2._Semester/Programmierung_I/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/logs/syslog_generic.log";
+char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
+FILE* outputDatei = NULL;
 
 void hauptmenue(void);
 void auswahlnachSuche(int funktionID);
@@ -110,7 +110,7 @@ int istPrivateIP(const char* ip) {
 
 // Funktion: Suche nach einer IP-Adresse im Logfile
 int ipSuche() {
-    
+
     int maxVersuche = 3;  // Maximal erlaubte Fehlversuche bei der IP-Eingabe
     int versuche = 0;
 
@@ -672,7 +672,7 @@ int zeitraum() {
             printf("\nErste Zeit: %d. %s %d um %02d:%02d:%02d Uhr\n\n\n", tag, monat, jahr, stunde, minute, sekunde);
         }
 
-         // Eingabe zweite Zeit
+        // Eingabe zweite Zeit
         printf("\nWähle die zweite Zeit aus:");
         tagDefinition();
         monatDefinition();
@@ -681,7 +681,8 @@ int zeitraum() {
 
         if (jahr == -1) {
             endzeit = zeitZuSekundenOhneJahr(tag, monat, stunde, minute, sekunde);
-        } else {
+        }
+        else {
             endzeit = zeitZuSekunden(tag, monat, jahr, stunde, minute, sekunde);
         }
 
@@ -1101,6 +1102,155 @@ void userSuche() {
     }
 }
 
+#define MAX_MNEMONICS 1000
+
+void mnemonicSuche() {
+    char* mnemonics[MAX_MNEMONICS];
+    int anzahlMnemonics = 0;
+
+    dateiOeffnen();
+    zeilennummer = 0;
+
+    for (int i = 0; i < MAX_MNEMONICS; i++) {
+        mnemonics[i] = NULL;
+    }
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+
+        char* prozent = strchr(zeile, '%');
+        if (prozent) {
+            char* minus = strrchr(prozent, '-');
+            char* doppelpunkt = strchr(prozent, ':');
+            if (!minus || !doppelpunkt || minus >= doppelpunkt) continue;
+
+            char mnemonic[64];
+            int len = doppelpunkt - minus - 1;
+            if (len <= 0 || len >= sizeof(mnemonic)) continue;
+
+            strncpy(mnemonic, minus + 1, len);
+            mnemonic[len] = '\0';
+
+            int vorhanden = 0;
+            for (int j = 0; j < anzahlMnemonics; j++) {
+                if (strcmp(mnemonics[j], mnemonic) == 0) {
+                    vorhanden = 1;
+                    break;
+                }
+            }
+
+            if (!vorhanden && anzahlMnemonics < MAX_MNEMONICS) {
+                mnemonics[anzahlMnemonics] = malloc(strlen(mnemonic) + 1);
+                strcpy(mnemonics[anzahlMnemonics], mnemonic);
+                anzahlMnemonics++;
+            }
+        }
+    }
+
+    fclose(datei);
+
+    if (anzahlMnemonics == 0) {
+        printf(YELLOW "\nKeine Mnemonics gefunden.\n" RESET);
+        return;
+    }
+
+    qsort(mnemonics, anzahlMnemonics, sizeof(char*), compareStrings);
+
+    printf("\nGefundene Mnemonics:\n");
+    for (int i = 0; i < anzahlMnemonics; i++) {
+        printf("%2d: %s\n", i + 1, mnemonics[i]);
+    }
+    printf(" 0: Zurück\n");
+
+    int auswahl;
+    printf("\nWähle ein Mnemonic aus: ");
+    scanf("%d", &auswahl);
+    while (getchar() != '\n');
+
+    if (auswahl == 0 || auswahl > anzahlMnemonics) {
+        printf("Zurück...\n");
+        return;
+    }
+
+    const char* muster = mnemonics[auswahl - 1];
+    char suchmuster[70];
+    snprintf(suchmuster, sizeof(suchmuster), "-%s:", muster); 
+
+    dateiOeffnen();
+    treffer = 0;
+    zeilennummer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, suchmuster)) {
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            if (outputDatei) {
+                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+            }
+            treffer++;
+        }
+    }
+
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf(YELLOW "\nKeine Treffer für Mnemonic '%s' gefunden.\n" RESET, muster);
+    }
+    else {
+        printf("\nInsgesamt %d Treffer für Mnemonic '%s'.\n", treffer, muster);
+    }
+
+    for (int i = 0; i < anzahlMnemonics; i++) {
+        free(mnemonics[i]);
+    }
+
+    auswahlnachSuche(13);
+}
+
+
+void eigeneMnemonicSuche() {
+    char eingabe[64];
+    printf("\nGib ein Mnemonic ein (z. B. CONFIG_I, UPDOWN, ADJCHANGE): ");
+    fgets(eingabe, sizeof(eingabe), stdin);
+    eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
+
+    if (strlen(eingabe) == 0) {
+        printf(YELLOW "Kein Mnemonic eingegeben. Zurück...\n" RESET);
+        return;
+    }
+
+    // Muster erstellen, z. B. ":CONFIG_I"
+    char muster[70];
+    snprintf(muster, sizeof(muster), "-%s:", eingabe);
+
+    dateiOeffnen();
+    zeilennummer = 0;
+    treffer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, muster)) {
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            if (outputDatei) {
+                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+            }
+            treffer++;
+        }
+    }
+
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf(YELLOW "\nKeine Logzeilen zum Mnemonic '%s' gefunden.\n" RESET, eingabe);
+    }
+    else {
+        printf("\nInsgesamt %d Treffer für Mnemonic '%s'.\n", treffer, eingabe);
+    }
+
+    auswahlnachSuche(13);
+}
+
+
 // Funktion 7: Severity-Level-Suche/Filterung
 int severityLevel() {
     const char* sevLevellNamen[] = {
@@ -1227,7 +1377,7 @@ void hauptmenue() {
     printf("\n2: IP Adresse");
     printf("\n3: Facilities");
     printf("\n4: User");
-    printf("\n5: Ereignis");
+    printf("\n5: Mnemonic");
     printf("\n6: Fehlermeldung");
     printf("\n7: Severity Level");
     printf("\n8: Neue Datei auswählen");
@@ -1320,7 +1470,31 @@ void hauptmenue() {
         }
         break;
     }
-    case 5: case 6:
+    case 5: {
+        int wahl;
+        printf("\nWähle die Art der Mnemonic-Suche:\n");
+        printf("1: Eigene Suche nach Mnemonic\n");
+        printf("2: Alle vorhandenen Mnemonics anzeigen und auswählen\n");
+        printf("3: Zurück in das Hauptmenü\n");
+        printf("4: Programm beenden\n");
+        printf("\nAuswahl: ");
+        scanf("%d", &wahl);
+        while (getchar() != '\n');
+
+        switch (wahl) {
+        case 1: eigeneMnemonicSuche(); break;
+        case 2: mnemonicSuche(); break;
+        case 3: hauptmenue(); break;
+        case 4:
+            printf(RED "Programm wird beendet.\n" RESET);
+            exit(0);
+        default:
+            printf(YELLOW "Ungültige Auswahl.\n" RESET);
+            break;
+        }
+        break;
+    }
+    case 6:
     case 7:
         severityLevel();
         break;
