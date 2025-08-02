@@ -6,6 +6,10 @@ Features einbauen:
 
 - Vorlesung prüfen, was noch alles eingebaut werden muss
 
+- exit-Funktion überall einbauen
+
+- Fehlermeldungen flexibler einbauen (falsche Eingabe)
+
 
 
 Code aufräumen:
@@ -19,6 +23,3 @@ Code aufräumen:
 - Ausgabetexte vereinheitlichen
 
 - alles ordentlich kommentieren
-
-
-
