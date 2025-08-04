@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>             // Löschen des Terminals
 #include <ctype.h>              // Buchstaben-Bibliothek
+// #include <windows.h>
 #define RED     "\033[31;91m"
 #define YELLOW  "\033[33;93m"     
 #define RESET   "\033[0m"
@@ -17,7 +18,6 @@
      VARIABLENDEKLARATION
 ###############################*/
 
-// SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
 FILE* datei;
 int stunde;
 int minute;
@@ -50,6 +50,8 @@ void userSuche(void);
 int severityLevel(void);
 int neueDateiAuswaehlen(void);
 void ipFilterSucheEinfach(int privat);
+void eigeneMnemonicSuche(void);
+void mnemonicSuche(void);
 
 int monatZuZahl(const char* monat);
 int zeitZuSekunden(int tag, const char* monat, int jahr, int stunde, int minute, int sekunde);
@@ -116,19 +118,19 @@ int ipSuche() {
 
     // Eingabeschleife für die IP-Adresse
     while (versuche < maxVersuche) {
-        printf("\n Gib eine IP-Adresse ein (Format: XXX.XXX.XXX.XXX): ");
+        printf("\nGib eine IP-Adresse ein (Format: XXX.XXX.XXX.XXX): ");
         fgets(suchbegriff, sizeof(suchbegriff), stdin);
         suchbegriff[strcspn(suchbegriff, "\n")] = '\0';
 
         // Prüfe, ob die Eingabe leer ist
         if (strlen(suchbegriff) == 0) {
             versuche++;
-            printf(YELLOW "Keine IP-Adresse eingegeben." RESET);
+            printf(YELLOW "\nKeine IP-Adresse eingegeben." RESET);
         }
         // Prüfe das Format der IP-Adresse
         else if (!istGueltigeIPv4(suchbegriff)) {
             versuche++;
-            printf(YELLOW "Ungültiges IP-Adressformat." RESET);
+            printf(YELLOW "\nUngültiges IP-Adressformat." RESET);
 
         }
         else {
@@ -140,15 +142,15 @@ int ipSuche() {
             printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, maxVersuche - versuche);
         }
         else {
-            printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+            printf(RED "\n\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             exit(1);
         }
     }
 
     // Gültige IP-Adresse liegt vor – Suche starten
-    printf("\n Suche nach IP-Adresse: %s\n", suchbegriff);
-
-    dateiOeffnen(); // Öffne die Logdatei
+    printf("\nSuche nach IP-Adresse: %s\n", suchbegriff);
+    speichersuche("Suchergebnisse.txt");
+    dateiOeffnen();
 
     treffer = 0;
     zeilennummer = 0;
@@ -198,7 +200,7 @@ int alleMonate(const char* monat) {
 int tagDefinition() {
     versuch = 0;
     do {
-        printf("\n Tag (DD): ");
+        printf("\nTag (DD): ");
         int falscheEingabe = scanf("%d", &tag);
         while (getchar() != '\n');
         if (falscheEingabe != 1 || tag < 1 || tag > 31) {
@@ -212,7 +214,7 @@ int tagDefinition() {
             printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
         }
         else {
-            printf(RED "Zu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+            printf(RED "\n\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             return 1;
         }
     } while (1);
@@ -221,9 +223,9 @@ int tagDefinition() {
 
 // Funktion: Definition der Monate
 int monatDefinition() {
+    int versuch = 0;
     do {
-        versuch = 0;
-        printf(" Monat (MMM): ");
+        printf("Monat (MMM): ");
         if (scanf("%3s", monat) != 1) {
             printf(YELLOW "Fehler bei der Eingabe.\n" RESET);
             while (getchar() != '\n');
@@ -235,7 +237,7 @@ int monatDefinition() {
             monat[2] = tolower(monat[2]);
             monat[3] = '\0';
             if (!alleMonate(monat)) {
-                printf(YELLOW "\nUngültige Eingabe (z. B. Jan, Feb, Mar...).\n" RESET);
+                printf(YELLOW "\nUngültige Eingabe (z. B. Jan, Feb, Mar...)." RESET);
                 versuch++;
             }
             else {
@@ -243,10 +245,10 @@ int monatDefinition() {
             }
         }
         if (versuch < 3) {
-            printf(YELLOW "Noch %d Versuch(e) übrig\n" RESET, 3 - versuch);
+            printf(YELLOW "\nNoch %d Versuch(e) übrig\n\n" RESET, 3 - versuch);
         }
         else {
-            printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+            printf(RED "\n\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             return 1;
         }
     } while (1);
@@ -257,6 +259,7 @@ int monatDefinition() {
 int jahrDefinition() {
     int jahrVorhanden = 0;
     minJahr = 9999; maxJahr = 0;
+    
     dateiOeffnen();
     while (fgets(zeile, sizeof(zeile), datei)) {
         char logMonat[4];
@@ -275,10 +278,10 @@ int jahrDefinition() {
     fclose(datei);
 
     if (jahrVorhanden) {
+        int versuch = 0;
         do {
-            versuch = 0;
             printf("Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).", minJahr, maxJahr);
-            printf("\n Jahreszahl (YYYY): ");
+            printf("\nJahreszahl (YYYY): ");
             int falscheEingabe = scanf("%d", &jahr);
             if (falscheEingabe != 1) {
                 printf(YELLOW "\nKeine gültige Jahreszahl." RESET);
@@ -286,17 +289,17 @@ int jahrDefinition() {
                 while (getchar() != '\n');
             }
             else if (jahr < minJahr || jahr > maxJahr) {
-                printf(YELLOW "Jahreszahl außerhalb des gültigen Bereichs." RESET);
+                printf(YELLOW "\nJahreszahl außerhalb des gültigen Bereichs." RESET);
                 versuch++;
             }
             else {
                 break;
             }
             if (versuch < 3) {
-                printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
+                printf(YELLOW "\nNoch %d Versuch(e) übrig\n\n" RESET, 3 - versuch);
             }
             else {
-                printf(RED "Zu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+                printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n\n" RESET);
                 return 1;
             }
         } while (1);
@@ -311,22 +314,22 @@ int jahrDefinition() {
 // Funktion: Definition der Uhrzeit
 int uhrzeitDefinition() {
     do {
-        printf(" Uhrzeit (HH:MM:SS): ");
+        printf("Uhrzeit (HH:MM:SS): ");
         if (scanf("%d:%d:%d", &stunde, &minute, &sekunde) != 3) {
-            printf(YELLOW "Ungültiges Format. Bitte HH:MM:SS eingeben.\n" RESET);
+            printf(YELLOW "\nUngültiges Format. Bitte HH:MM:SS eingeben.\n" RESET);
             versuch++;
             int ch;
             while ((ch = getchar()) != '\n' && ch != EOF);
         }
         else if (stunde < 0 || stunde > 23 || minute < 0 || minute > 59 || sekunde < 0 || sekunde > 59) {
-            printf(YELLOW "Ungültige Uhrzeitformat: %02d:%02d:%02d\n" RESET, stunde, minute, sekunde);
+            printf(YELLOW "\nUngültige Uhrzeitformat: %02d:%02d:%02d\n" RESET, stunde, minute, sekunde);
             versuch++;
         }
         else {
             break;
         }
         if (versuch < 3) {
-            printf(YELLOW "Noch %d Versuch(e) übrig\n" RESET, 3 - versuch);
+            printf(YELLOW "Noch %d Versuch(e) übrig\n\n" RESET, 3 - versuch);
         }
         else {
             printf(RED "Zu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
@@ -369,45 +372,108 @@ int monatZuZahl(const char* monat) {
     return 0;
 }
 
+//Funktion Begrenzung Versuche
+int begrenzungversuche(int min, int max, int maxVersuche) {
+    int eingabe;
+    int versuche = 0;
+    char buffer[64];
+
+    do {
+        printf("\n\nAuswahl (%d-%d):\n", min, max);
+
+        // Ganze Zeile einlesen statt scanf direkt
+        if (!fgets(buffer, sizeof(buffer), stdin)) {
+            printf(RED "Fehler beim Lesen der Eingabe.\n" RESET);
+            exit(1);
+        }
+
+        // Entferne \n am Ende
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        // Prüfen, ob leer
+        if (strlen(buffer) == 0) {
+            printf(YELLOW "Keine Eingabe erkannt. Bitte eine Zahl zwischen %d und %d eingeben.\n" RESET, min, max);
+            versuche++;
+        }
+        // Prüfen, ob Zahl gültig
+        else if (sscanf(buffer, "%d", &eingabe) != 1 || eingabe < min || eingabe > max) {
+            printf(YELLOW "\nUngültige Eingabe. Bitte eine Zahl zwischen %d und %d eingeben.\n" RESET, min, max);
+            versuche++;
+        }
+        else {
+            return eingabe; // gültige Zahl → zurückgeben
+        }
+
+        if (versuche < maxVersuche) {
+            printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
+        }
+        else {
+            printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+            exit(1);
+        }
+
+    } while (1);
+}
+
+
+//Funktion Ergebnis der Suche speichern
+int speichersuche(const char* zielDateiname) {
+    char speichern;
+    int versuche = 0;
+    const int maxVersuche = 3;
+
+    do {
+        printf("\nMöchtest du die Ergebnisse in eine Datei speichern? (j/n):\n");
+        speichern = getchar();
+        while (getchar() != '\n'); // Eingabepuffer leeren
+
+        if (speichern == 'j' || speichern == 'J') {
+            outputDatei = fopen(zielDateiname, "w");
+            if (!outputDatei) {
+                perror(RED "Fehler beim Öffnen der Datei" RESET);
+                return 0;
+            }
+            printf("\nDie Ergebnisse werden in '%s' gespeichert.\n", zielDateiname);
+            return 1;
+        }
+        else if (speichern == 'n' || speichern == 'N') {
+            return 0; // Nicht speichern
+        }
+        else {
+            versuche++;
+            if (versuche < maxVersuche) {
+                printf(YELLOW "\nUngültige Eingabe.\n" RESET);
+                printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
+            }
+            else {
+                printf(RED "\nZu viele ungültige Eingaben. Das Programm wird beendet.\n" RESET);
+                exit(1);
+            }
+        }
+    } while (1);
+}
+
+
 // Funktion: Auswahl nach Suche
 void auswahlnachSuche(int funktionID) {
     char wahl;
 
-    // Nur wenn mindestens ein Treffer gefunden wurde → Frage stellen
-    if (treffer > 0) {
-        char speichern;
-        printf("\n\nMöchten Sie die Ergebnisse in eine Datei speichern? (j/n): ");
-        speichern = getchar();
-        while (getchar() != '\n');  // Eingabepuffer leeren
-
-        if (speichern == 'j' || speichern == 'J') {
-            outputDatei = fopen("Suchergebnisse.txt", "w");
-            if (!outputDatei) {
-                perror(YELLOW "Fehler beim Öffnen der Datei" RESET);
-            }
-            else {
-                printf("\nErgebnisse werden gespeichert\n");
-            }
-        }
-    }
-
-    printf("\n\nWas möchten Sie tun?");
-    printf("\n1: Suche wiederholen");
-    printf("\n2: Zurück ins Hauptmenü");
-    printf("\n3: Programm beenden");
-    printf("\nBitte auswählen: ");
-    wahl = getchar();
-    while (getchar() != '\n');
-
-    // Datei schließen, wenn offen
+    // Falls noch offen: Speicherdatei schließen
     if (outputDatei) {
         fclose(outputDatei);
         outputDatei = NULL;
         printf("\nErgebnisse wurden in 'Suchergebnisse.txt' gespeichert.\n");
     }
 
+    // Auswahl anzeigen
+    printf("\n\nWas möchten Sie tun?");
+    printf("\n1: Suche wiederholen");
+    printf("\n2: Zurück ins Hauptmenü");
+    printf("\n3: Programm beenden");
+    wahl = begrenzungversuche(1, 3, 3);  // 1=Suche wiederholen, 2=Menü, 3=Beenden
+
     switch (wahl) {
-    case '1':
+    case 1:
         switch (funktionID) {
         case 1: ipSuche(); break;
         case 2: zeitraum(); break;
@@ -419,15 +485,17 @@ void auswahlnachSuche(int funktionID) {
         case 8: severityLevel(); break;
         case 9: ipFilterSucheEinfach(1); break;
         case 10: ipFilterSucheEinfach(0); break;
+        case 11: mnemonicSuche(); break;
+        case 12: eigeneMnemonicSuche(); break;
         default:
             printf("Unbekannte Funktion.\n");
             hauptmenue();
         }
         break;
-    case '2':
+    case 2:
         hauptmenue();
         break;
-    case '3':
+    case 3:
         printf("\nProgramm wird beendet.\n");
         exit(0);
     default:
@@ -438,22 +506,35 @@ void auswahlnachSuche(int funktionID) {
 
 // Funktion 0: eigene Suchbegriffeingabe
 int eigenerSuchbegriff() {
+    int versuche = 0;
+    const int maxVersuche = 3;
 
-    printf("\n Gib einen beliebigen Suchbegriff und drücke die Enter-Taste: ");
-    fgets(suchbegriff, sizeof(suchbegriff), stdin);
-    suchbegriff[strcspn(suchbegriff, "\n")] = '\0'; // Zeilenumbruch entfernen
+    do {
+        printf("\nGib einen beliebigen Suchbegriff und drücke die Enter-Taste: ");
+        fgets(suchbegriff, sizeof(suchbegriff), stdin);
+        suchbegriff[strcspn(suchbegriff, "\n")] = '\0'; // Zeilenumbruch entfernen
 
-    // Prüfen, ob der Suchbegriff leer ist
-    if (strlen(suchbegriff) == 0) {
-        printf(RED "\nDu hast keinen Suchbegriff eingegeben. Abbruch.\n" RESET);
-        return 1;
-    }
+        if (strlen(suchbegriff) == 0) {
+            printf(YELLOW "\nUngültige Eingabe. Bitte einen Suchbegriff eingeben.\n" RESET);
+            versuche++;
+            if (versuche < maxVersuche) {
+                printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
+            }
+            else {
+                printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+                exit(1);
+            }
+        }
+        else {
+            break; // gültige Eingabe → Schleife verlassen
+        }
+    } while (1);
 
-    printf("\n Dateiname: %s\n", dateiname);
-    printf("\n Suchbegriff: %s\n", suchbegriff);
+    printf("\nDateiname: %s\n", dateiname);
+    printf("\nSuchbegriff: %s\n", suchbegriff);
+    speichersuche("Suchergebnisse.txt");
 
     dateiOeffnen();
-
     treffer = 0;
     zeilennummer = 0;
 
@@ -475,11 +556,11 @@ int eigenerSuchbegriff() {
     }
 
     fclose(datei);
-
     auswahlnachSuche(4);
 
     return 0;
 }
+
 
 // Funktion: 1. Auswahl, Zeitraumberechnung der Logs
 int zeitraum() {
@@ -490,16 +571,14 @@ int zeitraum() {
     printf("\n2: Bis zur ersten eingegebenen Zeit.");
     printf("\n3: Zeitraum zwischen der ersten und zweiten Zeit.");
     printf("\n4: Zurück ins Hauptmenü");
-    printf("\n5: Programm beenden.\n");
+    printf("\n5: Programm beenden.");
 
-    printf("\n\nAuswahl: ");
-    scanf("%d", &zeitauswahl);
-    while (getchar() != '\n');
+    int zeitauswahl = begrenzungversuche(1, 5, 3);
 
     switch (zeitauswahl) {
     case 1: {
         treffer = 0;
-        printf("\nWähle die erste Zeit aus:");
+        printf("\nWähle die erste Zeit aus:\n");
         tagDefinition();
         monatDefinition();
         jahrDefinition();
@@ -507,13 +586,14 @@ int zeitraum() {
 
         if (jahr == -1) {
             startzeit = zeitZuSekundenOhneJahr(tag, monat, stunde, minute, sekunde);
-            printf("\nErste Zeit: %d. %s um %02d:%02d:%02d Uhr\n\n\n", tag, monat, stunde, minute, sekunde);
+            printf("\nErste Zeit: %d. %s um %02d:%02d:%02d Uhr\n\n", tag, monat, stunde, minute, sekunde);
         }
         else {
             startzeit = zeitZuSekunden(tag, monat, jahr, stunde, minute, sekunde);
-            printf("\nErste Zeit: %d. %s %d um %02d:%02d:%02d Uhr\n\n\n", tag, monat, jahr, stunde, minute, sekunde);
+            printf("\nErste Zeit: %d. %s %d um %02d:%02d:%02d Uhr\n\n", tag, monat, jahr, stunde, minute, sekunde);
         }
-
+        while (getchar() != '\n');
+        speichersuche("Suchergebnisse.txt");
         dateiOeffnen();
         while (fgets(zeile, sizeof(zeile), datei)) {
             char stern;
@@ -580,7 +660,8 @@ int zeitraum() {
             startzeit = zeitZuSekunden(tag, monat, jahr, stunde, minute, sekunde);
             printf("\nErste Zeit: %d. %s %d um %02d:%02d:%02d Uhr\n\n\n", tag, monat, jahr, stunde, minute, sekunde);
         }
-
+        while (getchar() != '\n');
+        speichersuche("Suchergebnisse.txt");
         dateiOeffnen();
         while (fgets(zeile, sizeof(zeile), datei)) {
             int lTag = 0, lJahr = -1, lStunde = 0, lMinute = 0, lSekunde = 0;
@@ -690,7 +771,8 @@ int zeitraum() {
             printf(YELLOW "\nDie zweite Zeit muss nach der ersten Zeit liegen.\n" RESET);
             break;
         }
-
+        while (getchar() != '\n');
+        speichersuche("Suchergebnisse.txt");
         dateiOeffnen();
         while (fgets(zeile, sizeof(zeile), datei)) {
             int lTag = 0, lJahr = -1, lStunde = 0, lMinute = 0, lSekunde = 0;
@@ -747,6 +829,7 @@ int zeitraum() {
 
 // Funktion 2: IP-Suche/Filterung
 void ipFilterSucheEinfach(int privat) {
+    speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
 
     zeilennummer = 0;
@@ -815,7 +898,7 @@ void eigeneFacilitySuche() {
     // Muster erstellen, z. B. "%STP-"
     char muster[70];
     snprintf(muster, sizeof(muster), "%%%s-", eingabe);
-
+    speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
     zeilennummer = 0;
     treffer = 0;
@@ -854,7 +937,7 @@ int compareStrings(const void* a, const void* b) {
 void facilitySuche() {
     char* facilities[MAX_FACILITIES];
     int anzahlFacilities = 0;
-
+    
     dateiOeffnen();
     zeilennummer = 0;
 
@@ -904,26 +987,17 @@ void facilitySuche() {
     // Sortieren alphabetisch
     qsort(facilities, anzahlFacilities, sizeof(char*), compareStrings);
 
-    printf("\nGefundene Facilities:\n");
+    printf("\nGefundene Facilities:\n\n");
     for (int i = 0; i < anzahlFacilities; i++) {
         printf("%2d: %s\n", i + 1, facilities[i]);
     }
-    printf(" 0: Zurück\n");
 
-    int auswahl;
-    printf("\nWähle eine Facility aus: ");
-    scanf("%d", &auswahl);
-    while (getchar() != '\n');
-
-    if (auswahl == 0 || auswahl > anzahlFacilities) {
-        printf("Zurück...\n");
-        return;
-    }
+    int auswahl = begrenzungversuche(0, anzahlFacilities, 3);
 
     const char* muster = facilities[auswahl - 1];
     char suchmuster[70];
     snprintf(suchmuster, sizeof(suchmuster), "%%%s-", muster); // z. B. %LINK-
-
+    speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
     treffer = 0;
     zeilennummer = 0;
@@ -959,15 +1033,31 @@ void facilitySuche() {
 // Funktion 3: Facility-Suche/Filterung
 void eigeneUserSuche() {
     char eingabe[64];
-    printf("\nGib einen Usernamen ein (z. B. admin, datacadmin): ");
-    fgets(eingabe, sizeof(eingabe), stdin);
-    eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
+    int versuche = 0;
+    const int maxVersuche = 3;
 
-    if (strlen(eingabe) == 0) {
-        printf(YELLOW "Keinen User eingegeben. Zurück...\n" RESET);
-        return;
-    }
+    do {
+        printf("\nGib einen Usernamen ein (z. B. admin, datacadmin): ");
+        fgets(eingabe, sizeof(eingabe), stdin);
+        eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
 
+        if (strlen(eingabe) == 0) {
+            printf(YELLOW "\nUngültige Eingabe. Bitte einen Usernamen eingeben.\n" RESET);
+            versuche++;
+            if (versuche < maxVersuche) {
+                printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
+            }
+            else {
+                printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+                exit(1);
+            }
+        }
+        else {
+            break; // gültige Eingabe → Schleife verlassen
+        }
+    } while (1);
+
+    speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
     zeilennummer = 0;
     treffer = 0;
@@ -992,7 +1082,7 @@ void eigeneUserSuche() {
     else {
         printf("\nInsgesamt %d Treffer für User '%s'.\n", treffer, eingabe);
     }
-    auswahlnachSuche(6);
+    auswahlnachSuche(3);
 }
 
 #define MAX_USER 100
@@ -1000,7 +1090,7 @@ void eigeneUserSuche() {
 void userSuche() {
     char* userNamen[MAX_USER];
     int anzahlUser = 0;
-
+    
     dateiOeffnen();
     zeilennummer = 0;
 
@@ -1057,17 +1147,15 @@ void userSuche() {
     }
     printf(" 0: Zurück\n");
 
-    int auswahl;
     printf("\nWähle einen User aus: ");
-    scanf("%d", &auswahl);
-    while (getchar() != '\n');
+    int auswahl = begrenzungversuche(0, anzahlUser, 3);
 
     if (auswahl == 0 || auswahl > anzahlUser) {
         printf(YELLOW "Zurück...\n" RESET);
     }
     else {
         const char* muster = userNamen[auswahl - 1];
-
+        speichersuche("Suchergebnisse.txt");
         dateiOeffnen();
         treffer = 0;
         zeilennummer = 0;
@@ -1107,7 +1195,7 @@ void userSuche() {
 void mnemonicSuche() {
     char* mnemonics[MAX_MNEMONICS];
     int anzahlMnemonics = 0;
-
+    
     dateiOeffnen();
     zeilennummer = 0;
 
@@ -1156,26 +1244,18 @@ void mnemonicSuche() {
 
     qsort(mnemonics, anzahlMnemonics, sizeof(char*), compareStrings);
 
-    printf("\nGefundene Mnemonics:\n");
+    printf("\nGefundene Mnemonics:\n\n");
     for (int i = 0; i < anzahlMnemonics; i++) {
         printf("%2d: %s\n", i + 1, mnemonics[i]);
     }
-    printf(" 0: Zurück\n");
 
-    int auswahl;
     printf("\nWähle ein Mnemonic aus: ");
-    scanf("%d", &auswahl);
-    while (getchar() != '\n');
-
-    if (auswahl == 0 || auswahl > anzahlMnemonics) {
-        printf("Zurück...\n");
-        return;
-    }
+    int auswahl = begrenzungversuche(0, anzahlMnemonics, 3);
 
     const char* muster = mnemonics[auswahl - 1];
     char suchmuster[70];
     snprintf(suchmuster, sizeof(suchmuster), "-%s:", muster); 
-
+    speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
     treffer = 0;
     zeilennummer = 0;
@@ -1204,25 +1284,40 @@ void mnemonicSuche() {
         free(mnemonics[i]);
     }
 
-    auswahlnachSuche(13);
+    auswahlnachSuche(11);
 }
 
 
 void eigeneMnemonicSuche() {
     char eingabe[64];
-    printf("\nGib ein Mnemonic ein (z. B. CONFIG_I, UPDOWN, ADJCHANGE): ");
-    fgets(eingabe, sizeof(eingabe), stdin);
-    eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
+    int versuche = 0;
+    const int maxVersuche = 3;
 
-    if (strlen(eingabe) == 0) {
-        printf(YELLOW "Kein Mnemonic eingegeben. Zurück...\n" RESET);
-        return;
-    }
+    do {
+        printf("\nGib ein Mnemonic ein (z. B. CONFIG_I, UPDOWN, ADJCHANGE): ");
+        fgets(eingabe, sizeof(eingabe), stdin);
+        eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
 
-    // Muster erstellen, z. B. ":CONFIG_I"
+        if (strlen(eingabe) == 0) {
+            printf(YELLOW "\nUngültige Eingabe. Bitte ein Mnemonic eingeben.\n" RESET);
+            versuche++;
+            if (versuche < maxVersuche) {
+                printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
+            }
+            else {
+                printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+                exit(1);
+            }
+        }
+        else {
+            break; // gültige Eingabe → Schleife verlassen
+        }
+    } while (1);
+
+    // Muster erstellen, z. B. "-CONFIG_I:"
     char muster[70];
     snprintf(muster, sizeof(muster), "-%s:", eingabe);
-
+    speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
     zeilennummer = 0;
     treffer = 0;
@@ -1247,7 +1342,7 @@ void eigeneMnemonicSuche() {
         printf("\nInsgesamt %d Treffer für Mnemonic '%s'.\n", treffer, eingabe);
     }
 
-    auswahlnachSuche(13);
+    auswahlnachSuche(12);
 }
 
 
@@ -1268,17 +1363,15 @@ int severityLevel() {
         "Debugging Nachrichten/Logs"
     };
 
-    printf("\n Wähle ein Severity Level aus.");
+    printf("\n Wähle ein Severity Level aus.\n");
     for (int i = 0; i < 8; ++i)
         printf("\n %d: %s", i, sevLevellNamen[i]);
     printf("\n 8: Alle");
     printf("\n 9: Zurück in das Hauptmenü");
     printf("\n 10: Programm beenden\n");
 
-    int sevLevelAuswahl;
     printf("\n Ausgewähltes Severity Level: ");
-    scanf("%d", &sevLevelAuswahl);
-    while (getchar() != '\n'); // Eingabepuffer leeren
+    int sevLevelAuswahl = begrenzungversuche(0, 10, 3);
 
     if (sevLevelAuswahl == 9) {
         hauptmenue();
@@ -1288,7 +1381,7 @@ int severityLevel() {
         printf(RED "\nProgramm wird beendet.\n" RESET);
         exit(0);
     }
-
+    speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
     int treffer = 0, zeilennummer = 0;
 
@@ -1374,18 +1467,15 @@ void hauptmenue() {
     printf("\n\nWähle ein Suchbegriff aus:\n");
     printf("\n0: Eigene Eingabe");
     printf("\n1: Zeitraum");
-    printf("\n2: IP Adresse");
+    printf("\n2: IP-Adresse");
     printf("\n3: Facilities");
     printf("\n4: User");
     printf("\n5: Mnemonic");
-    printf("\n6: Fehlermeldung");
-    printf("\n7: Severity Level");
-    printf("\n8: Neue Datei auswählen");
-    printf("\n9: Programm beenden");
+    printf("\n6: Severity Level");
+    printf("\n7: Neue Datei auswählen");
+    printf("\n8: Programm beenden");
 
-    printf("\n\nAusgewählter Suchbegriff: ");
-    scanf("%d", &begriff);
-    while (getchar() != '\n');  // Eingabepuffer leeren
+    begriff = begrenzungversuche(0, 8, 3);
 
     switch (begriff) {
     case 0:
@@ -1395,16 +1485,15 @@ void hauptmenue() {
         zeitraum();
         break;
     case 2: {
-        int wahl;
-        printf("\nWähle die Art der IP-Suche:\n");
+        printf("\nWähle die Art der IP-Suche:\n\n");
         printf("1: Manuelle Eingabe einer IP-Adresse\n");
         printf("2: Nur private IP-Adressen anzeigen\n");
         printf("3: Nur öffentliche IP-Adressen anzeigen\n");
         printf("4: Zurück in das Hauptmenü\n");
         printf("5: Programm beenden");
-        printf("\n\nAuswahl: ");
-        scanf("%d", &wahl);
-        while (getchar() != '\n');
+
+        int wahl = begrenzungversuche(1, 5, 3);
+
 
         switch (wahl) {
         case 1: ipSuche(); break;
@@ -1423,15 +1512,14 @@ void hauptmenue() {
         break;
     }
     case 3: {
-        int wahl;
-        printf("\nWähle die Art der Facility-Suche:\n");
+        printf("\nWähle die Art der Facility-Suche:\n\n");
         printf("1: Eigene Suche nach Facility-Begriff\n");
         printf("2: Alle vorhandenen Facilities anzeigen und auswählen\n");
         printf("3: Zurück in das Hauptmenü\n");
-        printf("4: Programm beenden\n");
-        printf("\nAuswahl: ");
-        scanf("%d", &wahl);
-        while (getchar() != '\n');
+        printf("4: Programm beenden");
+
+        int wahl = begrenzungversuche(1, 4, 3);
+
 
         switch (wahl) {
         case 1: eigeneFacilitySuche(); break;
@@ -1447,15 +1535,14 @@ void hauptmenue() {
         break;
     }
     case 4: {
-        int wahl;
         printf("\nWähle die Art der User-Suche:\n");
         printf("1: Eigene Suche nach User\n");
         printf("2: Alle User anzeigen und auswählen\n");
         printf("3: Zurück in das Hauptmenü\n");
-        printf("4: Programm beenden\n");
-        printf("\nAuswahl: ");
-        scanf("%d", &wahl);
-        while (getchar() != '\n');
+        printf("4: Programm beenden");
+
+        int wahl = begrenzungversuche(1, 4, 3);
+
 
         switch (wahl) {
         case 1: eigeneUserSuche(); break;
@@ -1471,15 +1558,13 @@ void hauptmenue() {
         break;
     }
     case 5: {
-        int wahl;
-        printf("\nWähle die Art der Mnemonic-Suche:\n");
+        printf("\nWähle die Art der Mnemonic-Suche:\n\n");
         printf("1: Eigene Suche nach Mnemonic\n");
         printf("2: Alle vorhandenen Mnemonics anzeigen und auswählen\n");
         printf("3: Zurück in das Hauptmenü\n");
-        printf("4: Programm beenden\n");
-        printf("\nAuswahl: ");
-        scanf("%d", &wahl);
-        while (getchar() != '\n');
+        printf("4: Programm beenden");
+
+        int wahl = begrenzungversuche(1, 4, 3);
 
         switch (wahl) {
         case 1: eigeneMnemonicSuche(); break;
@@ -1495,16 +1580,16 @@ void hauptmenue() {
         break;
     }
     case 6:
-    case 7:
         severityLevel();
         break;
-    case 8:
+    case 7:
         neueDateiAuswaehlen();
         hauptmenue();
         break;
-    case 9:
-        printf(RED "Programm wird beendet.\n" RESET);
+    case 8:
+        printf(RED "\nProgramm wird beendet.\n" RESET);
         exit(0);
+
     default:
         printf(YELLOW "Ungültige Auswahl.\n" RESET);
         break;
@@ -1516,6 +1601,8 @@ void hauptmenue() {
 ###############################*/
 
 int main() {
+
+//SetConsoleOutputCP(CP_UTF8);  // Konsole auf UTF-8 stellen und Windows ONLY
 
 #ifdef _WIN32
     system("cls");
