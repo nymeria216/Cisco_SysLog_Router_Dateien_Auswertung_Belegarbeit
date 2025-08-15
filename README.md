@@ -25,3 +25,5 @@ Abgabe Belegarbeit: 30.09.2025
 
 ## Funktionsweise
 <img width="464" height="145" alt="image" src="https://github.com/user-attachments/assets/747c307c-fe49-4dd1-8a17-661f2d4db5d5" />
+
+<img width="487" height="345" alt="image" src="https://github.com/user-attachments/assets/4205e15c-673a-4e6d-bcfd-8c623d651413" />
