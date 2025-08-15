@@ -21,3 +21,7 @@ Einschreibung Softwarebeleg: 30.06.2025
 Abgabe Belegarbeit: 30.09.2025
 
 [Git Commit Richtlinie](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13)
+
+
+## Funktionsweise
+<img width="464" height="145" alt="image" src="https://github.com/user-attachments/assets/747c307c-fe49-4dd1-8a17-661f2d4db5d5" />
