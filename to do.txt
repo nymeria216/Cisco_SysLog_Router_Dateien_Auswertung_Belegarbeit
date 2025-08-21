@@ -3,3 +3,4 @@ Verbindliche ToDo's:
 
 Optionale ToDo's:
 - "Keine Treffer für 'suchbegriff' gefunden." Reiehenfolge ändern, sodass die Ausgabe vor folgender Frage "Möchtest du die Ergebnisse in eine Datei speichern? (j/n):" passiert
+- Klein- und Großschreibung flexibel in der 0: Eigene Sucheingabe anpassen
