@@ -1,1 +1,5 @@
+Verbindliche ToDo's:
 - Programmabbruch: exit --> Hastagreihe einbauen und mit etwas mehr/ detaillierter beschreiben: Mit der Eingabe von "exit" kann das Programm immer beendet werden
+
+Optionale ToDo's:
+- "Keine Treffer für 'suchbegriff' gefunden." Reiehenfolge ändern, sodass die Ausgabe vor folgender Frage "Möchtest du die Ergebnisse in eine Datei speichern? (j/n):" passiert
