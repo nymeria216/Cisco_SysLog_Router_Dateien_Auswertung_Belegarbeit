@@ -130,7 +130,7 @@ int ipSuche() {
 
     // Eingabeschleife für die IP-Adresse
     while (versuche < maxVersuche) {
-        printf("\nGib eine IP-Adresse ein (Format: XXX.XXX.XXX.XXX): ");
+        printf("\nBitte geben Sie eine IP-Adresse ein (Format: XXX.XXX.XXX.XXX): ");
         fgets(suchbegriff, sizeof(suchbegriff), stdin);
         suchbegriff[strcspn(suchbegriff, "\n")] = '\0';
         exitEingabe(suchbegriff);
@@ -246,7 +246,7 @@ int tagDefinition() {
         }
 
         do {
-            printf("\nTag (DD): ");
+            printf("\nTag (DD): \n");
             fgets(tagEingabe, sizeof(tagEingabe), stdin);
             tagEingabe[strcspn(tagEingabe, "\n")] = '\0';
             exitEingabe(tagEingabe);
@@ -336,14 +336,14 @@ int monatDefinition() {
     fclose(datei);
 
     if (monatVorhanden) {
-        printf("Verfügbare Monate in der Datei: ");
+        printf("\nVerfügbare Monate in der Datei: ");
         for (int i = 0; i < anzahlVorhandeneMonate; i++) {
             printf("%s ", vorhandeneMonate[i]);
         }
         printf("\n");
 
         do {
-            printf("Monat (MMM): ");
+            printf("Monat (MMM): \n");
             fgets(monatEingabe, sizeof(monatEingabe), stdin);
             monatEingabe[strcspn(monatEingabe, "\n")] = '\0';
             exitEingabe(monatEingabe);
@@ -423,8 +423,8 @@ int jahrDefinition() {
         char* endptr;
 
         do {
-            printf("Wähle eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl (%d).", minJahr, maxJahr);
-            printf("\nJahreszahl (YYYY): ");
+            printf("\nBitte wählen Sie eine Jahreszahl aus der kleinsten (%d) und größten Jahreszahl aus (%d).\n", minJahr, maxJahr);
+            printf("\nJahreszahl (YYYY): \n");
             fgets(jahrEingabe, sizeof(jahrEingabe), stdin);
             jahrEingabe[strcspn(jahrEingabe, "\n")] = '\0';
             exitEingabe(jahrEingabe);
@@ -435,7 +435,7 @@ int jahrDefinition() {
                 versuch++;
             }
             else if (jahr < minJahr || jahr > maxJahr) {
-                printf(YELLOW "\nJahreszahl außerhalb des gültigen Bereichs." RESET);
+                printf(YELLOW "\nDie Jahreszahl liegt außerhalb des gültigen Bereichs." RESET);
                 versuch++;
             }
             else {
@@ -463,7 +463,7 @@ int uhrzeitDefinition() {
     char uhrzeitEingabe[16];
 
     do {
-        printf("Uhrzeit (HH:MM:SS): ");
+        printf("\nUhrzeit (HH:MM:SS): \n");
         fgets(uhrzeitEingabe, sizeof(uhrzeitEingabe), stdin);
         uhrzeitEingabe[strcspn(uhrzeitEingabe, "\n")] = '\0';
         exitEingabe(uhrzeitEingabe);
@@ -578,7 +578,7 @@ int speichersuche(const char* zielDateiname) {
     const int maxVersuche = 3;
 
     do {
-        printf("\nMöchtest du die Ergebnisse in eine Datei speichern? (j/n):\n");
+        printf("\nMöchten Sie die Ergebnisse in einer Datei speichern? (j/n):\n");
         speichern = getchar();
         while (getchar() != '\n'); // Eingabepuffer leeren
 
@@ -620,7 +620,7 @@ void auswahlnachSuche(int funktionID) {
     }
 
     // Auswahl anzeigen
-    printf("\n\nWas möchten Sie tun?");
+    printf("\n\nWas möchten Sie tun?\n");
     printf("\n1: Suche wiederholen");
     printf("\n2: Zurück ins Hauptmenü");
     printf("\n3: Programm beenden");
@@ -664,7 +664,7 @@ int eigenerSuchbegriff() {
     const int maxVersuche = 3;
 
     do {
-        printf("\nGib einen beliebigen Suchbegriff und drücke die Enter-Taste: ");
+        printf("\nBitte geben Sie einen beliebigen Suchbegriff ein:\n");
         fgets(suchbegriff, sizeof(suchbegriff), stdin);
         suchbegriff[strcspn(suchbegriff, "\n")] = '\0';
         exitEingabe(suchbegriff);
@@ -720,7 +720,7 @@ int eigenerSuchbegriff() {
 int zeitraum() {
     int startzeit;
 
-    printf("\nWie sollen die Logs betrachtet werden?\n");
+    printf("\nWie wollen Sie die Logs betrachten?\n");
     printf("\n1: Ab der ersten eingegebenen Zeit.");
     printf("\n2: Bis zur ersten eingegebenen Zeit.");
     printf("\n3: Zeitraum zwischen der ersten und zweiten Zeit.");
@@ -732,7 +732,7 @@ int zeitraum() {
     switch (zeitauswahl) {
     case 1: {
         treffer = 0;
-        printf("\nWähle die erste Zeit aus:\n");
+        printf("\nWählen Sie bitte die erste Zeit aus:\n");
         tagDefinition();
         monatDefinition();
         jahrDefinition();
@@ -800,7 +800,7 @@ int zeitraum() {
     }
     case 2: {
         treffer = 0;
-        printf("\nWähle die erste Zeit aus:");
+        printf("\nWählen Sie bitte die erste Zeit aus:\n");
         tagDefinition();
         monatDefinition();
         jahrDefinition();
@@ -892,7 +892,7 @@ int zeitraum() {
         char endMonat[4];
         int endzeit;
 
-        printf("\nWähle die erste Zeit aus:");
+        printf("\nBitte wählen Sie die erste Zeit aus:\n");
         tagDefinition();
         monatDefinition();
         jahrDefinition();
@@ -908,7 +908,7 @@ int zeitraum() {
         }
 
         // Eingabe zweite Zeit
-        printf("\nWähle die zweite Zeit aus:");
+        printf("\nBitte wählen Sie die zweite Zeit aus:");
         tagDefinition();
         monatDefinition();
         jahrDefinition();
@@ -1040,7 +1040,7 @@ void ipFilterSucheEinfach(int privat) {
 // Funktion 3: Facility-Suche/Filterung
 void eigeneFacilitySuche() {
     char eingabe[64];
-    printf("\nGib einen Facility-Begriff ein (z. B. STP, LINK, DHCP): ");
+    printf("\nBitte geben Sie einen Facility-Begriff ein (z. B. STP, LINK, DHCP):\n");
     fgets(eingabe, sizeof(eingabe), stdin);
     eingabe[strcspn(eingabe, "\n")] = '\0';
     exitEingabe(eingabe);
@@ -1197,12 +1197,12 @@ void eigeneUserSuche() {
     const int maxVersuche = 3;
 
     do {
-        printf("\nGib einen Usernamen ein (z. B. admin, datacadmin): ");
+        printf("\nBitte geben Sie einen Usernamen ein (z. B. admin, datacadmin):");
         fgets(eingabe, sizeof(eingabe), stdin);
         eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
 
         if (strlen(eingabe) == 0) {
-            printf(YELLOW "\nUngültige Eingabe. Bitte einen Usernamen eingeben.\n" RESET);
+            printf(YELLOW "\nUngültige Eingabe. Bitte geben Sie einen Usernamen ein.\n" RESET);
             versuche++;
             if (versuche < maxVersuche) {
                 printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
@@ -1304,47 +1304,45 @@ void userSuche() {
 
     printf("\nGefundene User:\n");
     for (int i = 0; i < anzahlUser; i++) {
-        printf("%2d: %s\n", i, userNamen[i]);   // 0-basiert ausgeben
+        printf("%d: %s", i, userNamen[i]);   // 0-basiert ausgeben
     }
-    printf("%2d: Zurück\n", anzahlUser);        // Zurück als letzter Index
 
-    printf("\nWähle einen User aus: ");
-    int auswahl = begrenzungversuche(0, anzahlUser, 3);
+    // KEINE "Zurück"-Zeile mehr!
+    // printf("%2d: Zurück\n", anzahlUser);
 
-    if (auswahl == anzahlUser) {
-        printf(YELLOW "Zurück...\n" RESET);
-        // return oder auswahlnachSuche(7);
+    int auswahl = begrenzungversuche(0, anzahlUser - 1, 3);
+
+    // Direkter Zugriff (0-basiert), NICHT auswahl-1
+    const char* muster = userNamen[auswahl];
+
+    speichersuche("Suchergebnisse.txt");
+    dateiOeffnen();
+    treffer = 0;
+    zeilennummer = 0;
+
+    while (fgets(zeile, sizeof(zeile), datei)) {
+        zeilennummer++;
+        if (strstr(zeile, muster)) {
+            printf("Zeile %d: %s", zeilennummer, zeile);
+            if (outputDatei) {
+                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
+            }
+            treffer++;
+        }
+    }
+    fclose(datei);
+
+    if (treffer == 0) {
+        printf(YELLOW "\nKeine Treffer für Benutzer '%s' gefunden.\n" RESET, muster);
     }
     else {
-        const char* muster = userNamen[auswahl - 1];
-        speichersuche("Suchergebnisse.txt");
-        dateiOeffnen();
-        treffer = 0;
-        zeilennummer = 0;
-
-        while (fgets(zeile, sizeof(zeile), datei)) {
-            zeilennummer++;
-            if (strstr(zeile, muster)) {
-                printf("Zeile %d: %s", zeilennummer, zeile);
-                if (outputDatei) {
-                    fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
-                }
-                treffer++;
-            }
-        }
-
-        fclose(datei);
-
-
-        if (treffer == 0) {
-            printf(YELLOW "\nKeine Treffer für Benutzer '%s' gefunden.\n" RESET, muster);
-        }
-        else {
-            printf("\nInsgesamt %d Treffer für Benutzer '%s'.\n", treffer, muster);
-        }
+        printf("\nInsgesamt %d Treffer für Benutzer '%s'.\n", treffer, muster);
     }
 
     auswahlnachSuche(7);
+
+    // Speicher freigeben wie gehabt ...
+
 
     // Speicher freigeben
     for (int i = 0; i < anzahlUser; i++) {
@@ -1411,8 +1409,8 @@ void mnemonicSuche() {
         printf("%2d: %s\n", i + 1, mnemonics[i]);
     }
 
-    printf("\nWähle ein Mnemonic aus: ");
-    int auswahl = begrenzungversuche(0, anzahlMnemonics, 3);
+    printf("\nBitte wählen Sie ein Mnemonic aus: ");
+    int auswahl = begrenzungversuche(1, anzahlMnemonics, 3);
 
     const char* muster = mnemonics[auswahl - 1];
     char suchmuster[70];
@@ -1455,13 +1453,13 @@ void eigeneMnemonicSuche() {
     const int maxVersuche = 3;
 
     do {
-        printf("\nGib ein Mnemonic ein (z. B. CONFIG_I, UPDOWN, ADJCHANGE): ");
+        printf("\nBitte geben Sie ein Mnemonic ein (z. B. CONFIG_I, UPDOWN, ADJCHANGE):\n");
         fgets(eingabe, sizeof(eingabe), stdin);
         eingabe[strcspn(eingabe, "\n")] = '\0';
         exitEingabe(eingabe);
 
         if (strlen(eingabe) == 0) {
-            printf(YELLOW "\nUngültige Eingabe. Bitte ein Mnemonic eingeben.\n" RESET);
+            printf(YELLOW "\nUngültige Eingabe. Bitte geben Sie ein Mnemonic ein.\n" RESET);
             versuche++;
             if (versuche < maxVersuche) {
                 printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
@@ -1524,13 +1522,12 @@ int severityLevel() {
         "Debugging Nachrichten/Logs"
     };
 
-    printf("\n Wähle ein Severity Level aus.\n");
+    printf("\nBitte wählen Sie ein Severity Level aus.\n");
     for (int i = 0; i < 8; ++i)
-        printf("\n %d: %s", i, sevLevellNamen[i]);
-    printf("\n 8: Zurück in das Hauptmenü");
-    printf("\n 9: Programm beenden\n");
+        printf("\n%d: %s", i, sevLevellNamen[i]);
+    printf("\n8: Zurück in das Hauptmenü");
+    printf("\n9: Programm beenden");
 
-    printf("\n Ausgewähltes Severity Level: ");
     int sevLevelAuswahl = begrenzungversuche(0, 9, 3);
 
     if (sevLevelAuswahl == 8) {
@@ -1589,7 +1586,7 @@ int neueDateiAuswaehlen() {
     FILE* neueDatei;
 
     while (1) {
-        printf("\n\nBitte geben Sie den Pfad zur neuen Logdatei ein (mit .log-Endung):\n> ");
+        printf("\n\nBitte geben Sie den Pfad zur neuen Datei ein (.log-Datei:\n");
 
         fgets(neuerDateiname, sizeof(neuerDateiname), stdin);
         neuerDateiname[strcspn(neuerDateiname, "\n")] = '\0'; // Zeilenumbruch entfernen
@@ -1625,10 +1622,10 @@ void hauptmenue() {
     printf("\n#####################################################");
     printf("\n      Auswertungsprogramm für CISCO-Logdateien");
     printf("\n#####################################################");
-    printf("\n\nHinweis: Das Programm kann jederzeit mit der Eingabe von 'exit' beendet werden");
+    printf("\n\nHinweise: Das Programm kann jederzeit mit der Eingabe von 'exit' beendet werden.\n          Alle Eingaben müssen mit der Enter-Taste bestätigt werden.");
     printf("\n\nAktuelle Logdatei: %s", dateiname);
 
-    printf("\n\nWähle ein Suchbegriff aus:\n");
+    printf("\n\nBitte wählen Sie einen Suchbegriff aus:\n");
     printf("\n0: Eigene Eingabe");
     printf("\n1: Zeitraum");
     printf("\n2: IP-Adresse");
@@ -1649,7 +1646,7 @@ void hauptmenue() {
         zeitraum();
         break;
     case 2: {
-        printf("\nWähle die Art der IP-Suche:\n\n");
+        printf("\nBitte wählen Sie die Art der IP-Suche:\n\n");
         printf("1: Manuelle Eingabe einer IP-Adresse\n");
         printf("2: Nur private IP-Adressen anzeigen\n");
         printf("3: Nur öffentliche IP-Adressen anzeigen\n");
@@ -1676,7 +1673,7 @@ void hauptmenue() {
         break;
     }
     case 3: {
-        printf("\nWähle die Art der Facility-Suche:\n\n");
+        printf("\nBitte wählen Sie die Art der Facility-Suche:\n\n");
         printf("1: Eigene Suche nach Facility-Begriff\n");
         printf("2: Alle vorhandenen Facilities anzeigen und auswählen\n");
         printf("3: Zurück in das Hauptmenü\n");
@@ -1699,7 +1696,7 @@ void hauptmenue() {
         break;
     }
     case 4: {
-        printf("\nWähle die Art der User-Suche:\n");
+        printf("\n Bitte wählen Sie die Art der User-Suche:\n\n");
         printf("1: Eigene Suche nach User\n");
         printf("2: Alle User anzeigen und auswählen\n");
         printf("3: Zurück in das Hauptmenü\n");
@@ -1722,7 +1719,7 @@ void hauptmenue() {
         break;
     }
     case 5: {
-        printf("\nWähle die Art der Mnemonic-Suche:\n\n");
+        printf("\nBitte wählen Sie die Art der Mnemonic-Suche:\n\n");
         printf("1: Eigene Suche nach Mnemonic\n");
         printf("2: Alle vorhandenen Mnemonics anzeigen und auswählen\n");
         printf("3: Zurück in das Hauptmenü\n");
@@ -1774,14 +1771,14 @@ int main() {
     printf("\n#####################################################");
     printf("\n      Auswertungsprogramm für CISCO-Logdateien");
     printf("\n#####################################################");
-    printf("\n\nHinweis: Das Programm kann jederzeit mit der Eingabe von 'exit' beendet werden");
+    printf("\n\nHinweise: Das Programm kann jederzeit mit der Eingabe von 'exit' beendet werden.\n          Alle Eingaben müssen mit der Enter-Taste bestätigt werden.");
     
     int maxVersuche = 3;
     int versuch = 0;
     int gueltig = 0;
 
     while (versuch < maxVersuche) {
-        printf("\n\nBitte geben Sie den Dateipfad ein (mit .log-Endung):\n> ");
+        printf("\n\nBitte geben Sie den Dateipfad ein (.log-Datei):\n");
         fgets(dateiname, sizeof(dateiname), stdin);
         dateiname[strcspn(dateiname, "\n")] = '\0'; // Zeilenumbruch entfernen
 
