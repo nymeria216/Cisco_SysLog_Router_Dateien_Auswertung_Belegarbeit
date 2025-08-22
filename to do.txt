@@ -1,8 +1,9 @@
 Verbindliche ToDo's:
-- Programmabbruch: exit --> Hashtagreihe einbauen und mit etwas mehr/ detaillierter beschreiben: Mit der Eingabe von "exit" kann das Programm immer beendet werden
+ERLEDIGT Programmabbruch: exit --> Hashtagreihe einbauen und mit etwas mehr/ detaillierter beschreiben: Mit der Eingabe von "exit" kann das Programm immer beendet werden
 - 1: Zeitraum, extra Zeile einfügen bei Tag/ Monat
 - Uhrzeiteingabe checken
-- Ergebnisausgbabe doppelt mit Text-Dateispeicherung --> einmal löschen (untere behalten und Trefferausgabe nach oben verschieben)
+ERLEDIGT - Ergebnisausgbabe doppelt mit Text-Dateispeicherung --> einmal löschen, unten behalten
+- Ergebnisausgabe Trefferausgabe nach oben verschieben)
 ERLEDIGT - 2: IP-Adresse, 1: Manuelle Eingabe, wenn IP nicht im Dokument, dann soll Fehlermeldung oder Anzeige rein, dass IP nicht da ist 
 ERLEDIGT - 3: Facilities, Gefunde Facilities --> extra Zeile raus zwischen gefundenen und der Auswahl (0-5) 
 - 4: User, 1: Eigene Suche --> exit-Funktion einbauen
@@ -15,6 +16,7 @@ Optionale ToDo's:
 - "Keine Treffer für 'suchbegriff' gefunden." Reiehenfolge ändern, sodass die Ausgabe vor folgender Frage "Möchtest du die Ergebnisse in eine Datei speichern? (j/n):" passiert
 - Klein- und Großschreibung flexibel überall bei eigenen Eingaben anpassen
 - alle Fehlermeldungen vereinheitlichen
-- Dateiname konstant anzeigen lassen
+ERLEDIGT Dateiname konstant anzeigen lassen
 - 6: Severity Level: Auswahl von mehreren Leveln (bspw. 2)
+
 
