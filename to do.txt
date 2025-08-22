@@ -3,12 +3,12 @@ Verbindliche ToDo's:
 - 1: Zeitraum, extra Zeile einfügen bei Tag/ Monat
 - Uhrzeiteingabe checken
 - Ergebnisausgbabe doppelt mit Text-Dateispeicherung --> einmal löschen (untere behalten und Trefferausgabe nach oben verschieben)
-- 2: IP-Adresse, 1: Manuelle Eingabe, wenn IP nicht im Dokument, dann soll Fehlermeldung oder Anzeige rein, dass IP nicht da ist
-- 3: Facilities, Gefunde Facilities --> extra Zeile raus zwischen gefundenen und der Auswahl (0-5)
+ERLEDIGT - 2: IP-Adresse, 1: Manuelle Eingabe, wenn IP nicht im Dokument, dann soll Fehlermeldung oder Anzeige rein, dass IP nicht da ist 
+ERLEDIGT - 3: Facilities, Gefunde Facilities --> extra Zeile raus zwischen gefundenen und der Auswahl (0-5) 
 - 4: User, 1: Eigene Suche --> exit-Funktion einbauen
---> 2: gefunde User, Zahlenreihenfolge anpassen (1, 2 und nicht 1, 0)
-- 6: Severity Level --> "8: Alle" entfernen (sonst werden alle Logs angezeigt)
---> Ausgabe von einzelnen Severity Levels nicht möglich (werden nur alle angezeigt)
+ERLEDIGT --> 2: gefunde User, Zahlenreihenfolge anpassen (1, 2 und nicht 1, 0) 
+ERLEDIGT - 6: Severity Level --> "8: Alle" entfernen (sonst werden alle Logs angezeigt)
+BEI MIR FUNKTIONIERT DIE SUCHE GANZ NORMAL--> Ausgabe von einzelnen Severity Levels nicht möglich (werden nur alle angezeigt)
 - Professionelle Ansprache (Sie), Ansprachen vereinheitlichen und direkte Ansprache an den Nutzer
 
 Optionale ToDo's:
@@ -17,3 +17,4 @@ Optionale ToDo's:
 - alle Fehlermeldungen vereinheitlichen
 - Dateiname konstant anzeigen lassen
 - 6: Severity Level: Auswahl von mehreren Leveln (bspw. 2)
+
