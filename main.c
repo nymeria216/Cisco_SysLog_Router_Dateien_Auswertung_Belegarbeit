@@ -36,8 +36,6 @@ char uhrzeit[9];
 char sevLevel[8];
 char exitEingaben[6];
 char dateiname[256];
-// char dateiname[256] = "/Volumes/HSMW_MacOS/Programmierung/2._Semester/Programmierung_I/Cisco_SysLog_Router_Dateien_Auswertung_Belegarbeit/logs/syslog2.log";
-// char dateiname[256] = "C:\\Users\\katha\\OneDrive\\Philipp\\HSMW Cybercrime, IT-Forensik\\2. Semester\\Programmierung I\\06 Beleg\\CICSO-Logfiles\\syslog_generic.log";
 FILE* outputDatei = NULL;
 
 void hauptmenue(void);
@@ -1197,9 +1195,11 @@ void eigeneUserSuche() {
     const int maxVersuche = 3;
 
     do {
-        printf("\nBitte geben Sie einen Usernamen ein (z. B. admin, datacadmin):");
+        printf("\nBitte geben Sie einen Usernamen ein (z. B. admin, datacadmin):\n");
         fgets(eingabe, sizeof(eingabe), stdin);
         eingabe[strcspn(eingabe, "\n")] = '\0'; // Zeilenumbruch entfernen
+
+        exitEingabe(eingabe);
 
         if (strlen(eingabe) == 0) {
             printf(YELLOW "\nUngültige Eingabe. Bitte geben Sie einen Usernamen ein.\n" RESET);
