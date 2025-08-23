@@ -256,41 +256,41 @@ int dateiOeffnen() {
 
 
 // Fragt, ob die Suchergebnisse gespeichert werden sollen.
-int speichersuche(const char* zielDateiname) {
-    char speichern;
-    int versuche = 0;
-    const int maxVersuche = 3;
+int speichersuche(const char* zielDateiname) {      // Übergabe der Datei, in die die Suchergebnisse gespeichert werden sollen
+    char speichern;                                 // Variable für Antwort des Benutzers
+    int versuche = 0;                               // Zählt die Anzahl der Eingabeversuche
+    const int maxVersuche = 3;                      // Maximale erlaubte Anzahl an Versuchen, bevor die Funktion abbricht
 
     do {
         printf("\nMöchten Sie die Ergebnisse in einer Datei speichern? (j/n):\n");
-        speichern = getchar();
+        speichern = getchar();     // eingegebene Taste einlesen
         while (getchar() != '\n'); // Eingabepuffer leeren
 
-        if (speichern == 'j' || speichern == 'J') {
+        if (speichern == 'j' || speichern == 'J') {     // Datei zum Schreiben öffnen
             outputDatei = fopen(zielDateiname, "w");
-            if (!outputDatei) {
+            if (!outputDatei) {                         // Fehler beim Öffnen
                 perror(RED "Fehler beim Öffnen der Datei" RESET);
                 return 0;
             }
             printf("\n");
-            return 1;
+            return 1;   // Ergebnisse werden gespeichert
         }
-        else if (speichern == 'n' || speichern == 'N') {
+        else if (speichern == 'n' || speichern == 'N') {    // keine Speicherung
             printf("\n");
-            return 0; // Nicht speichern
+            return 0; 
         }
-        else {
+        else {      // ungültige Eingabe
             versuche++;
             if (versuche < maxVersuche) {
                 printf(YELLOW "\nUngültige Eingabe.\n" RESET);
                 printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
             }
-            else {
+            else {  // beendet nach zu vielen Fehlversuchen
                 printf(RED "\nZu viele ungültige Eingaben. Das Programm wird beendet.\n" RESET);
                 exit(1);
             }
         }
-    } while (1);
+    } while (1);    // wiederholen, bis gültige Eingabe erfolgt ist
 }
 
 
@@ -298,21 +298,23 @@ int speichersuche(const char* zielDateiname) {
 
 // Liest die Logdatei, ermittelt vorhandene Tage und fragt interaktiv einen gültigen Tag ab.
 int tagDefinition() {
-    int tagVorhanden = 0;
-    int vorhandeneTage[31] = { 0 }; // Index 0 bis 30 → Tag 1 bis 31
-    int versuch = 0;
-    char tagEingabe[16];
+    int tagVorhanden = 0;               // Gibt an, ob der eingegebene Tag in der Logdatei gefunden wurde
+    int vorhandeneTage[31] = { 0 };     // Array für mögliche Tage 
+    int versuch = 0;                    // Zählt die Eingabeversuche des Benutzers
+    char tagEingabe[16];                // Puffer für die Eingabe des Benutzers
 
-    // Datei scannen und vorhandene Tage erfassen
-    dateiOeffnen();
-    while (fgets(zeile, sizeof(zeile), datei)) {
+    // Logdatei öffnen und nach Tagen durchsuchen
+    dateiOeffnen();                                 
+    while (fgets(zeile, sizeof(zeile), datei)) {    // zeilenweise lesen
         char logMonat[4];
         int logTag, logJahr, dummy;
 
-        if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 ||
+        // zwei mögliche Formate für das Datum prüfen
+        if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 ||                
             sscanf(zeile, "<%d>: %3s %d %d", &dummy, logMonat, &logTag, &logJahr) == 4) {
 
-            if (logTag >= 1 && logTag <= 31) {
+            // prüfen, ob Tag im gültigen Bereich liegt
+            if (logTag >= 1 && logTag <= 31) {           
                 if (!vorhandeneTage[logTag - 1]) {
                     vorhandeneTage[logTag - 1] = 1;
                     tagVorhanden = 1;
@@ -320,24 +322,24 @@ int tagDefinition() {
             }
         }
     }
-    fclose(datei);
+    fclose(datei);  // Datei wieder schließen
 
-    if (tagVorhanden) {
+    // nur wenn Tage im Log gefunden wurden
+    if (tagVorhanden) {                                 
         printf("\nVerfügbare Tage in den Logdaten: ");
         for (int i = 0; i < 31; i++) {
             if (vorhandeneTage[i]) {
-                printf("%d ", i + 1);
+                printf("%d ", i + 1);                   // zeigt gefundene Tage an
             }
         }
 
-        do {
+        do {                                                // Eingabeaufforderung für gültigen Tag
             printf("\nTag (DD): \n");
             fgets(tagEingabe, sizeof(tagEingabe), stdin);
-            tagEingabe[strcspn(tagEingabe, "\n")] = '\0';
-            exitEingabe(tagEingabe);
+            tagEingabe[strcspn(tagEingabe, "\n")] = '\0';   // Zeilenumbruch entfernen
+            exitEingabe(tagEingabe);                        // Exitfunktion
 
-            // Prüfen, ob nur Ziffern eingegeben wurden
-            int gueltig = 1;
+            int gueltig = 1;    // Prüft, ob nur Ziffern eingegeben wurden
             for (int i = 0; tagEingabe[i] != '\0'; i++) {
                 if (!isdigit((unsigned char)tagEingabe[i])) {
                     gueltig = 0;
@@ -345,13 +347,13 @@ int tagDefinition() {
                 }
             }
 
-            if (!gueltig || strlen(tagEingabe) == 0) {
+            if (!gueltig || strlen(tagEingabe) == 0) {      // Eingabe nicht gültig
                 printf(YELLOW "\nUngültige Eingabe – geben Sie bitte einen Tag zwischen 1 und 31 ein." RESET);
                 versuch++;
             }
             else {
-                tag = atoi(tagEingabe);
-                if (tag < 1 || tag > 31 || !vorhandeneTage[tag - 1]) {
+                tag = atoi(tagEingabe);     // Eingabe in Zahl umwandeln
+                if (tag < 1 || tag > 31 || !vorhandeneTage[tag - 1]) {      // prüft, ob dieser Tag im Log enthalten ist
                     printf(YELLOW "\nDieser Tag ist nicht in den Logdaten enthalten oder ungültig." RESET);
                     versuch++;
                 }
@@ -360,7 +362,7 @@ int tagDefinition() {
                 }
             }
 
-            if (versuch < 3) {
+            if (versuch < 3) {      // begrenzt Fehlerversuche
                 printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
             }
             else {
@@ -368,42 +370,44 @@ int tagDefinition() {
                 exit(1);
             }
 
-        } while (1);
+        } while (1);    // solange wiederholen, bis gültiger Tag eingegeben wurde
     }
     else {
         printf("Es ist keine Abfrage für den Tag nötig.\n");
-        tag = -1;
+        tag = -1;   // kein Tag gefunden
     }
 
-    return 0;
+    return 0;       // Funktion beendet
 }
 
 
 // Liest die Logdatei, ermittelt vorhandene Monate und fragt interaktiv einen gültigen Monat ab.
 int monatDefinition() {
-    int monatVorhanden = 0;
-    int versuch = 0;
-    char monatEingabe[16];
-    char vorhandeneMonate[12][4]; // Maximal 12 gültige Monate
-    int anzahlVorhandeneMonate = 0;
+    int monatVorhanden = 0;             // Gibt an, ob der eingegebene Monat in der Logdatei gefunden wurde
+    int versuch = 0;                    // Zählt Eingabeversuche des Benutzers
+    char monatEingabe[16];              // Eingabepuffer für den vom Benutzer eingegebenen Monat
+    char vorhandeneMonate[12][4];       // speichert maximal 12 gültige Monate
+    int anzahlVorhandeneMonate = 0;     // Anzahl der tatsächlich in der Logdatei gefundenen Monate
 
-    // Datei scannen und vorhandene Monate erfassen
-    dateiOeffnen();
-    while (fgets(zeile, sizeof(zeile), datei)) {
+    dateiOeffnen();     // öffnet Logdatei und sucht nach Monaten
+    while (fgets(zeile, sizeof(zeile), datei)) {    // liest Daten zeilenweise ein
         char logMonat[4];
         int logTag, logJahr, dummy;
 
-        if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 ||
+        // prüft zwei mögliche Formate für das Datum
+        if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 ||                   
             sscanf(zeile, "<%d>: %3s %d %d", &dummy, logMonat, &logTag, &logJahr) == 4) {
 
-            // Formatierung: erster Buchstabe groß, Rest klein
-            logMonat[0] = toupper(logMonat[0]);
+            // formatiert Monatskürzel einheitlich: Erster Buchstabe groß, Rest klein
+            logMonat[0] = toupper(logMonat[0]);     
             logMonat[1] = tolower(logMonat[1]);
             logMonat[2] = tolower(logMonat[2]);
             logMonat[3] = '\0';
 
+            // prüft, ob Monatskürzel gültig ist
             if (alleMonate(logMonat)) {
-                // Prüfen, ob der Monat schon gespeichert wurde
+
+                // prüft, ob der Monat bereits gespeichert wurde
                 int bereitsVorhanden = 0;
                 for (int i = 0; i < anzahlVorhandeneMonate; i++) {
                     if (strcmp(vorhandeneMonate[i], logMonat) == 0) {
@@ -411,16 +415,18 @@ int monatDefinition() {
                         break;
                     }
                 }
+                // falls noch nicht enthalten: speichert neuen Monat
                 if (!bereitsVorhanden && anzahlVorhandeneMonate < 12) {
                     strncpy(vorhandeneMonate[anzahlVorhandeneMonate], logMonat, 4);
                     anzahlVorhandeneMonate++;
-                    monatVorhanden = 1;
+                    monatVorhanden = 1;     // mindestens einen Monat gefunden
                 }
             }
         }
     }
-    fclose(datei);
+    fclose(datei);      // Datei wieder schließen
 
+    // wenn Monate gefunden wurden, zeigt Auswahl an und fordert Eingabe
     if (monatVorhanden) {
         printf("\nVerfügbare Monate in der Datei: ");
         for (int i = 0; i < anzahlVorhandeneMonate; i++) {
@@ -431,21 +437,21 @@ int monatDefinition() {
         do {
             printf("Monat (MMM): \n");
             fgets(monatEingabe, sizeof(monatEingabe), stdin);
-            monatEingabe[strcspn(monatEingabe, "\n")] = '\0';
-            exitEingabe(monatEingabe);
+            monatEingabe[strcspn(monatEingabe, "\n")] = '\0';       // entfernt Zeilenumbruch
+            exitEingabe(monatEingabe);                              // Exitfunktion
 
-            if (strlen(monatEingabe) != 3) {
+            if (strlen(monatEingabe) != 3) {        // Eingabe muss genau 3 Zeichen haben
                 printf(YELLOW "\nUngültige Eingabe (z. B. Jan, Feb, Mar...).\n" RESET);
                 versuch++;
             }
             else {
-                // Formatieren
+                // Eingabe einheitlich formatieren
                 monatEingabe[0] = toupper(monatEingabe[0]);
                 monatEingabe[1] = tolower(monatEingabe[1]);
                 monatEingabe[2] = tolower(monatEingabe[2]);
                 monatEingabe[3] = '\0';
 
-                // Überprüfen, ob gültig UND in Datei enthalten
+                // prüft, ob der eingegebene Monat in den Logdaten enthalten ist
                 int gueltig = 0;
                 for (int i = 0; i < anzahlVorhandeneMonate; i++) {
                     if (strcmp(monatEingabe, vorhandeneMonate[i]) == 0) {
@@ -459,11 +465,12 @@ int monatDefinition() {
                     versuch++;
                 }
                 else {
-                    strncpy(monat, monatEingabe, 4);
+                    strncpy(monat, monatEingabe, 4);    // gültigen Monat in Variable schreiben
                     break;
                 }
             }
 
+            // wertet Fehlversuche aus
             if (versuch < 3) {
                 printf(YELLOW "\nNoch %d Versuch(e) übrig\n\n" RESET, 3 - versuch);
             }
@@ -471,11 +478,11 @@ int monatDefinition() {
                 printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
                 exit(1);
             }
-        } while (1);
+        } while (1);    // wiederholen, bis eine gültige Eingabe erfolgt
     }
     else {
         printf("\nEs ist keine Abfrage für den Monat nötig.\n");
-        monat[0] = '\0'; // leer setzen
+        monat[0] = '\0'; // Variable leer setzen
     }
 
     return 0;
