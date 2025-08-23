@@ -115,90 +115,82 @@ int zeitZuSekundenOhneJahr(int tag, const char* monat, int stunde, int minute, i
 
 /* --- Hilfsfunktionen --- */
 
-// Prüfung, ob die Datei eine .log-Datei ist
-int log_dateiendung(const char* log_dateiname) {
-    size_t laenge = strlen(log_dateiname);
-    return (laenge >= 4 && strcmp(log_dateiname + laenge - 4, ".log") == 0);
+// Prüft, ob die Datei eine .log-Datei ist.
+int log_dateiendung(const char* log_dateiname) {                                // Eingabe eines Dateinamen
+    size_t laenge = strlen(log_dateiname);                                      // ermittelt die Länge des Strings log_dateiname
+    return (laenge >= 4 && strcmp(log_dateiname + laenge - 4, ".log") == 0);    // Rückgabe: 1, wenn Endung ".log", sonst 0
 }
 
 
-// Funktion: Definition aller gültigen Monate
-int alleMonate(const char* monat) {
-    const char* gueltigeMonate[] = {
+// Prüft, ob ein String ein gültiger Monatsname ist.
+int alleMonate(const char* monat) {                         // Eingabe von Monatskürzel
+    const char* gueltigeMonate[] = {                        // Liste der erlaubten Monatskürzel
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
-    for (int i = 0; i < 12; i++) {
-        if (strcasecmp(monat, gueltigeMonate[i]) == 0) {
-            return 1;
+    for (int i = 0; i < 12; i++) {                          // geht alle Monate in der Liste der gültigen Monate durch
+        if (strcasecmp(monat, gueltigeMonate[i]) == 0) {    // prüft, ob Eingabe und Monat aus der Liste übereinstimmen (Groß-/Kleinschreibung egal)
+            return 1;                                       // gültiger Monat gefunden
         }
     }
-    return 0;
+    return 0;                                               // kein gültiger Monat
 }
 
 
-// Funktion: Zur Zeitstempelberechnung
-int monatZuZahl(const char* monat) {
-    if (strcmp(monat, "Jan") == 0) return 1;
-    if (strcmp(monat, "Feb") == 0) return 2;
-    if (strcmp(monat, "Mar") == 0) return 3;
-    if (strcmp(monat, "Apr") == 0) return 4;
-    if (strcmp(monat, "May") == 0) return 5;
-    if (strcmp(monat, "Jun") == 0) return 6;
-    if (strcmp(monat, "Jul") == 0) return 7;
-    if (strcmp(monat, "Aug") == 0) return 8;
-    if (strcmp(monat, "Sep") == 0) return 9;
-    if (strcmp(monat, "Oct") == 0) return 10;
-    if (strcmp(monat, "Nov") == 0) return 11;
-    if (strcmp(monat, "Dec") == 0) return 12;
-    return 0;
+// Wandelt einen Monatsnamen in die entsprechende Zahl (1-12) um.
+int monatZuZahl(const char* monat) {            // Eingabe von Monatskürzel                    
+    if (strcmp(monat, "Jan") == 0) return 1;    // Januar
+    if (strcmp(monat, "Feb") == 0) return 2;    // Februar
+    if (strcmp(monat, "Mar") == 0) return 3;    // März
+    if (strcmp(monat, "Apr") == 0) return 4;    // April
+    if (strcmp(monat, "May") == 0) return 5;    // Mai
+    if (strcmp(monat, "Jun") == 0) return 6;    // Juni
+    if (strcmp(monat, "Jul") == 0) return 7;    // Juli
+    if (strcmp(monat, "Aug") == 0) return 8;    // August
+    if (strcmp(monat, "Sep") == 0) return 9;    // September
+    if (strcmp(monat, "Oct") == 0) return 10;   // Oktober
+    if (strcmp(monat, "Nov") == 0) return 11;   // November
+    if (strcmp(monat, "Dec") == 0) return 12;   // Dezember
+    return 0;                                   // Rückgabe 0, wenn kein gültiger Monat übergeben wurde
 }
 
 
-// Funktion: Prüft, ob eine IPv4-Adresse gültig ist (vier Zahlen zwischen 0–255)
-int istGueltigeIPv4(const char* ip) {
+// Prüft, ob eine IPv4-Adresse gültig ist
+int istGueltigeIPv4(const char* ip) {                       // Eingabe einer IP-Adresse
     int a, b, c, d;
 
-    if (sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d) == 4) {
-        if (a >= 0 && a <= 255 &&
+    if (sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d) == 4) {    // Einlesen von vier Ganzzahlen im Format "a.b.c.d"
+        if (a >= 0 && a <= 255 &&                            // Prüft, ob alle Zahlen im gültigen Bereich liegen (0-255)
             b >= 0 && b <= 255 &&
             c >= 0 && c <= 255 &&
             d >= 0 && d <= 255) {
-            return 1;
+            return 1;                                       // gültige IPv4-Adresse
         }
     }
-    return 0;
+    return 0;                                               // ungültige IPv4-Adresse
 }
 
 
-// Funktion: Prüft, ob eine IP-Adresse im privaten Bereich liegt
-int istPrivateIP(const char* ip) {
+// Prüft, ob eine IP-Adresse im privaten Bereich liegt.
+int istPrivateIP(const char* ip) {                                  // Übergabe einer IP-Adresse
     int a, b, c, d;
-    if (sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d) != 4) return 0;
+    if (sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d) != 4) return 0;   // ungültiges Format → nicht privat
+    if (a == 10) return 1;                                          // 10.0.0.0 – 10.255.255.255 
+    if (a == 172 && b >= 16 && b <= 31) return 1;                   // 172.16.0.0 – 172.31.255.255       
+    if (a == 192 && b == 168) return 1;                             // 192.168.0.0 – 192.168.255.255  
+    return 0;                                                       // sonst: öffentliche Adresse
+}
 
-    // Private IP-Bereiche:
-    // 10.0.0.0 – 10.255.255.255
-    if (a == 10) return 1;
-
-    // 172.16.0.0 – 172.31.255.255
-    if (a == 172 && b >= 16 && b <= 31) return 1;
-
-    // 192.168.0.0 – 192.168.255.255
-    if (a == 192 && b == 168) return 1;
-
-    return 0;
+// Vergleichsfunktion für die alphabetische Sortierung von Strings
+int compareStrings(const void* a, const void* b) {                  // Übergabe von zwei Strings
+    const char* sa = *(const char**)a;                              // erster String
+    const char* sb = *(const char**)b;                              // zweiter String
+    return strcmp(sa, sb);                                          // Vergleich der Strings
 }
 
 
-int compareStrings(const void* a, const void* b) {
-    const char* sa = *(const char**)a;
-    const char* sb = *(const char**)b;
-    return strcmp(sa, sb);
-}
-
-
-//Funktion Begrenzung Versuche
-int begrenzungversuche(int min, int max, int maxVersuche) {
+// Liest eine Zahl ein und prüft, ob diese gültig ist. Die Anzahl der Versuche ist begrenzt; bei Überschreitung wird das Programm beendet.
+int begrenzungversuche(int min, int max, int maxVersuche) {         // Übergabe gültiger Werte
     int eingabe;
     int versuche = 0;
     char buffer[64];
@@ -206,32 +198,29 @@ int begrenzungversuche(int min, int max, int maxVersuche) {
     do {
         printf("\n\nAuswahl (%d-%d):\n", min, max);
 
-        // Ganze Zeile einlesen statt scanf direkt
-        if (!fgets(buffer, sizeof(buffer), stdin)) {
+        if (!fgets(buffer, sizeof(buffer), stdin)) {                // Ganze Zeile einlesen
             printf(RED "Fehler beim Lesen der Eingabe.\n" RESET);
-            exit(1);
+            exit(1);                                                // beendet Programm bei Lesefehler
         }
 
-        // Entferne \n am Ende
-        buffer[strcspn(buffer, "\n")] = '\0';
+        buffer[strcspn(buffer, "\n")] = '\0';                       // Zeilenumbruch am Ende entfernen
 
-        exitEingabe(buffer);
+        exitEingabe(buffer);                                        // Exitfunktion
 
-        // Prüfen, ob leer
-        if (strlen(buffer) == 0) {
+        if (strlen(buffer) == 0) {                                                                                          // prüft, ob Eingabe leer ist
             printf(YELLOW "Keine Eingabe erkannt. Bitte geben Sie eine Zahl zwischen %d und %d ein.\n" RESET, min, max);
             versuche++;
         }
-        // Prüfen, ob Zahl gültig
-        else if (sscanf(buffer, "%d", &eingabe) != 1 || eingabe < min || eingabe > max) {
+        
+        else if (sscanf(buffer, "%d", &eingabe) != 1 || eingabe < min || eingabe > max) {                                   // prüft, ob Zahlen im gültigen Bereich liegen
             printf(YELLOW "\nUngültige Eingabe. Bitte geben Sie eine Zahl zwischen %d und %d ein.\n" RESET, min, max);
             versuche++;
         }
         else {
-            return eingabe; // gültige Zahl → zurückgeben
+            return eingabe; // gültige Zahl wird zurückgegeben
         }
 
-        if (versuche < maxVersuche) {
+        if (versuche < maxVersuche) {                                                           // wertet Fehlversuche aus
             printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
         }
         else {
@@ -239,15 +228,15 @@ int begrenzungversuche(int min, int max, int maxVersuche) {
             exit(1);
         }
 
-    } while (1);
+    } while (1);       // wiederholt, bis eine gültige Eingabe erfolgt oder max. Versuche erreicht sind
 }
 
 
-// Funktion: Programmende nach Exit-Eingabe
-int exitEingabe(char* exitEingaben) {
-    if (strcmp(exitEingaben, "exit") == 0) {
-        printf(RED "\nProgramm wird beendet.\n" RESET);
-        exit(0);
+// Beendet jederzeit das Programm, wenn "exit" eingegeben wird.
+int exitEingabe(char* exitEingaben) {                       // Übergabe zu prüfender String
+    if (strcmp(exitEingaben, "exit") == 0) {                // prüft, ob Eingabe = "exit"              
+        printf(RED "\nProgramm wird beendet.\n" RESET);     // gibt eine Meldung aus
+        exit(0);                                            // Programm wird sofort beendet
     }
     return 0;
 }
@@ -256,7 +245,7 @@ int exitEingabe(char* exitEingaben) {
 /* --- Datei/Ausage-Funktionen --- */
 
 
-// Öffnet die Datei
+// Öffnet die Datei und gibt bei einem Fehler eine Meldung aus.
 int dateiOeffnen() {
     datei = fopen(dateiname, "r");
     if (!datei) {
@@ -266,7 +255,7 @@ int dateiOeffnen() {
 }
 
 
-//Funktion Ergebnis der Suche speichern
+// Fragt, ob die Suchergebnisse gespeichert werden sollen.
 int speichersuche(const char* zielDateiname) {
     char speichern;
     int versuche = 0;
@@ -307,7 +296,7 @@ int speichersuche(const char* zielDateiname) {
 
 /* --- Zeit/Datum-Funktionen --- */
 
-// Funktion: Definition der und aller Tage
+// Liest die Logdatei, ermittelt vorhandene Tage und fragt interaktiv einen gültigen Tag ab.
 int tagDefinition() {
     int tagVorhanden = 0;
     int vorhandeneTage[31] = { 0 }; // Index 0 bis 30 → Tag 1 bis 31
@@ -390,7 +379,7 @@ int tagDefinition() {
 }
 
 
-// Funktion: Definition der Monate
+// Liest die Logdatei, ermittelt vorhandene Monate und fragt interaktiv einen gültigen Monat ab.
 int monatDefinition() {
     int monatVorhanden = 0;
     int versuch = 0;
@@ -493,7 +482,7 @@ int monatDefinition() {
 }
 
 
-// Funktion: Definition der Jahre
+// Liest die Logdatei, ermittelt vorhandene Jahre und fragt interaktiv ein gültiges Jahr ab.
 int jahrDefinition() {
     int jahrVorhanden = 0;
     minJahr = 9999; maxJahr = 0;
@@ -556,7 +545,7 @@ int jahrDefinition() {
 }
 
 
-// Funktion: Definition der Uhrzeit
+// Liest eine Uhrzeit im Format HH:MM:SS ein und prüft ihre Gültigkeit.
 int uhrzeitDefinition() {
     int versuch = 0;
     char uhrzeitEingabe[16];
@@ -593,7 +582,7 @@ int uhrzeitDefinition() {
 }
 
 
-// Funktion: Zeitpunktberechnung für Zeitraum mit Jahr
+// Wandelt Datum und Uhrzeit (Tag, Monat, Jahr, Stunde, Minute, Sekunde) in Sekunden um.
 int zeitZuSekunden(int tag, const char* monat, int jahr, int stunde, int minute, int sekunde) {
     int mon = monatZuZahl(monat);
     if (mon == 0) return -1;
@@ -602,7 +591,7 @@ int zeitZuSekunden(int tag, const char* monat, int jahr, int stunde, int minute,
 }
 
 
-// Funktion: Zeitpunktberechnung für Zeitraum ohne Jahr
+// Wandelt Datum ohne Jahr und Uhrzeit in Sekunden um.
 int zeitZuSekundenOhneJahr(int tag, const char* monat, int stunde, int minute, int sekunde) {
     int mon = monatZuZahl(monat);
     if (mon == 0) return -1;
@@ -613,7 +602,7 @@ int zeitZuSekundenOhneJahr(int tag, const char* monat, int stunde, int minute, i
 
 /* --- Such/Filter-Funktionen --- */
 
-// Funktion 0: eigene Suchbegriffeingabe
+// Liest einen Suchbegriff ein, prüft die Eingabe, durchsucht die Logdatei und gibt die Treffer aus.
 int eigenerSuchbegriff() {
     int versuche = 0;
     const int maxVersuche = 3;
@@ -686,7 +675,7 @@ int eigenerSuchbegriff() {
 }
 
 
-// Funktion: 1. Auswahl, Zeitraumberechnung der Logs
+// Ermöglicht die Betrachtung von Logs ab/bis zu einem Zeitpunkt oder zwischen zwei Zeitpunkten.
 int zeitraum() {
     int startzeit;
 
@@ -952,7 +941,7 @@ int zeitraum() {
 }
 
 
-// Funktion: Suche nach einer IP-Adresse im Logfile
+// Liest eine IPv4-Adresse ein, prüft ihre Gültigkeit und durchsucht das Logfile nach Treffern.
 int ipSuche() {
 
     int maxVersuche = 3;  // Maximal erlaubte Fehlversuche bei der IP-Eingabe
@@ -1028,7 +1017,7 @@ int ipSuche() {
 }
 
 
-// Funktion 2: IP-Suche/Filterung
+// Durchsucht das Logfile nach IPv4-Adressen und filtert private oder öffentliche Adressen.
 void ipFilterSucheEinfach(int privat) {
     speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
@@ -1083,7 +1072,7 @@ void ipFilterSucheEinfach(int privat) {
 }
 
 
-// Funktion 3: Facility-Suche/Filterung
+// Liest einen Facility-Begriff ein, durchsucht das Logfile und gibt passende Zeilen aus.
 void eigeneFacilitySuche() {
     char eingabe[64];
     printf("\nBitte geben Sie einen Facility-Begriff ein (z. B. STP, LINK, DHCP):\n");
@@ -1143,8 +1132,7 @@ void eigeneFacilitySuche() {
 
 #define MAX_FACILITIES 1000
 
-
-
+// Extrahiert alle Facilities aus dem Logfile, sortiert sie alphabetisch, fragt eine Facility ab und zeigt die Treffer.
 void facilitySuche() {
     char* facilities[MAX_FACILITIES];
     int anzahlFacilities = 0;
@@ -1246,7 +1234,8 @@ void facilitySuche() {
     auswahlnachSuche(6);
 }
 
-// Funktion 3: 
+
+// Liest einen Usernamen ein und durchsucht das Logfile nach Treffern. 
 void eigeneUserSuche() {
     char eingabe[64];
     int versuche = 0;
@@ -1311,6 +1300,7 @@ void eigeneUserSuche() {
 
 #define MAX_USER 100
 
+// Extrahiert alle Usernamen aus dem Logfile, sortiert sie alphabetisch, lässt eine Auswahl treffen und gibt die passenden Logzeilen aus.
 void userSuche() {
     char* userNamen[MAX_USER];
     int anzahlUser = 0;
@@ -1405,9 +1395,6 @@ void userSuche() {
 
     auswahlnachSuche(7);
 
-    // Speicher freigeben wie gehabt ...
-
-
     // Speicher freigeben
     for (int i = 0; i < anzahlUser; i++) {
         free(userNamen[i]);
@@ -1415,7 +1402,7 @@ void userSuche() {
 }
 
 
-
+// Liest ein Mnemonic ein und durchsucht das Logfile nach passenden Einträgen.
 void eigeneMnemonicSuche() {
     char eingabe[64];
     int versuche = 0;
@@ -1483,6 +1470,7 @@ void eigeneMnemonicSuche() {
 
 #define MAX_MNEMONICS 1000
 
+// Liest alle Mnemonics aus dem Logfile, sortiert sie alphabetisch, lässt eine Auswahl treffen und gibt die passenden Logzeilen aus.
 void mnemonicSuche() {
     char* mnemonics[MAX_MNEMONICS];
     int anzahlMnemonics = 0;
@@ -1579,7 +1567,7 @@ void mnemonicSuche() {
 }
 
 
-// Funktion 7: Severity-Level-Suche/Filterung
+//  Bietet eine Auswahl an Syslog-Severity-Leveln und filtert die Logdatei nach dem gewählten Level
 int severityLevel() {
     const char* sevLevellNamen[] = {
         "EMERGENCIES", "ALERTS", "CRITICALS", "ERRORS", "WARNINGS",
@@ -1654,8 +1642,9 @@ int severityLevel() {
     return 0;
 }
 
+/* ===== Navigationsfunktionen ===== */
 
-// Funktion: Auswahl nach Suche
+//  Bietet nach einer Suche die Optionen: wiederholen, ins Hauptmenü zurückkehren oder Programm beenden.
 void auswahlnachSuche(int funktionID) {
     char wahl;
 
@@ -1706,7 +1695,7 @@ void auswahlnachSuche(int funktionID) {
 }
 
 
-// Funktion 8: Auswahl neue Datei
+// Liest einen neuen Logdateinamen ein, prüft ihn und übernimmt ihn als aktive Datei.
 int neueDateiAuswaehlen() {
     char neuerDateiname[256];
     FILE* neueDatei;
@@ -1739,6 +1728,7 @@ int neueDateiAuswaehlen() {
     return 0;
 }
 
+// Stellt das Hauptmenü dar, prüft die Eingabe und ruft die gewählte Suchfunktion oder Programmoption auf.
 void hauptmenue() {
 #ifdef _WIN32
     system("cls");
@@ -1883,10 +1873,9 @@ void hauptmenue() {
     }
 }
 
-/* ##############################
-      MAIN-/ HAUPTMETHODE
-###############################*/
+/* ===== Programmstart ===== */
 
+// Einstiegspunkt des Programms; prüft die Logdatei und ruft das Hauptmenü auf.
 int main() {
 #ifdef _WIN32
     system("cls");
