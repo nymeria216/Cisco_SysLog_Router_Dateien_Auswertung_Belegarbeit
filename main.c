@@ -12,6 +12,7 @@
 
 #ifdef _WIN32                   
 #define strcasecmp _stricmp
+
 #endif
 
 /* ##############################
@@ -259,7 +260,7 @@ int tagDefinition() {
             }
 
             if (!gueltig || strlen(tagEingabe) == 0) {
-                printf(YELLOW "\nUngültige Eingabe – gib einen Tag zwischen 1 und 31 ein." RESET);
+                printf(YELLOW "\nUngültige Eingabe – geben Sie bitte einen Tag zwischen 1 und 31 ein." RESET);
                 versuch++;
             }
             else {
@@ -546,12 +547,12 @@ int begrenzungversuche(int min, int max, int maxVersuche) {
 
         // Prüfen, ob leer
         if (strlen(buffer) == 0) {
-            printf(YELLOW "Keine Eingabe erkannt. Bitte eine Zahl zwischen %d und %d eingeben.\n" RESET, min, max);
+            printf(YELLOW "Keine Eingabe erkannt. Bitte geben Sie eine Zahl zwischen %d und %d ein.\n" RESET, min, max);
             versuche++;
         }
         // Prüfen, ob Zahl gültig
         else if (sscanf(buffer, "%d", &eingabe) != 1 || eingabe < min || eingabe > max) {
-            printf(YELLOW "\nUngültige Eingabe. Bitte eine Zahl zwischen %d und %d eingeben.\n" RESET, min, max);
+            printf(YELLOW "\nUngültige Eingabe. Bitte geben Sie eine Zahl zwischen %d und %d ein.\n" RESET, min, max);
             versuche++;
         }
         else {
@@ -590,6 +591,7 @@ int speichersuche(const char* zielDateiname) {
             return 1;
         }
         else if (speichern == 'n' || speichern == 'N') {
+            printf("\n");
             return 0; // Nicht speichern
         }
         else {
@@ -614,7 +616,7 @@ void auswahlnachSuche(int funktionID) {
     if (outputDatei) {
         fclose(outputDatei);
         outputDatei = NULL;
-        printf("\nErgebnisse wurden in 'Suchergebnisse.txt' gespeichert.\n");
+        printf("\n Die Ergebnisse wurden in der 'Suchergebnisse.txt' Datei gespeichert.\n");
     }
 
     // Auswahl anzeigen
@@ -683,6 +685,11 @@ int eigenerSuchbegriff() {
         }
     } while (1);
 
+    // Suchbegriff in Kleinbuchstaben umwandeln (für case-insensitive Vergleich)
+    for (int i = 0; suchbegriff[i]; i++) {
+        suchbegriff[i] = (char)tolower((unsigned char)suchbegriff[i]);
+    }
+
     printf("\nDateiname: %s\n", dateiname);
     printf("\nSuchbegriff: %s\n", suchbegriff);
     speichersuche("Suchergebnisse.txt");
@@ -693,7 +700,16 @@ int eigenerSuchbegriff() {
 
     while (fgets(zeile, sizeof(zeile), datei)) {
         zeilennummer++;
-        if (strstr(zeile, suchbegriff)) {
+
+        // Zeile in Kleinbuchstaben kopieren
+        char zeile_klein[1024];
+        strcpy(zeile_klein, zeile);
+        for (int i = 0; zeile_klein[i]; i++) {
+            zeile_klein[i] = (char)tolower((unsigned char)zeile_klein[i]);
+        }
+
+        // Case-insensitive Teilstring-Suche
+        if (strstr(zeile_klein, suchbegriff)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
             if (outputDatei) {
                 fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
@@ -701,6 +717,7 @@ int eigenerSuchbegriff() {
             treffer++;
         }
     }
+
     if (treffer == 0) {
         printf(YELLOW "\nKeine Treffer für '%s' gefunden.\n" RESET, suchbegriff);
     }
@@ -710,7 +727,6 @@ int eigenerSuchbegriff() {
 
     fclose(datei);
     auswahlnachSuche(4);
-
     return 0;
 }
 
@@ -1048,6 +1064,11 @@ void eigeneFacilitySuche() {
         return;
     }
 
+    // Eingabe klein machen
+    for (int i = 0; eingabe[i]; i++) {
+        eingabe[i] = tolower((unsigned char)eingabe[i]);
+    }
+
     // Muster erstellen, z. B. "%STP-"
     char muster[70];
     snprintf(muster, sizeof(muster), "%%%s-", eingabe);
@@ -1058,7 +1079,16 @@ void eigeneFacilitySuche() {
 
     while (fgets(zeile, sizeof(zeile), datei)) {
         zeilennummer++;
-        if (strstr(zeile, muster)) {
+
+        // Zeile in Kleinbuchstaben kopieren
+        char zeile_klein[1024];
+        strcpy(zeile_klein, zeile);
+        for (int i = 0; zeile_klein[i]; i++) {
+            zeile_klein[i] = (char)tolower((unsigned char)zeile_klein[i]);
+        }
+
+        // Case-insensitive Teilstring-Suche
+        if (strstr(zeile_klein, muster)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
             if (outputDatei) {
                 fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
@@ -1217,6 +1247,9 @@ void eigeneUserSuche() {
         }
     } while (1);
 
+    for (int i = 0; eingabe[i]; i++)
+        eingabe[i] = (char)tolower((unsigned char)eingabe[i]);
+
     speichersuche("Suchergebnisse.txt");
     dateiOeffnen();
     zeilennummer = 0;
@@ -1224,11 +1257,14 @@ void eigeneUserSuche() {
 
     while (fgets(zeile, sizeof(zeile), datei)) {
         zeilennummer++;
-        if (strstr(zeile, eingabe)) {
+        char zeile_klein[1024];
+        strcpy(zeile_klein, zeile);
+        for (int i = 0; zeile_klein[i]; i++)
+            zeile_klein[i] = (char)tolower((unsigned char)zeile_klein[i]);
+
+        if (strstr(zeile_klein, eingabe)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
-            if (outputDatei) {
-                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
-            }
+            if (outputDatei) fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
             treffer++;
         }
     }
@@ -1474,6 +1510,9 @@ void eigeneMnemonicSuche() {
         }
     } while (1);
 
+    for (int i = 0; eingabe[i]; i++)
+        eingabe[i] = (char)tolower((unsigned char)eingabe[i]);
+
     // Muster erstellen, z. B. "-CONFIG_I:"
     char muster[70];
     snprintf(muster, sizeof(muster), "-%s:", eingabe);
@@ -1484,11 +1523,14 @@ void eigeneMnemonicSuche() {
 
     while (fgets(zeile, sizeof(zeile), datei)) {
         zeilennummer++;
-        if (strstr(zeile, muster)) {
+        char zeile_klein[1024];
+        strcpy(zeile_klein, zeile);
+        for (int i = 0; zeile_klein[i]; i++)
+            zeile_klein[i] = (char)tolower((unsigned char)zeile_klein[i]);
+
+        if (strstr(zeile_klein, muster)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
-            if (outputDatei) {
-                fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
-            }
+            if (outputDatei) fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
             treffer++;
         }
     }
@@ -1600,7 +1642,7 @@ int neueDateiAuswaehlen() {
 
         neueDatei = fopen(neuerDateiname, "r");
         if (!neueDatei) {
-            printf(YELLOW "Datei konnte nicht geöffnet werden. Bitte erneut versuchen.\n" RESET);
+            printf(YELLOW "Datei konnte nicht geöffnet werden. Bitte versuchen Sie es erneut.\n" RESET);
             continue;
         }
         fclose(neueDatei);
