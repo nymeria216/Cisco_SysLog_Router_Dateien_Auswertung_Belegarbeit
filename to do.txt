@@ -18,11 +18,12 @@ als allerletztes: Code ordentlich kommentieren
 
 Optionale ToDo's:
 
-ERLEDIGT - "Keine Treffer für 'suchbegriff' gefunden." Reiehenfolge ändern, sodass die Ausgabe vor folgender Frage "Möchtest du die Ergebnisse in eine Datei speichern? (j/n):" passiert
+- "Keine Treffer für 'suchbegriff' gefunden." Reiehenfolge ändern, sodass die Ausgabe vor folgender Frage "Möchtest du die Ergebnisse in eine Datei speichern? (j/n):" passiert
 ERLEDIGT - Klein- und Großschreibung flexibel überall bei eigenen Eingaben anpassen
-- alle Fehlermeldungen vereinheitlichen
+ERLEDIGT - alle Fehlermeldungen vereinheitlichen
 ERLEDIGT Dateiname konstant anzeigen lassen
 LASS MAL NICHT MACHEN, AUFWAND ZU GROSS - 6: Severity Level: Auswahl von mehreren Leveln (bspw. 2)
+
 
 
 
