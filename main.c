@@ -224,7 +224,7 @@ int begrenzungversuche(int min, int max, int maxVersuche) {         // Übergabe
             printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
         }
         else {
-            printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+            printf(RED "Zu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             exit(1);
         }
 
@@ -292,7 +292,7 @@ int speichersuche(const char* zielDateiname) {           // Übergabe der Datei,
                 printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
             }
             else {  // beendet nach zu vielen Fehlversuchen
-                printf(RED "\nZu viele ungültige Eingaben. Das Programm wird beendet.\n" RESET);
+                printf(RED "Zu viele ungültige Eingaben. Das Programm wird beendet.\n" RESET);
                 exit(1);
             }
         }
@@ -372,7 +372,7 @@ int tagDefinition() {
                 printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
             }
             else {
-                printf(RED "\n\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+                printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
                 exit(1);
             }
 
@@ -478,7 +478,7 @@ int monatDefinition() {
 
             // wertet Fehlversuche aus
             if (versuch < 3) {
-                printf(YELLOW "\nNoch %d Versuch(e) übrig\n\n" RESET, 3 - versuch);
+                printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
             }
             else {
                 printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
@@ -542,10 +542,10 @@ int jahrDefinition() {
                 break;
             }
             if (versuch < 3) {
-                printf(YELLOW "\nNoch %d Versuch(e) übrig\n\n" RESET, 3 - versuch);
+                printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
             }
             else {
-                printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n\n" RESET);
+                printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
                 exit(1);
             }
         } while (1);
@@ -594,7 +594,7 @@ int uhrzeitDefinition() {
             printf(YELLOW "Noch %d Versuch(e) übrig\n" RESET, 3 - versuch);
         }
         else {
-            printf(RED "Zu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+            printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             exit(1);
         }
     } while (1);
@@ -1012,7 +1012,7 @@ int ipSuche() {
             printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, maxVersuche - versuche);
         }
         else {
-            printf(RED "\n\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
+            printf(RED "\nZu viele ungültige Versuche. Das Programm wird beendet.\n" RESET);
             exit(1);
         }
     }
