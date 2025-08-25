@@ -683,10 +683,10 @@ int eigenerSuchbegriff() {
     }
 
     if (treffer == 0) {
-        printf(YELLOW "\nKeine Treffer für '%s' gefunden.\n" RESET, suchbegriff);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs für '%s' gefunden.\n" RESET, suchbegriff);
     }
     else {
-        printf("\nIn der analysierten Log-Datei konnten %d Logs gefunden werden.\n", treffer);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
     }
 
     fclose(datei);
@@ -780,10 +780,10 @@ int zeitraum() {
         fclose(datei);
 
         if (treffer == 0) {
-            printf(YELLOW "\nKeine Logs gefunden.\n" RESET);
+            printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs gefunden.\n" RESET);
         }
         else {
-            printf("\nIn der analysierten Log-Datei konnten %d Logs gefunden werden.\n", treffer);
+            printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
         }
         break;
     }
@@ -867,10 +867,10 @@ int zeitraum() {
         fclose(datei);
 
         if (treffer == 0) {
-            printf(YELLOW "\nKeine Logs gefunden.\n" RESET);
+            printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs gefunden.\n" RESET);
         }
         else {
-            printf("\nIn der analysierten Log-Datei konnten %d Logs gefunden werden.\n", treffer);
+            printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
         }
         break;
     }
@@ -953,10 +953,10 @@ int zeitraum() {
 
         // Nach der Ausgabe:
         if (treffer == 0) {
-            printf(YELLOW "\nKeine Logs gefunden.\n" RESET);
+            printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs gefunden.\n" RESET);
         }
         else {
-            printf("\nIn der analysierten Log-Datei konnten %d Logs gefunden werden.\n", treffer);
+            printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
         }
         break;
     }
@@ -1041,10 +1041,10 @@ int ipSuche() {
     
     // Zusammenfassung ausgeben
     if (treffer == 0) {
-        printf(YELLOW "\nKeine Einträge mit IP-Adresse '%s' gefunden.\n" RESET, suchbegriff);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs mit IP-Adresse '%s' gefunden.\n" RESET, suchbegriff);
     }
     else {
-        printf("\nIn der analysierten Log-Datei konnten %d Logs gefunden werden.\n", treffer);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
     }
 
     auswahlnachSuche(1);
@@ -1098,10 +1098,10 @@ void ipFilterSucheEinfach(int privat) {
     fclose(datei);
 
     if (treffer == 0) {
-        printf(YELLOW "\nKeine %s IP-Adressen gefunden.\n" RESET, privat ? "privaten" : "öffentlichen");
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs mit %s IP-Adressen gefunden.\n" RESET, privat ? "privaten" : "öffentlichen");
     }
     else {
-        printf("\nIn der analysierten Log-Datei konnten %d Logs gefunden werden.\n", treffer);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
     }
 
     auswahlnachSuche(privat ? 9 : 10);
@@ -1157,10 +1157,10 @@ void eigeneFacilitySuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf(YELLOW "\nKeine Logzeilen zur Facility '%s' gefunden.\n" RESET, eingabe);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs zur Facility '%s' gefunden.\n" RESET, eingabe);
     }
     else {
-        printf("\nIn der analysierten Log-Datei konntenn %d Logs Facility '%s' gefunden werden.\n", treffer, eingabe);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs Facility '%s' gefunden.\n", treffer, eingabe);
     }
 
     auswahlnachSuche(5);
@@ -1215,7 +1215,7 @@ void facilitySuche() {
     fclose(datei);
 
     if (anzahlFacilities == 0) {
-        printf(YELLOW "\nKeine Facilities gefunden.\n" RESET);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Facilities gefunden.\n" RESET);
         return;
     }
 
@@ -1256,10 +1256,10 @@ void facilitySuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf(YELLOW "\nKeine Treffer für Facility '%s' gefunden.\n" RESET, muster);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs für Facility '%s' gefunden.\n" RESET, muster);
     }
     else {
-        printf("\nIn der analysierten Log-Datei konnten %d Logs für Facility '%s' gefunden werden.\n", treffer, muster);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs für Facility '%s' gefunden.\n", treffer, muster);
     }
 
     // Speicher freigeben
@@ -1326,10 +1326,10 @@ void eigeneUserSuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf(YELLOW "\nKeine Logzeilen zum User '%s' gefunden.\n" RESET, eingabe);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs zum User '%s' gefunden.\n" RESET, eingabe);
     }
     else {
-        printf("\nIn der analysierten Log-Datei konnten %d Logs für User '%s' gefunden werden.\n", treffer, eingabe);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs für User '%s' gefunden.\n", treffer, eingabe);
     }
     auswahlnachSuche(3);
 }
@@ -1384,7 +1384,7 @@ void userSuche() {
     fclose(datei);
 
     if (anzahlUser == 0) {
-        printf(YELLOW "\nKeine User gefunden.\n" RESET);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine User gefunden.\n" RESET);
         auswahlnachSuche(7);
         return;
     }
@@ -1423,10 +1423,10 @@ void userSuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf(YELLOW "\nKeine Treffer für Benutzer '%s' gefunden.\n" RESET, muster);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs für Benutzer '%s' gefunden.\n" RESET, muster);
     }
     else {
-        printf("\nIn der analysierten Log-Datei konnten %d Logs für Benutzer '%s' gefunden werden.\n", treffer, muster);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs für Benutzer '%s' gefunden.\n", treffer, muster);
     }
 
     auswahlnachSuche(7);
@@ -1494,10 +1494,10 @@ void eigeneMnemonicSuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf(YELLOW "\nKeine Logzeilen zum Mnemonic '%s' gefunden.\n" RESET, eingabe);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs zum Mnemonic '%s' gefunden.\n" RESET, eingabe);
     }
     else {
-        printf("\nIn der analysierten Log-Datei konnten %d Logs für Mnemonic '%s' gefunden werden.\n", treffer, eingabe);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs für Mnemonic '%s' gefunden.\n", treffer, eingabe);
     }
 
     auswahlnachSuche(12);
@@ -1553,7 +1553,7 @@ void mnemonicSuche() {
     fclose(datei);
 
     if (anzahlMnemonics == 0) {
-        printf(YELLOW "\nKeine Mnemonics gefunden.\n" RESET);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs zu Mnemonics gefunden.\n" RESET);
         return;
     }
 
@@ -1589,10 +1589,10 @@ void mnemonicSuche() {
     fclose(datei);
 
     if (treffer == 0) {
-        printf(YELLOW "\nKeine Treffer für Mnemonic '%s' gefunden.\n" RESET, muster);
+        printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs für Mnemonic '%s' gefunden.\n" RESET, muster);
     }
     else {
-        printf("\nIn der analysierten Log-Datei konnten %d Logs für Mnemonic '%s' gefunden werden.\n", treffer, muster);
+        printf("\nIn der analysierten Log-Datei wurden %d Logs für Mnemonic '%s' gefunden.\n", treffer, muster);
     }
 
     for (int i = 0; i < anzahlMnemonics; i++) {
@@ -1663,15 +1663,15 @@ int severityLevel() {
 
     if (treffer == 0) {
         if (sevLevelAuswahl == 8)
-            printf(YELLOW "Keine Logs gefunden.\n" RESET);
+            printf(YELLOW "In der analysierten Log-Datei wurden keine Logs gefunden.\n" RESET);
         else
-            printf(YELLOW "Keine Logs mit Severity Level %d gefunden.\n" RESET, sevLevelAuswahl);
+            printf(YELLOW "In der analysierten Log-Datei wurden keine Logs mit Severity Level %d gefunden.\n" RESET, sevLevelAuswahl);
     }
     else {
         if (sevLevelAuswahl == 8)
-            printf("\nIn der analysierten Log-Datei konnten %d Logs gefunden werden.\n", treffer);
+            printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
         else
-            printf("\nIn der analysierten Log-Datei konnten %d Logs für Severity Level '%d' gefunden werden.\n", treffer, sevLevelAuswahl);
+            printf("\nIn der analysierten Log-Datei wurden %d Logs für Severity Level '%d' gefunden.\n", treffer, sevLevelAuswahl);
     }
 
     auswahlnachSuche(8);
