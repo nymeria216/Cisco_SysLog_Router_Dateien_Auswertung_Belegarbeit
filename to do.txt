@@ -2,27 +2,27 @@ Verbindliche ToDo's:
 
 ERLEDIGT Programmabbruch: exit --> Hashtagreihe einbauen und mit etwas mehr/ detaillierter beschreiben: Mit der Eingabe von "exit" kann das Programm immer beendet werden
 ERLEDIGT 1: Zeitraum, extra Zeile einfügen bei Tag/ Monat
-- Uhrzeiteingabe checken
+ERLEDIGT - Uhrzeiteingabe checken
 ERLEDIGT - Ergebnisausgbabe doppelt mit Text-Dateispeicherung --> einmal löschen, unten behalten
-NICHT UNBEDINGT NÖTIG? - Ergebnisausgabe Trefferausgabe nach oben verschieben)
+NICHT UNBEDINGT NÖTIG? - Ergebnisausgabe (Trefferausgabe nach oben verschieben)
 ERLEDIGT - 2: IP-Adresse, 1: Manuelle Eingabe, wenn IP nicht im Dokument, dann soll Fehlermeldung oder Anzeige rein, dass IP nicht da ist 
 ERLEDIGT - 3: Facilities, Gefunde Facilities --> extra Zeile raus zwischen gefundenen und der Auswahl (0-5) 
 ERLEDIGT - 4: User, 1: Eigene Suche --> exit-Funktion einbauen
 ERLEDIGT --> 2: gefunde User, Zahlenreihenfolge anpassen (1, 2 und nicht 1, 0) 
 ERLEDIGT - 6: Severity Level --> "8: Alle" entfernen (sonst werden alle Logs angezeigt)
-BEI MIR FUNKTIONIERT DIE SUCHE GANZ NORMAL--> Ausgabe von einzelnen Severity Levels nicht möglich (werden nur alle angezeigt)
+ERLEDIGT --> Ausgabe von einzelnen Severity Levels nicht möglich (werden nur alle angezeigt)
 ERLEDIGT - Professionelle Ansprache (Sie), Ansprachen vereinheitlichen und direkte Ansprache an den Nutzer
-- alle Ausgabemeldungen für die Treffer vereinheitlichen
+ERLEDIGT - alle Ausgabemeldungen für die Treffer vereinheitlichen
 
 als allerletztes: Code ordentlich kommentieren
 
 Optionale ToDo's:
 
-- "Keine Treffer für 'suchbegriff' gefunden." Reiehenfolge ändern, sodass die Ausgabe vor folgender Frage "Möchtest du die Ergebnisse in eine Datei speichern? (j/n):" passiert
+ERLEDIGT - "Keine Treffer für 'suchbegriff' gefunden." Reiehenfolge ändern, sodass die Ausgabe vor folgender Frage "Möchtest du die Ergebnisse in eine Datei speichern? (j/n):" passiert
 ERLEDIGT - Klein- und Großschreibung flexibel überall bei eigenen Eingaben anpassen
 - alle Fehlermeldungen vereinheitlichen
 ERLEDIGT Dateiname konstant anzeigen lassen
-- 6: Severity Level: Auswahl von mehreren Leveln (bspw. 2)
+LASS MAL NICHT MACHEN, AUFWAND ZU GROSS - 6: Severity Level: Auswahl von mehreren Leveln (bspw. 2)
 
 
 
