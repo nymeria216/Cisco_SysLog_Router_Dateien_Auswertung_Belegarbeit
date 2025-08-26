@@ -1,7 +1,7 @@
-/* 
+/*
 Hochschule Mittweida
 University of Applied Sciences
- 
+
 Studiengang: Bachelor of Science IT-Forensik/Cybercrime
 Seminargruppe: CC24w1-B
 Modul: Programmierung I
@@ -211,9 +211,9 @@ int begrenzungversuche(int min, int max, int maxVersuche) {         // Übergabe
             printf(YELLOW "Keine Eingabe erkannt. Bitte geben Sie eine Zahl zwischen %d und %d ein.\n" RESET, min, max);
             versuche++;                                             // zählt die Eingabe-Fehlversuche
         }
-        
+
         // prüft, ob Zahlen im gültigen Bereich liegen
-        else if (sscanf(buffer, "%d", &eingabe) != 1 || eingabe < min || eingabe > max) {                                   
+        else if (sscanf(buffer, "%d", &eingabe) != 1 || eingabe < min || eingabe > max) {
             printf(YELLOW "\nUngültige Eingabe. Bitte geben Sie eine Zahl zwischen %d und %d ein.\n" RESET, min, max);
             versuche++;                                             // zählt die Eingabe-Fehlversuche
         }
@@ -264,16 +264,16 @@ int speichersuche(const char* zielDateiname) {                     // Übergabe 
 
     do {
         printf("\nMöchten Sie die Ergebnisse in einer Datei speichern? (j/n):\n");
-        
+
         if (!fgets(speichern, sizeof(speichern), stdin)) {
             printf(RED "Fehler beim Lesen der Eingabe.\n" RESET);
             exit(1);
         }
 
         speichern[strcspn(speichern, "\n")] = '\0';                             // Zeilenumbruch entfernen
-        exitEingabe(speichern); 
+        exitEingabe(speichern);
 
-        if (strcmp(speichern,"j") == 0 || strcmp(speichern, "J") == 0) {        // Datei zum Schreiben öffnen
+        if (strcmp(speichern, "j") == 0 || strcmp(speichern, "J") == 0) {        // Datei zum Schreiben öffnen
             outputDatei = fopen(zielDateiname, "w");
             if (!outputDatei) {                                                 // Fehler beim Öffnen
                 perror(RED "Fehler beim Öffnen der Datei" RESET);
@@ -284,7 +284,7 @@ int speichersuche(const char* zielDateiname) {                     // Übergabe 
         }
         else if (strcmp(speichern, "n") == 0 || strcmp(speichern, "N") == 0) {  // keine Speicherung
             printf("\n");
-            return 0; 
+            return 0;
         }
         else {                                                                  // ungültige Eingabe
             versuche++;                                                         // zählt die Eingabe-Fehlversuche
@@ -293,7 +293,7 @@ int speichersuche(const char* zielDateiname) {                     // Übergabe 
                 printf(YELLOW "Noch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuche);
             }
             // beendet nach zu vielen Fehlversuchen
-            else {          
+            else {
                 printf(RED "Zu viele ungültige Eingaben. Das Programm wird beendet.\n" RESET);
                 exit(1);
             }
@@ -312,17 +312,17 @@ int tagDefinition() {
     char tagEingabe[16];                            // Puffer für die Eingabe des Benutzers
 
     // Logdatei öffnen und nach Tagen durchsuchen
-    dateiOeffnen();                                 
+    dateiOeffnen();
     while (fgets(zeile, sizeof(zeile), datei)) {    // zeilenweise lesen
         char logMonat[4];
         int logTag, logJahr, dummy;
 
         // zwei mögliche Formate für das Datum prüfen
-        if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 ||                
+        if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 ||
             sscanf(zeile, "<%d>: %3s %d %d", &dummy, logMonat, &logTag, &logJahr) == 4) {
 
             // prüfen, ob Tag im gültigen Bereich liegt
-            if (logTag >= 1 && logTag <= 31) {           
+            if (logTag >= 1 && logTag <= 31) {
                 if (!vorhandeneTage[logTag - 1]) {
                     vorhandeneTage[logTag - 1] = 1;
                     tagVorhanden = 1;
@@ -333,7 +333,7 @@ int tagDefinition() {
     fclose(datei);                                          // Datei wieder schließen
 
     // nur wenn Tage im Log gefunden wurden
-    if (tagVorhanden) {                                 
+    if (tagVorhanden) {
         printf("\nVerfügbare Tage in den Logdaten: ");
         for (int i = 0; i < 31; i++) {
             if (vorhandeneTage[i]) {
@@ -371,7 +371,7 @@ int tagDefinition() {
             }
 
             // begrenzt Fehlerversuche
-            if (versuch < 3) {                              
+            if (versuch < 3) {
                 printf(YELLOW "\nNoch %d Versuch(e) übrig\n" RESET, 3 - versuch);
             }
             else {
@@ -404,11 +404,11 @@ int monatDefinition() {
         int logTag, logJahr, dummy;
 
         // prüft zwei mögliche Formate für das Datum
-        if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 ||                   
+        if (sscanf(zeile, "*%3s %d %d", logMonat, &logTag, &logJahr) == 3 ||
             sscanf(zeile, "<%d>: %3s %d %d", &dummy, logMonat, &logTag, &logJahr) == 4) {
 
             // formatiert Monatskürzel einheitlich: Erster Buchstabe groß, Rest klein
-            logMonat[0] = toupper(logMonat[0]);     
+            logMonat[0] = toupper(logMonat[0]);
             logMonat[1] = tolower(logMonat[1]);
             logMonat[2] = tolower(logMonat[2]);
             logMonat[3] = '\0';
@@ -577,7 +577,7 @@ int uhrzeitDefinition() {
 
     do {
         printf("\nUhrzeit (HH:MM:SS): \n");
-        
+
         // liest und prüft die Eingabe des Nutzers
         if (!fgets(uhrzeitEingabe, sizeof(uhrzeitEingabe), stdin)) {
             printf(RED "Fehler beim Lesen der Eingabe.\n" RESET);
@@ -729,7 +729,7 @@ int zeitraum() {
     int zeitauswahl = begrenzungversuche(1, 5, 3);             // Eingabe des Benutzers: Zahl 1–5, maximal 3 Versuche erlaubt 
 
     switch (zeitauswahl) {
-    // ab der ersten Zeit
+        // ab der ersten Zeit
     case 1: {
         treffer = 0;                                           // setzt Trefferzähler auf Null
         printf("\nWählen Sie bitte die erste Zeit aus:\n");
@@ -739,7 +739,7 @@ int zeitraum() {
         uhrzeitDefinition();                                   // Ausführung uhrzeitDefinition()-Funktion
 
         // Umwandlung der Eingabe in Sekunden (mit oder ohne Jahr)
-        if (jahr == -1) {                       
+        if (jahr == -1) {
             startzeit = zeitZuSekundenOhneJahr(tag, monat, stunde, minute, sekunde);
             printf("\nErste Zeit: %d. %s um %02d:%02d:%02d Uhr\n\n", tag, monat, stunde, minute, sekunde);
         }
@@ -814,7 +814,7 @@ int zeitraum() {
         }
         break;
     }
-    // Bis zur ersten Zeit
+          // Bis zur ersten Zeit
     case 2: {
         treffer = 0;                                            // setzt Trefferzähler auf Null
         printf("\nWählen Sie bitte die erste Zeit aus:\n");
@@ -911,7 +911,7 @@ int zeitraum() {
         }
         break;
     }
-    // Zeitraum zwischen zwei Zeiten
+          // Zeitraum zwischen zwei Zeiten
     case 3: {
         treffer = 0;                                                // setzt Trefferzähler auf Null
         int endTag, endJahr, endStunde, endMinute, endSekunde;
@@ -1074,7 +1074,7 @@ int ipSuche() {
     }
 
     fclose(datei);                                      // Datei wieder schließen
-    
+
     // Ausgabe, wenn keine Logs zur Eingabe gefunden wurden
     if (treffer == 0) {
         printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs mit IP-Adresse '%s' gefunden.\n" RESET, suchbegriff);
@@ -1212,32 +1212,34 @@ void eigeneFacilitySuche() {
 
 // Extrahiert alle Facilities aus dem Logfile, sortiert sie alphabetisch, fragt eine Facility ab und zeigt die Treffer.
 void facilitySuche() {
-    char* facilities[MAX_FACILITIES];
-    int anzahlFacilities = 0;
+    char* facilities[MAX_FACILITIES];                   // Array mit Zeiger auf gefundene Facilities
+    int anzahlFacilities = 0;                           // Zähler für die Anzahl Facilities
 
-    dateiOeffnen();                                     // öffnet Logdatei
+    dateiOeffnen();                                     // öffnet die Logdatei
     zeilennummer = 0;                                   // setzt Zeilenzähler auf Null
 
-    for (int i = 0; i < MAX_FACILITIES; i++) {
+    for (int i = 0; i < MAX_FACILITIES; i++) {          // setzt Einträge im Facility-Array auf Null
         facilities[i] = NULL;
     }
 
-    while (fgets(zeile, sizeof(zeile), datei)) {        // liest Daten zeilenweise ein
+    while (fgets(zeile, sizeof(zeile), datei)) {        // liest Logdatei zeilenweise ein
         zeilennummer++;
 
-        char* start = strchr(zeile, '%');
+        char* start = strchr(zeile, '%');               // Sucht nach '%' als Beginn einer Facility
         if (start) {
-            start++; // nach dem '%'
+            start++;                                    // setzt Zeiger hinter '%' an Beginn einer Facility
 
+            // Extrahiert die Facility bis zu '-' oder bis zum Ende der Zeile
             char facility[64];
             int i = 0;
             while (*start && *start != '-' && i < 63) {
                 facility[i++] = *start++;
             }
-            facility[i] = '\0';
+            facility[i] = '\0';                         
 
-            if (strlen(facility) == 0) continue;
+            if (strlen(facility) == 0) continue;        //ignoriert leere Einträge
 
+            // Prüft, ob die Facility schon im Array existiert
             int vorhanden = 0;
             for (int j = 0; j < anzahlFacilities; j++) {
                 if (strcmp(facilities[j], facility) == 0) {
@@ -1246,6 +1248,7 @@ void facilitySuche() {
                 }
             }
 
+            // Fügt Facility dem Array hinzu, falls noch nicht vorhanden
             if (!vorhanden && anzahlFacilities < MAX_FACILITIES) {
                 facilities[anzahlFacilities] = malloc(strlen(facility) + 1);
                 strcpy(facilities[anzahlFacilities], facility);
@@ -1256,35 +1259,38 @@ void facilitySuche() {
 
     fclose(datei);                                      // Datei wieder schließen
 
+    // Ausgabe keine Facilities gefunden
     if (anzahlFacilities == 0) {
         printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Facilities gefunden.\n" RESET);
         return;
     }
 
-    // Sortieren alphabetisch
-    qsort(facilities, anzahlFacilities, sizeof(char*), compareStrings);
+    qsort(facilities, anzahlFacilities, sizeof(char*), compareStrings);     // Sortiert Facilities alphabetisch
 
+    // Gibt gefundene Facilites aus
     printf("\nGefundene Facilities:\n\n");
     for (int i = 0; i < anzahlFacilities; i++) {
         if (i == anzahlFacilities - 1) {
-            printf("%2d: %s", i + 1, facilities[i]);   // letzte Zeile OHNE \n
+            printf("%2d: %s", i + 1, facilities[i]);    // letzte Zeile ohne Zeilenumbruch
         }
         else {
-            printf("%2d: %s\n", i + 1, facilities[i]);  // alle anderen MIT \n
+            printf("%2d: %s\n", i + 1, facilities[i]);  // alle anderen Zeilen mit Zeilenumbruch
         }
     }
 
-    int auswahl = begrenzungversuche(0, anzahlFacilities, 3);
+    int auswahl = begrenzungversuche(0, anzahlFacilities, 3);   //Eingabebegrenzung
 
+    // Erzeugt Suchmuster für eingegebene Facility
     const char* muster = facilities[auswahl - 1];
     char suchmuster[70];
     snprintf(suchmuster, sizeof(suchmuster), "%%%s-", muster);  // z. B. %LINK-
     speichersuche("Suchergebnisse.txt");                        // Ausführung der Speichersuche-Funktion
-    dateiOeffnen();                                             // öffnet Logdatei
+    dateiOeffnen();                                             // öffnet die Logdatei
     treffer = 0;                                                // setzt Trefferzähler auf Null
     zeilennummer = 0;                                           // setzt Zeilenzähler auf Null
 
-    while (fgets(zeile, sizeof(zeile), datei)) {                // liest Daten zeilenweise ein
+    // sucht nach Zeilen die das Suchmuster enthalten
+    while (fgets(zeile, sizeof(zeile), datei)) {                
         zeilennummer++;
         if (strstr(zeile, suchmuster)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
@@ -1297,16 +1303,15 @@ void facilitySuche() {
 
     fclose(datei);                                              // Datei wieder schließen
 
-    // Ausgabe, wenn keine Logs zur Eingabe gefunden wurden
+    // Ausgabe entsprechend der Trefferzahl
     if (treffer == 0) {
         printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs für Facility '%s' gefunden.\n" RESET, muster);
     }
-    // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
         printf("\nIn der analysierten Log-Datei wurden %d Logs für Facility '%s' gefunden.\n", treffer, muster);
     }
 
-    // Speicher freigeben
+    // gibt Speicher frei
     for (int i = 0; i < anzahlFacilities; i++) {
         free(facilities[i]);
     }
@@ -1384,7 +1389,7 @@ void eigeneUserSuche() {
 
 // Extrahiert alle Usernamen aus dem Logfile, sortiert sie alphabetisch, lässt eine Auswahl treffen und gibt die passenden Logzeilen aus.
 void userSuche() {
-    char* userNamen[MAX_USER];
+    char* userNamen[MAX_USER];                              // Array für gefundene User
     int anzahlUser = 0;
 
     dateiOeffnen();                                         // öffnet Logdatei
@@ -1394,13 +1399,17 @@ void userSuche() {
         userNamen[i] = NULL;
     }
 
-    while (fgets(zeile, sizeof(zeile), datei)) {            // liest Daten zeilenweise ein
+    
+    while (fgets(zeile, sizeof(zeile), datei)) {            
         zeilennummer++;
-        char* userStart = strstr(zeile, "user ");
+
+        char* userStart = strstr(zeile, "user ");               // Suche nach 'user' oder 'User'
         if (!userStart) userStart = strstr(zeile, "User ");
 
         if (userStart) {
-            userStart += 5; // springe über "user "
+            userStart += 5; // springt hinter 'user'
+
+            // Liest Usernamen bis Leerzeichen oder Zeilenende
             char name[64];
             int i = 0;
             while (*userStart && !isspace(*userStart) && i < 63) {
@@ -1410,7 +1419,7 @@ void userSuche() {
 
             if (strlen(name) == 0) continue;
 
-            // schon vorhanden?
+            // Prüft, ob Username schon vorhanden ist
             int vorhanden = 0;
             for (int j = 0; j < anzahlUser; j++) {
                 if (strcmp(userNamen[j], name) == 0) {
@@ -1419,6 +1428,7 @@ void userSuche() {
                 }
             }
 
+            // fügt User dem Array hinzu, falls noch nicht vorhanden
             if (!vorhanden && anzahlUser < MAX_USER) {
                 userNamen[anzahlUser] = malloc(strlen(name) + 1);
                 strcpy(userNamen[anzahlUser], name);
@@ -1427,28 +1437,28 @@ void userSuche() {
         }
     }
 
-    fclose(datei);                                              // Datei wieder schließen
+    fclose(datei);                                              
 
+    // Keine User gefunden
     if (anzahlUser == 0) {
         printf(YELLOW "\nIn der analysierten Log-Datei wurden keine User gefunden.\n" RESET);
-        auswahlnachSuche(7);                                    // ruft Hauptmenü nach der Suche auf
+        auswahlnachSuche(7);                                   
         return;
     }
 
-    // sortieren
+    // sortiert User alphabetisch
     qsort(userNamen, anzahlUser, sizeof(char*), compareStrings);
 
+    // gibt gefundene User aus
     printf("\nGefundene User:\n");
     for (int i = 0; i < anzahlUser; i++) {
-        printf("%d: %s", i, userNamen[i]);                      // 0-basiert ausgeben
+        printf("%d: %s", i, userNamen[i]);                      
     }
 
-    // KEINE "Zurück"-Zeile mehr!
-    // printf("%2d: Zurück\n", anzahlUser);
-
+    // Fragt Auswahl des Users ab
     int auswahl = begrenzungversuche(0, anzahlUser - 1, 3);
 
-    // Direkter Zugriff (0-basiert), NICHT auswahl-1
+    // Direkter Zugriff (0-basiert)
     const char* muster = userNamen[auswahl];
 
     speichersuche("Suchergebnisse.txt");                // Ausführung der Speichersuche-Funktion
@@ -1456,17 +1466,18 @@ void userSuche() {
     treffer = 0;                                        // setzt Trefferzähler auf Null
     zeilennummer = 0;                                   // setzt Zeilenzähler auf Null
 
-    while (fgets(zeile, sizeof(zeile), datei)) {        // liest Daten zeilenweise ein
+    // sucht alle Zeilen mit dem ausgewählten User
+    while (fgets(zeile, sizeof(zeile), datei)) {        
         zeilennummer++;
         if (strstr(zeile, muster)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
             if (outputDatei) {
                 fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
             }
-            treffer++;                                  // Trefferzähler erhöht sich
+            treffer++;                                  
         }
     }
-    fclose(datei);                                      // Datei wieder schließen
+    fclose(datei);                                      
 
     // Ausgabe, wenn keine Logs zur Eingabe gefunden wurden
     if (treffer == 0) {
@@ -1477,9 +1488,9 @@ void userSuche() {
         printf("\nIn der analysierten Log-Datei wurden %d Logs für Benutzer '%s' gefunden.\n", treffer, muster);
     }
 
-    auswahlnachSuche(7);                                // ruft Hauptmenü nach der Suche auf
+    auswahlnachSuche(7);        // ruft Hauptmenü nach der Suche auf                                
 
-    // Speicher freigeben
+    // gibt Speicher frei
     for (int i = 0; i < anzahlUser; i++) {
         free(userNamen[i]);
     }
@@ -1489,15 +1500,17 @@ void userSuche() {
 // Liest ein Mnemonic ein und durchsucht das Logfile nach passenden Einträgen.
 void eigeneMnemonicSuche() {
     char eingabe[64];
-    int versuche = 0;                                   // setzt die Eingabeversuche des Nutzers auf Null
+    int versuche = 0;                                  
     const int maxVersuche = 3;
 
+    // Fragt Eingabe ab
     do {
         printf("\nBitte geben Sie ein Mnemonic ein (z. B. CONFIG_I, UPDOWN, ADJCHANGE):\n");
         fgets(eingabe, sizeof(eingabe), stdin);
         eingabe[strcspn(eingabe, "\n")] = '\0';
-        exitEingabe(eingabe);                           // prüft, ob der Benutzer "exit" eingibt → Programm wird sofort beendet
+        exitEingabe(eingabe);                           
 
+        // Meldungen bei ungültigen Eingaben
         if (strlen(eingabe) == 0) {
             printf(YELLOW "\nUngültige Eingabe. Bitte geben Sie ein Mnemonic ein.\n" RESET);
             versuche++;                                 // zählt die Eingabe-Fehlversuche
@@ -1510,36 +1523,40 @@ void eigeneMnemonicSuche() {
             }
         }
         else {
-            break; // gültige Eingabe → Schleife verlassen
+            break;
         }
     } while (1);
 
+    // Wandelt die Eingabe in Kleinbuchstaben um
     for (int i = 0; eingabe[i]; i++)
         eingabe[i] = (char)tolower((unsigned char)eingabe[i]);
 
-    // Muster erstellen, z. B. "-CONFIG_I:"
+    // Erstellt Suchmuster
     char muster[70];
     snprintf(muster, sizeof(muster), "-%s:", eingabe);
+
     speichersuche("Suchergebnisse.txt");                // Ausführung der Speichersuche-Funktion
     dateiOeffnen();                                     // öffnet Logdatei
     zeilennummer = 0;                                   // setzt Zeilenzähler auf Null
     treffer = 0;                                        // setzt Trefferzähler auf Null
 
-    while (fgets(zeile, sizeof(zeile), datei)) {        // liest Daten zeilenweise ein
+    // Durchsucht Datei zeilenweise nach Begriff
+    while (fgets(zeile, sizeof(zeile), datei)) {        
         zeilennummer++;
         char zeile_klein[1024];
         strcpy(zeile_klein, zeile);
         for (int i = 0; zeile_klein[i]; i++)
             zeile_klein[i] = (char)tolower((unsigned char)zeile_klein[i]);
 
+        // Begriff gefunden
         if (strstr(zeile_klein, muster)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
             if (outputDatei) fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
-            treffer++;                                  // Trefferzähler erhöht sich
+            treffer++;                                 
         }
     }
 
-    fclose(datei);                                      // Datei wieder schließen
+    fclose(datei);                                      
 
     // Ausgabe, wenn keine Logs zur Eingabe gefunden wurden
     if (treffer == 0) {
@@ -1550,7 +1567,7 @@ void eigeneMnemonicSuche() {
         printf("\nIn der analysierten Log-Datei wurden %d Logs für Mnemonic '%s' gefunden.\n", treffer, eingabe);
     }
 
-    auswahlnachSuche(12);                               // ruft Hauptmenü nach der Suche auf
+    auswahlnachSuche(12);       // ruft Hauptmenü nach der Suche auf     
 }
 
 
@@ -1568,15 +1585,18 @@ void mnemonicSuche() {
         mnemonics[i] = NULL;
     }
 
-    while (fgets(zeile, sizeof(zeile), datei)) {            // liest Daten zeilenweise ein
-        zeilennummer++; 
+    // List Zeilen ein
+    while (fgets(zeile, sizeof(zeile), datei)) {            
+        zeilennummer++;
 
+        // Sucht nach der Struktur %...-MNEMONIC:
         char* prozent = strchr(zeile, '%');
         if (prozent) {
             char* minus = strrchr(prozent, '-');
             char* doppelpunkt = strchr(prozent, ':');
             if (!minus || !doppelpunkt || minus >= doppelpunkt) continue;
 
+            // Mnemonic befindet sich zwischen '-' und ':'
             char mnemonic[64];
             int len = doppelpunkt - minus - 1;
             if (len <= 0 || len >= sizeof(mnemonic)) continue;
@@ -1584,6 +1604,7 @@ void mnemonicSuche() {
             strncpy(mnemonic, minus + 1, len);
             mnemonic[len] = '\0';
 
+            // prüft, ob Mnemonic schon vorhanden
             int vorhanden = 0;
             for (int j = 0; j < anzahlMnemonics; j++) {
                 if (strcmp(mnemonics[j], mnemonic) == 0) {
@@ -1592,6 +1613,7 @@ void mnemonicSuche() {
                 }
             }
 
+            // neue Mnemonic in Array
             if (!vorhanden && anzahlMnemonics < MAX_MNEMONICS) {
                 mnemonics[anzahlMnemonics] = malloc(strlen(mnemonic) + 1);
                 strcpy(mnemonics[anzahlMnemonics], mnemonic);
@@ -1600,43 +1622,49 @@ void mnemonicSuche() {
         }
     }
 
-    fclose(datei);                                              // Datei wieder schließen
+    fclose(datei);                                              
 
+    // Kein Mnemonic gefunden
     if (anzahlMnemonics == 0) {
         printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs zu Mnemonics gefunden.\n" RESET);
         return;
     }
 
-    qsort(mnemonics, anzahlMnemonics, sizeof(char*), compareStrings);
+    qsort(mnemonics, anzahlMnemonics, sizeof(char*), compareStrings); // sortiert alphabetisch
 
+    // Gibt alle vorkommenden Mnemonics aus
     printf("\nGefundene Mnemonics:\n\n");
     for (int i = 0; i < anzahlMnemonics; i++) {
         printf("%2d: %s\n", i + 1, mnemonics[i]);
     }
 
+    // Fragt Eingabe ab
     printf("\nBitte wählen Sie ein Mnemonic aus: ");
     int auswahl = begrenzungversuche(1, anzahlMnemonics, 3);
 
+    // Bildet Suchmuster
     const char* muster = mnemonics[auswahl - 1];
     char suchmuster[70];
     snprintf(suchmuster, sizeof(suchmuster), "-%s:", muster);
+
     speichersuche("Suchergebnisse.txt");            // Ausführung der Speichersuche-Funktion
     dateiOeffnen();                                 // öffnet Logdatei
     treffer = 0;                                    // setzt Trefferzähler auf Null
     zeilennummer = 0;                               // setzt Zeilenzähler auf Null
 
-    while (fgets(zeile, sizeof(zeile), datei)) {    // liest Daten zeilenweise ein
+    // Sucht nach passenden Logzeilen
+    while (fgets(zeile, sizeof(zeile), datei)) {    
         zeilennummer++;
         if (strstr(zeile, suchmuster)) {
             printf("Zeile %d: %s", zeilennummer, zeile);
             if (outputDatei) {
                 fprintf(outputDatei, "Zeile %d: %s", zeilennummer, zeile);
             }
-            treffer++;                              // Trefferzähler erhöht sich
+            treffer++;                              
         }
     }
 
-    fclose(datei);                                  // Datei wieder schließen
+    fclose(datei);                                  
 
     // Ausgabe, wenn keine Logs zur Eingabe gefunden wurden
     if (treffer == 0) {
@@ -1647,6 +1675,7 @@ void mnemonicSuche() {
         printf("\nIn der analysierten Log-Datei wurden %d Logs für Mnemonic '%s' gefunden.\n", treffer, muster);
     }
 
+    // Gibt Speicher frei
     for (int i = 0; i < anzahlMnemonics; i++) {
         free(mnemonics[i]);
     }
@@ -1672,6 +1701,7 @@ int severityLevel() {
         "Debugging Nachrichten/Logs"
     };
 
+    // Menü anzeigen
     printf("\nBitte wählen Sie ein Severity Level aus.\n");
     for (int i = 0; i < 8; ++i)
         printf("\n%d: %s", i, sevLevellNamen[i]);
@@ -1685,7 +1715,7 @@ int severityLevel() {
     }
 
     if (sevLevelAuswahl == 9) {
-        printf(RED "\nProgramm wird beendet.\n" RESET);
+        printf(RED "\nProgramm wird beendet.\n" RESET); // Beendigung des Programms
         exit(0);
     }
 
@@ -1694,7 +1724,8 @@ int severityLevel() {
     int treffer = 0;                                    // setzt Trefferzähler auf Null
     int zeilennummer = 0;                               // setzt Zeilenzähler auf Null
 
-    while (fgets(zeile, sizeof(zeile), datei)) {        // liest Daten zeilenweise ein
+    // durchsucht Logdatei Zeilenweise
+    while (fgets(zeile, sizeof(zeile), datei)) {        
         zeilennummer++;
         char* prozentZeichen = strchr(zeile, '%');
         if (prozentZeichen) {
@@ -1702,12 +1733,12 @@ int severityLevel() {
             if (minusZeichen && isdigit(*(minusZeichen + 1)) && !isdigit(*(minusZeichen + 2))) {
                 int sev = *(minusZeichen + 1) - '0';
 
-                if (sev == sevLevelAuswahl) {
+                if (sev == sevLevelAuswahl) {               // Treffer gefunden
                     printf("%s", zeile);
                     if (outputDatei) {
                         fprintf(outputDatei, "%s", zeile);
                     }
-                    treffer++;                          // Trefferzähler erhöht sich
+                    treffer++;                          
                 }
             }
         }
@@ -1770,18 +1801,18 @@ void auswahlnachSuche(int funktionID) {
         case 12: eigeneMnemonicSuche(); break;
         default:
             printf("Unbekannte Funktion.\n");
-            hauptmenue();                                   // Hauptmenü anzeigen
+            hauptmenue();                                   
         }
         break;
     case 2:
-        hauptmenue();                                       // Hauptmenü anzeigen
+        hauptmenue();                                       
         break;
     case 3:
         printf(RED "\nProgramm wird beendet.\n" RESET);
         exit(0);
     default:
         printf("Ungültige Eingabe. Zurück ins Hauptmenü.\n");
-        hauptmenue();                                       // Hauptmenü anzeigen
+        hauptmenue();                                       
     }
 }
 
@@ -1868,7 +1899,7 @@ void hauptmenue() {
         case 2: ipFilterSucheEinfach(1); break;
         case 3: ipFilterSucheEinfach(0); break;
         case 4:
-            hauptmenue();                                           // Hauptmenü anzeigen
+            hauptmenue();                                           
             break;
         case 5:
             printf(RED "Programm wird beendet.\n" RESET);
@@ -1893,7 +1924,7 @@ void hauptmenue() {
         case 1: eigeneFacilitySuche(); break;
         case 2: facilitySuche(); break;
         case 3:
-            hauptmenue();                                       // Hauptmenü anzeigen
+            hauptmenue();                                       
             break;
         case 4:
             printf(RED "Programm wird beendet.\n" RESET);
@@ -1916,7 +1947,7 @@ void hauptmenue() {
         case 1: eigeneUserSuche(); break;
         case 2: userSuche(); break;
         case 3:
-            hauptmenue();                                       // Hauptmenü anzeigen
+            hauptmenue();                                       
             break;
         case 4:
             printf(RED "Programm wird beendet.\n" RESET);
@@ -1937,7 +1968,7 @@ void hauptmenue() {
         switch (wahl) {
         case 1: eigeneMnemonicSuche(); break;
         case 2: mnemonicSuche(); break;
-        case 3: hauptmenue(); break;                                // Hauptmenü anzeigen
+        case 3: hauptmenue(); break;                                
         case 4:
             printf(RED "Programm wird beendet.\n" RESET);
             exit(0);
@@ -1952,7 +1983,7 @@ void hauptmenue() {
         break;
     case 7:
         neueDateiAuswaehlen();
-        hauptmenue();                                               // Hauptmenü anzeigen
+        hauptmenue();                                               
         break;
     case 8:
         printf(RED "\nProgramm wird beendet.\n" RESET);
@@ -1978,15 +2009,16 @@ int main() {
     printf("\n      Auswertungsprogramm für CISCO-Logdateien");
     printf("\n#####################################################");
     printf("\n\nHinweise: Das Programm kann jederzeit mit der Eingabe von 'exit' beendet werden.\n          Alle Eingaben müssen mit der Enter-Taste bestätigt werden.");
-    
+
     int maxVersuche = 3;
     int versuch = 0;                                // setzt die Eingabeversuche des Nutzers auf Null
     int gueltig = 0;
 
+    // Eingabe des Nutzers
     while (versuch < maxVersuche) {
         printf("\n\nBitte geben Sie den Dateipfad ein (.log-Datei):\n");
         fgets(dateiname, sizeof(dateiname), stdin);
-        dateiname[strcspn(dateiname, "\n")] = '\0'; // Zeilenumbruch entfernen
+        dateiname[strcspn(dateiname, "\n")] = '\0'; 
 
         // Exit-Eingabe prüfen
         if (strcmp(dateiname, "exit") == 0) {
@@ -1994,8 +2026,9 @@ int main() {
             return 0;
         }
 
+        // Prüft Endung der Datei
         if (!log_dateiendung(dateiname)) {
-            versuch++;                                      // zählt die Eingabe-Fehlversuche
+            versuch++;                                      
             if (versuch < maxVersuche) {
                 printf(RED "\nDie Datei muss die Endung .log haben." RESET);
                 printf(YELLOW "\nNoch %d Versuch(e) übrig.\n" RESET, maxVersuche - versuch);
@@ -2006,7 +2039,8 @@ int main() {
             }
         }
         else {
-            // Teste, ob Datei existiert und lesbar ist
+
+            // Prüft, ob Datei existiert und lesbar ist
             FILE* test = fopen(dateiname, "r");
             if (!test) {
                 versuch++;                                  // zählt die Eingabe-Fehlversuche
@@ -2021,7 +2055,7 @@ int main() {
             }
             else {
                 fclose(test);
-                gueltig = 1;
+                gueltig = 1;        // gültige Datei vorhanden
                 break;
             }
         }
@@ -2031,6 +2065,6 @@ int main() {
         return 1;
     }
 
-    hauptmenue();                                   // Hauptmenü anzeigen
+    hauptmenue();                                   
     return 0;
 }
