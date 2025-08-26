@@ -791,7 +791,7 @@ int zeitraum() {
             }
 
             // Logdatei mit "<zahl>" scannen und ohne Jahr; liest alle Eingaben ein
-            else if (sscanf(zeile, "<%*d>: %3s %d %d %d:%d:%d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
+            else if (sscanf(zeile, "<%*d>: %3s %d %d:%d:%d", lMonat, &lTag, &lStunde, &lMinute, &lSekunde) == 5) {
                 int logZeit = zeitZuSekundenOhneJahr(lTag, lMonat, lStunde, lMinute, lSekunde);
                 if (logZeit >= startzeit) {
                     printf("%s", zeile);
