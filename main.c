@@ -1704,7 +1704,7 @@ int severityLevel() {
     // Menü anzeigen
     printf("\nBitte wählen Sie ein Severity Level aus.\n");
     for (int i = 0; i < 8; ++i)
-        printf("\n%d: %s", i, sevLevellNamen[i]);
+        printf("\n%d: %s - %s", i, sevLevellNamen[i], sevLevelBeschreibung[i]);
     printf("\n8: Zurück in das Hauptmenü");
     printf("\n9: Programm beenden");
 
@@ -1750,14 +1750,18 @@ int severityLevel() {
         if (sevLevelAuswahl == 8)
             printf(YELLOW "In der analysierten Log-Datei wurden keine Logs gefunden.\n" RESET);
         else
-            printf(YELLOW "In der analysierten Log-Datei wurden keine Logs mit Severity Level %d gefunden.\n" RESET, sevLevelAuswahl);
+            printf(YELLOW "In der analysierten Log-Datei wurden keine Logs mit Severity Level %d (%s - %s) gefunden.\n" RESET,
+       sevLevelAuswahl, sevLevellNamen[sevLevelAuswahl], sevLevelBeschreibung[sevLevelAuswahl]);
+
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
         if (sevLevelAuswahl == 8)
             printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
         else
-            printf("\nIn der analysierten Log-Datei wurden %d Logs für Severity Level '%d' gefunden.\n", treffer, sevLevelAuswahl);
+            printf("\nIn der analysierten Log-Datei wurden %d Logs für Severity Level %d (%s - %s) gefunden.\n",
+       treffer, sevLevelAuswahl, sevLevellNamen[sevLevelAuswahl], sevLevelBeschreibung[sevLevelAuswahl]);
+
     }
 
     auswahlnachSuche(8);                            // ruft Hauptmenü nach der Suche auf
