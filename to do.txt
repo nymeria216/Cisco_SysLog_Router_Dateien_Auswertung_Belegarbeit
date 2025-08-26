@@ -25,7 +25,7 @@ ERLEDIGT Dateiname konstant anzeigen lassen
 LASS MAL NICHT MACHEN, AUFWAND ZU GROSS - 6: Severity Level: Auswahl von mehreren Leveln (bspw. 2)
 ERLEDIGT -Beschreibung Severity Level hinzufügen
 - Menüaufrufe vereinheitlichen
-- Menü in Reihenfolge bringen
+ERLEDIGT - Menü in Reihenfolge bringen
 
 
 
