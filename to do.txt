@@ -23,7 +23,7 @@ ERLEDIGT - Klein- und Großschreibung flexibel überall bei eigenen Eingaben anp
 ERLEDIGT - alle Fehlermeldungen vereinheitlichen
 ERLEDIGT Dateiname konstant anzeigen lassen
 LASS MAL NICHT MACHEN, AUFWAND ZU GROSS - 6: Severity Level: Auswahl von mehreren Leveln (bspw. 2)
-- Beschreibung Severity Level hinzufügen
+ERLEDIGT -Beschreibung Severity Level hinzufügen
 - Menüaufrufe vereinheitlichen
 - Menü in Reihenfolge bringen
 
