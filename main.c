@@ -32,6 +32,7 @@ Beschreibung: Das folgende Programm dient der Auswertung von CISCO-Syslog-Router
 
 #define RED     "\033[31;91m"       // Rot für Fehlermeldungen
 #define YELLOW  "\033[33;93m"       // Gelb für Warnungen
+#define GREEN   "\033[32;92m"       // Grün für die Log-Ausgabe
 #define RESET   "\033[0m"           // Reset auf Standardfarbe
 
 
@@ -370,7 +371,7 @@ int eigenerSuchbegriff() {
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n" RESET, treffer);
     }
 
     fclose(datei);                                              // Datei wieder schließen
@@ -804,7 +805,7 @@ int zeitraum() {
         }
         // Ausgabe, wenn Logs zur Eingabe gefunden wurden
         else {
-            printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
+            printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n" RESET, treffer);
         }
         break;
     }
@@ -901,7 +902,7 @@ int zeitraum() {
         }
         // Ausgabe, wenn Logs zur Eingabe gefunden wurden
         else {
-            printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
+            printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n" RESET, treffer);
         }
         break;
     }
@@ -988,7 +989,7 @@ int zeitraum() {
         }
         // Ausgabe, wenn Logs zur Eingabe gefunden wurden
         else {
-            printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
+            printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n" RESET, treffer);
         }
         break;
     }
@@ -1078,7 +1079,7 @@ int ipSuche() {
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n" RESET, treffer);
     }
 
     auswahlnachSuche(1);                                // ruft Hauptmenü nach der Suche auf
@@ -1137,7 +1138,7 @@ void ipFilterSucheEinfach(int privat) {
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n" RESET, treffer);
     }
 
     auswahlnachSuche(privat ? 9 : 10);                  // ruft Hauptmenü nach der Suche auf, wenn private/ öffentliche IPs gefiltert wurden
@@ -1202,7 +1203,7 @@ void eigeneFacilitySuche() {
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs Facility '%s' gefunden.\n", treffer, eingabe);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs Facility '%s' gefunden.\n" RESET, treffer, eingabe);
     }
 
     auswahlnachSuche(5);                                // ruft Hauptmenü nach der Suche auf
@@ -1308,7 +1309,7 @@ void facilitySuche() {
         printf(YELLOW "\nIn der analysierten Log-Datei wurden keine Logs für Facility '%s' gefunden.\n" RESET, muster);
     }
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs für Facility '%s' gefunden.\n", treffer, muster);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs für Facility '%s' gefunden.\n" RESET, treffer, muster);
     }
 
     // gibt Speicher frei
@@ -1387,7 +1388,7 @@ void eigeneUserSuche() {
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs für User '%s' gefunden.\n", treffer, eingabe);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs für User '%s' gefunden.\n" RESET, treffer, eingabe);
     }
     auswahlnachSuche(3);                                    // ruft Hauptmenü nach der Suche auf
 }
@@ -1492,7 +1493,7 @@ void userSuche() {
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs für Benutzer '%s' gefunden.\n", treffer, muster);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs für Benutzer '%s' gefunden.\n" RESET, treffer, muster);
     }
 
     auswahlnachSuche(7);        // ruft Hauptmenü nach der Suche auf                                
@@ -1574,7 +1575,7 @@ void eigeneMnemonicSuche() {
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs für Mnemonic '%s' gefunden.\n", treffer, eingabe);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs für Mnemonic '%s' gefunden.\n" RESET, treffer, eingabe);
     }
 
     auswahlnachSuche(12);       // ruft Hauptmenü nach der Suche auf     
@@ -1681,7 +1682,7 @@ void mnemonicSuche() {
     }
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
-        printf("\nIn der analysierten Log-Datei wurden %d Logs für Mnemonic '%s' gefunden.\n", treffer, muster);
+        printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs für Mnemonic '%s' gefunden.\n" RESET, treffer, muster);
     }
 
     // Gibt Speicher frei
@@ -1769,9 +1770,9 @@ int severityLevel() {
     // Ausgabe, wenn Logs zur Eingabe gefunden wurden
     else {
         if (sevLevelAuswahl == 8)
-            printf("\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n", treffer);
+            printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs gefunden.\n" RESET, treffer);
         else
-            printf("\nIn der analysierten Log-Datei wurden %d Logs für Severity Level %d (%s - %s) gefunden.\n",
+            printf(GREEN "\nIn der analysierten Log-Datei wurden %d Logs für Severity Level %d (%s - %s) gefunden.\n" RESET,
                 treffer, sevLevelAuswahl, sevLevellNamen[sevLevelAuswahl], sevLevelBeschreibung[sevLevelAuswahl]);
 
     }
@@ -1792,7 +1793,7 @@ void auswahlnachSuche(int funktionID) {
     if (outputDatei) {
         fclose(outputDatei);
         outputDatei = NULL;
-        printf("\nDie Ergebnisse wurden in der 'Suchergebnisse.txt' Datei gespeichert.\n");
+        printf(GREEN "\nDie Ergebnisse wurden in der 'Suchergebnisse.txt' Datei gespeichert.\n" RESET);
     }
 
     // Auswahl anzeigen
